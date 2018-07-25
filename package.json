@@ -1,12 +1,14 @@
 {
   "name": "set-protocol-utils",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Common utilities for Set Protocol",
   "main": "lib/src/index.js",
   "scripts": {
     "cleanup": "find src -name \\*.js* -type f -delete",
     "lint": "tslint -c tslint.json -p tsconfig.json --fix",
-    "precommit": "lint-staged"
+    "build": "tsc",
+    "precommit": "lint-staged",
+    "prepublishOnly": "yarn build"
   },
   "repository": {
     "type": "git",
