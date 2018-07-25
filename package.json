@@ -4,7 +4,9 @@
   "description": "Common utilities for Set Protocol",
   "main": "lib/src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "cleanup": "find src -name \\*.js* -type f -delete",
+    "lint": "tslint -c tslint.json -p tsconfig.json --fix",
+    "precommit": "lint-staged"
   },
   "repository": {
     "type": "git",
@@ -15,34 +17,44 @@
   "bugs": {
     "url": "https://github.com/SetProtocol/set-protocol-utils/issues"
   },
-  "scripts": {
-    "cleanup": "find src -name \\*.js* -type f -delete",
-    "lint": "tslint -c tslint.json -p tsconfig.json --fix"
-  },
   "homepage": "https://github.com/SetProtocol/set-protocol-utils#readme",
   "devDependencies": {
-        "@0xproject/typescript-typings": "^0.0.3",
-        "@types/lodash": "4.14.104",
-        "abi-decoder": "^1.0.9",
-        "copyfiles": "^1.2.0",
-        "make-promises-safe": "^1.1.0",
-        "npm-run-all": "^4.1.2",
-        "shx": "^0.2.2",
-        "tslint": "5.8.0",
-        "typescript": "2.7.1",
-        "web3": "0.20.0"
-    },
-    "dependencies": {
-        "@types/node": "^8.0.53",
-        "bignumber.js": "~4.1.0",
-        "ethereum-types": "^1.0.0",
-        "ethereumjs-util": "^5.1.1",
-        "ethers": "3.0.22",
-        "js-sha3": "^0.7.0",
-        "lodash": "^4.17.4",
-        "tslint-eslint-rules": "^5.3.1"
-    },
-    "publishConfig": {
-        "access": "public"
+    "@0xproject/typescript-typings": "^0.0.3",
+    "@types/lodash": "4.14.104",
+    "abi-decoder": "^1.0.9",
+    "copyfiles": "^1.2.0",
+    "make-promises-safe": "^1.1.0",
+    "npm-run-all": "^4.1.2",
+    "shx": "^0.2.2",
+    "tslint": "5.8.0",
+    "typedoc": "^0.11.1",
+    "typescript": "2.7.1",
+    "web3": "0.20.0"
+  },
+  "dependencies": {
+    "@types/node": "^8.0.53",
+    "bignumber.js": "~4.1.0",
+    "ethereum-types": "^1.0.0",
+    "ethereumjs-util": "^5.1.1",
+    "ethers": "3.0.22",
+    "husky": "^0.14.3",
+    "js-sha3": "^0.7.0",
+    "lint-staged": "^7.2.0",
+    "lodash": "^4.17.4",
+    "tslint-eslint-rules": "^5.3.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
     }
+  },
+  "lint-staged": {
+    "src/**/*.ts": [
+      "yarn lint",
+      "git add"
+    ]
+  },
+  "publishConfig": {
+    "access": "public"
+  }
 }

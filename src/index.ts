@@ -1,4 +1,5 @@
 import { BigNumber } from 'bignumber.js';
+import * as Web3 from 'web3';
 
 import { Address, Bytes32, IssuanceOrder, Log, ECSig } from './types';
 import { constants } from './constants';
@@ -26,11 +27,21 @@ import {
  * methods that pertain to encoding, order generation, signing, etc.
  */
 export class Utils {
+  private web3: Web3;
+
   /**
    * Enumeration of accepted exchange wrapper ids used as part of Exchange headers
    * { ZERO_EX: 1, KYBER: 2, TAKER_WALLET: 3 }
    */
   public static EXCHANGES = constants.EXCHANGES;
+
+  /**
+   * Initialize a Utils class
+   * @param web3   Web3 instance to use
+   */
+  public constructor(web3?: Web3) {
+    this.web3 = web3 || new Web3();
+  }
 
   /**
    * Converts an array of Buffers into Hex
@@ -74,7 +85,7 @@ export class Utils {
    * @return  Primitive value represented as Buffer
    */
   public static paddedBufferForPrimitive(value: any): Buffer {
-      return paddedBufferForPrimitive(value);
+    return paddedBufferForPrimitive(value);
   }
 
   /**
@@ -83,7 +94,7 @@ export class Utils {
    * @return  BigNumber value represented as Buffer
    */
   public static paddedBufferForBigNumber(number: BigNumber): Buffer {
-      return paddedBufferForBigNumber(number);
+    return paddedBufferForBigNumber(number);
   }
 
   /**
@@ -92,7 +103,7 @@ export class Utils {
    * @return  An object containing the Elliptic curve signature parameters
    */
   public static parseSignatureHexAsRSV(signature: string): any {
-      return parseSignatureHexAsRSV(signature);
+    return parseSignatureHexAsRSV(signature);
   }
 
   /**
@@ -101,8 +112,8 @@ export class Utils {
    * @param   address   Address to sign with
    * @return  An object containing the Elliptic curve signature parameters
    */
-  public static async signMessage(message: string, address: Address): Promise<ECSig> {
-      return signMessage(message, address);
+  public async signMessage(message: string, address: Address): Promise<ECSig> {
+    return signMessage(this.web3, message, address);
   }
 }
 
@@ -112,12 +123,22 @@ export class Utils {
  * methods that pertain to testing
  */
 export class TestUtils {
+  private web3: Web3;
+
+  /**
+   * Initialize a TestUtils class
+   * @param web3   Web3 instance to use
+   */
+  public constructor(web3?: Web3) {
+    this.web3 = web3 || new Web3();
+  }
+
   /**
    * Retrieves readable logs from a transaction hash
    * @param   txHash   Transaction hash to retrieve logs from
    * @return  Array of logs presented as Log
    */
   public async getLogsFromTxHash(txHash: string): Promise<Log[]> {
-      return getLogsFromTxHash(txHash);
+    return getLogsFromTxHash(this.web3, txHash);
   }
 }

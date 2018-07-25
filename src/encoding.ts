@@ -8,9 +8,9 @@ const web3 = new Web3();
 
 
 export function bufferArrayToHex(bufferArray: Buffer[]): Bytes32 {
-    const buffer = Buffer.concat(bufferArray);
+  const buffer = Buffer.concat(bufferArray);
 
-    return ethUtil.bufferToHex(buffer);
+  return ethUtil.bufferToHex(buffer);
 }
 
 export function bufferObjectWithProperties(types: string[], values: any[]): Buffer {
