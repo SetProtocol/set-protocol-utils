@@ -1,0 +1,43 @@
+import * as ABIDecoder from 'abi-decoder';
+import * as _ from 'lodash';
+import * as Web3 from 'web3';
+
+import { BigNumber } from 'bignumber.js';
+import { Log } from './types';
+
+const web3 = new Web3();
+
+
+export async function getLogsFromTxHash(txHash: string): Promise<Log[]> {
+  const receipt = await web3.eth.getTransactionReceipt(txHash);
+  const logs: ABIDecoder.DecodedLog[] = _.compact(ABIDecoder.decodeLogs(receipt.logs));
+
+  return _.map(logs, log => formatLogEntry(log));
+}
+
+function formatLogEntry(logs: ABIDecoder.DecodedLog): Log {
+  const { name, events, address } = logs;
+  const args: any = {};
+
+  _.each(events, event => {
+    const { name, type, value } = event;
+    let argValue: any = value;
+    switch (true) {
+      case (/^(uint)\d*\[\]/.test(type)): {
+        break;
+       }
+      case (/^(uint)\d*/.test(type)): {
+        argValue = new BigNumber(value.toString());
+        break;
+      }
+    }
+
+    args[name] = argValue;
+  });
+
+  return {
+    event: name,
+    address,
+    args,
+  };
+}
