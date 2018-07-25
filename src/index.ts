@@ -1,4 +1,5 @@
 import { BigNumber } from 'bignumber.js';
+import * as Web3 from 'web3';
 
 import { Address, Bytes32, IssuanceOrder, Log, ECSig } from './types';
 import { constants } from './constants';
@@ -26,11 +27,17 @@ import {
  * methods that pertain to encoding, order generation, signing, etc.
  */
 export class Utils {
+  private web3: Web3;
+
   /**
    * Enumeration of accepted exchange wrapper ids used as part of Exchange headers
    * { ZERO_EX: 1, KYBER: 2, TAKER_WALLET: 3 }
    */
   public static EXCHANGES = constants.EXCHANGES;
+
+  public constructor(web3: Web3?) {
+    this.web3 = web3 || new Web3();
+  }
 
   /**
    * Converts an array of Buffers into Hex
@@ -102,7 +109,7 @@ export class Utils {
    * @return  An object containing the Elliptic curve signature parameters
    */
   public static async signMessage(message: string, address: Address): Promise<ECSig> {
-      return signMessage(message, address);
+      return signMessage(this.web3, message, address);
   }
 }
 
@@ -112,12 +119,18 @@ export class Utils {
  * methods that pertain to testing
  */
 export class TestUtils {
+  private web3: Web3;
+
+  public constructor(web3?: Web3) {
+    this.web3 = web3 || new Web3();
+  }
+
   /**
    * Retrieves readable logs from a transaction hash
    * @param   txHash   Transaction hash to retrieve logs from
    * @return  Array of logs presented as Log
    */
   public async getLogsFromTxHash(txHash: string): Promise<Log[]> {
-      return getLogsFromTxHash(txHash);
+      return getLogsFromTxHash(this.web3, txHash);
   }
 }

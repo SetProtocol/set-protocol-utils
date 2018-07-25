@@ -6,7 +6,16 @@
     "module": "commonjs",
     "allowJs": true,
     "target": "es5",
-    "typeRoots": ["node_modules/@0xproject/typescript-typings/types", "node_modules/@types"]
+    "outDir": "dist",
+    "typeRoots": ["node_modules/@0xproject/typescript-typings/types", "node_modules/@types"],
+    "baseUrl": ".",
+    "paths": {
+      "*": [
+        "node_modules/*",
+        "types/*",
+        "node_modules/@0xproject/typescript-typings/types"
+      ]
+    },
   },
   "include": [
     "./src/**/*",

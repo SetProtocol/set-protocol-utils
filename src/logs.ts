@@ -5,10 +5,7 @@ import * as Web3 from 'web3';
 import { BigNumber } from 'bignumber.js';
 import { Log } from './types';
 
-const web3 = new Web3();
-
-
-export async function getLogsFromTxHash(txHash: string): Promise<Log[]> {
+export async function getLogsFromTxHash(web3: Web3, txHash: string): Promise<Log[]> {
   const receipt = await web3.eth.getTransactionReceipt(txHash);
   const logs: ABIDecoder.DecodedLog[] = _.compact(ABIDecoder.decodeLogs(receipt.logs));
 
