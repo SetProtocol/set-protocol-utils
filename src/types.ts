@@ -21,6 +21,12 @@ export interface IssuanceOrder {
     requiredComponentAmounts: BigNumber[];
 }
 
+export interface ECSig {
+  v: UInt;
+  r: string;
+  s: string;
+}
+
 export interface Log {
   event: string;
   address: Address;

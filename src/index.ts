@@ -1,6 +1,6 @@
 import { BigNumber } from 'bignumber.js';
 
-import { Address, Bytes32, IssuanceOrder, Log } from './types';
+import { Address, Bytes32, IssuanceOrder, Log, ECSig } from './types';
 import { constants } from './constants';
 import {
   bufferArrayToHex,
@@ -101,7 +101,7 @@ export class Utils {
    * @param   address   Address to sign with
    * @return  An object containing the Elliptic curve signature parameters
    */
-  public static async signMessage(message: string, address: Address): Promise<string> {
+  public static async signMessage(message: string, address: Address): Promise<ECSig> {
       return signMessage(message, address);
   }
 }

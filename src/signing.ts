@@ -1,12 +1,12 @@
 import * as ethUtil from 'ethereumjs-util';
 import * as Web3 from 'web3';
 
-import { Address } from './types';
+import { Address, ECSig } from './types';
 
 const web3 = new Web3();
 
 
-export function parseSignatureHexAsRSV(signatureHex: string): any {
+export function parseSignatureHexAsRSV(signatureHex: string): ECSig {
   const { v, r, s } = ethUtil.fromRpcSig(signatureHex);
 
   return {
@@ -16,7 +16,7 @@ export function parseSignatureHexAsRSV(signatureHex: string): any {
   };
 }
 
-export async function signMessage(message: string, address: Address): Promise<string> {
+export async function signMessage(message: string, address: Address): Promise<ECSig> {
   const signature = web3.eth.sign(address, message);
 
   return parseSignatureHexAsRSV(signature);
