@@ -1,5 +1,5 @@
 {
-  "name": "dev-utils",
+  "name": "set-protocol-utils",
   "version": "0.1.0",
   "description": "Common utilities for Set Protocol",
   "main": "lib/src/index.js",
