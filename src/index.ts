@@ -35,7 +35,11 @@ export class Utils {
    */
   public static EXCHANGES = constants.EXCHANGES;
 
-  public constructor(web3: Web3?) {
+  /**
+   * Initialize a Utils class
+   * @param web3   Web3 instance to use
+   */
+  public constructor(web3?: Web3) {
     this.web3 = web3 || new Web3();
   }
 
@@ -81,7 +85,7 @@ export class Utils {
    * @return  Primitive value represented as Buffer
    */
   public static paddedBufferForPrimitive(value: any): Buffer {
-      return paddedBufferForPrimitive(value);
+    return paddedBufferForPrimitive(value);
   }
 
   /**
@@ -90,7 +94,7 @@ export class Utils {
    * @return  BigNumber value represented as Buffer
    */
   public static paddedBufferForBigNumber(number: BigNumber): Buffer {
-      return paddedBufferForBigNumber(number);
+    return paddedBufferForBigNumber(number);
   }
 
   /**
@@ -99,7 +103,7 @@ export class Utils {
    * @return  An object containing the Elliptic curve signature parameters
    */
   public static parseSignatureHexAsRSV(signature: string): any {
-      return parseSignatureHexAsRSV(signature);
+    return parseSignatureHexAsRSV(signature);
   }
 
   /**
@@ -108,8 +112,8 @@ export class Utils {
    * @param   address   Address to sign with
    * @return  An object containing the Elliptic curve signature parameters
    */
-  public static async signMessage(message: string, address: Address): Promise<ECSig> {
-      return signMessage(this.web3, message, address);
+  public async signMessage(message: string, address: Address): Promise<ECSig> {
+    return signMessage(this.web3, message, address);
   }
 }
 
@@ -121,6 +125,10 @@ export class Utils {
 export class TestUtils {
   private web3: Web3;
 
+  /**
+   * Initialize a TestUtils class
+   * @param web3   Web3 instance to use
+   */
   public constructor(web3?: Web3) {
     this.web3 = web3 || new Web3();
   }
@@ -131,6 +139,6 @@ export class TestUtils {
    * @return  Array of logs presented as Log
    */
   public async getLogsFromTxHash(txHash: string): Promise<Log[]> {
-      return getLogsFromTxHash(this.web3, txHash);
+    return getLogsFromTxHash(this.web3, txHash);
   }
 }
