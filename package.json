@@ -2,7 +2,7 @@
   "name": "set-protocol-utils",
   "version": "0.1.1",
   "description": "Common utilities for Set Protocol",
-  "main": "lib/src/index.js",
+  "main": "dist/src/index.js",
   "scripts": {
     "cleanup": "find src -name \\*.js* -type f -delete",
     "lint": "tslint -c tslint.json -p tsconfig.json --fix",
