@@ -1,11 +1,25 @@
+import * as _ from 'lodash';
 import * as ethUtil from 'ethereumjs-util';
 import * as Web3 from 'web3';
 import { BigNumber } from 'bignumber.js';
 
-import { Bytes32 } from './types';
+import { Bytes, Bytes32 } from './types';
 
 const web3 = new Web3();
 
+
+export function concatBytes(inputs: Bytes[]): Bytes {
+  if (inputs.length === 0) {
+    throw new Error('No errors in concat Orders');
+  }
+
+  let bytes: Bytes = '';
+  _.each(inputs, input => {
+    bytes = bytes.concat(removeHexPrefix(input));
+  });
+
+  return addHexPrefix(bytes);
+}
 
 export function bufferArrayToHex(bufferArray: Buffer[]): Bytes32 {
   const buffer = Buffer.concat(bufferArray);
@@ -15,6 +29,20 @@ export function bufferArrayToHex(bufferArray: Buffer[]): Bytes32 {
 
 export function bufferObjectWithProperties(types: string[], values: any[]): Buffer {
   return ethUtil.sha3(solidityPack(types, values));
+}
+
+export function numBytesFromBuffer(buffer: Buffer[]): BigNumber {
+    const hex = bufferArrayToHex(buffer);
+
+    return numBytesFromHex(hex);
+}
+
+export function numBytesFromHex(hex: string): BigNumber {
+  if (!isHexPrefixed(hex)) {
+    throw new Error(`${hex} is not a hex string. It must be Hex-Prefixed`);
+  }
+
+  return new BigNumber(removeHexPrefix(hex).length).div(2);
 }
 
 export function paddedBufferForPrimitive(input: any): Buffer {
@@ -40,6 +68,14 @@ function elementaryName (
   return name;
 }
 
+function isHexPrefixed(str: any): boolean {
+  if (typeof str !== 'string') {
+    throw new Error("Must be type 'string', is currently type " + (typeof str) + ', while checking isHexPrefixed.');
+  }
+
+  return str.slice(0, 2) === '0x';
+}
+
 // Parse N from type<N>
 function parseTypeN (
   type: string,
@@ -60,6 +96,22 @@ function parseNumber (
   } else {
     throw new Error('Argument is not a supported type');
   }
+}
+
+function removeHexPrefix(input: any): string {
+  if (typeof input !== 'string') {
+    return input;
+  }
+
+  return isHexPrefixed(input) ? input.slice(2) : input;
+}
+
+function addHexPrefix(input: any): string {
+if (typeof input !== 'string') {
+    return input;
+  }
+
+  return !isHexPrefixed(input) ? `0x${input}` : input;
 }
 
 function solidityPack (

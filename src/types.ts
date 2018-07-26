@@ -6,6 +6,12 @@ export type Bytes32 = string;
 export type Bytes = string;
 export type UInt = number | BigNumber;
 
+export interface ECSig {
+  v: UInt;
+  r: string;
+  s: string;
+}
+
 export interface IssuanceOrder {
   setAddress: Address;
   makerAddress: Address;
@@ -19,12 +25,6 @@ export interface IssuanceOrder {
   salt: BigNumber;
   requiredComponents: Address[];
   requiredComponentAmounts: BigNumber[];
-}
-
-export interface ECSig {
-  v: UInt;
-  r: string;
-  s: string;
 }
 
 export interface Log {

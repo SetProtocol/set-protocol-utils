@@ -1,10 +1,13 @@
 import { BigNumber } from 'bignumber.js';
+import { Order } from '@0xproject/types';
 import * as Web3 from 'web3';
 
-import { Address, Bytes32, IssuanceOrder, Log, ECSig } from './types';
+import { Address, Bytes, Bytes32, IssuanceOrder, Log, ECSig } from './types';
 import { constants } from './constants';
 import {
   bufferArrayToHex,
+  concatBytes,
+  numBytesFromBuffer,
   paddedBufferForBigNumber,
   paddedBufferForPrimitive,
 } from './encoding';
@@ -20,6 +23,12 @@ import {
   parseSignatureHexAsRSV,
   signMessage
 } from './signing';
+import {
+  encodeZeroExOrder,
+  generateZeroExExchangeWrapperOrder,
+  generateZeroExOrder,
+  signZeroExOrderAsync,
+} from './zeroEx';
 
 
 /**
@@ -53,6 +62,24 @@ export class SetProtocolUtils {
   }
 
   /**
+   * Converts an array of Bytes (each prefixed 0x) into one byte array
+   * @param   bytes   Array of byte strings
+   * @return  A single byte string representing the array of bytes
+   */
+  public static concatBytes(bytes: Bytes[]): Bytes {
+    return concatBytes(bytes);
+  }
+
+  /**
+   * Converts a 0x order into binary representation, often to get byte count
+   * @param   order   Object conforming to 0x's Order inteface
+   * @return  Array of buffers representing the order
+   */
+  public static encodeZeroExOrder(order: Order): Buffer[] {
+    return encodeZeroExOrder(order);
+  }
+
+  /**
    * Generates expiration timestamp that can be used as part of IssuanceOrder
    * @param   minutes   Number of minutes from now
    * @return  Expiration timestamp represented as BigNumber
@@ -70,12 +97,51 @@ export class SetProtocolUtils {
   }
 
   /**
+   * Generates a byte array with a valid 0x order that can be passed into ZeroExExchangeWrapper
+   * @param   order       Object conforming to 0x's Order inteface
+   * @param   signature   Elliptic curve signature as hex string
+   * @param   fillAmount  Amount of 0x order to fill
+   * @return  Hex string representation of valid 0xExchangeWrapper order
+   */
+  public static generateZeroExExchangeWrapperOrder(order: Order, signature: Bytes, fillAmount: BigNumber): Bytes {
+    return generateZeroExExchangeWrapperOrder(order, signature, fillAmount);
+  }
+
+  /**
+   * Generates a 0x order
+   * @param   makerAddress       Maker token owner
+   * @param   makerToken         Asset to exchange
+   * @param   takerToken         Asset to exchange for
+   * @param   makerAssetAmount   Amount of asset to exchange
+   * @param   takerAssetAmount   Amount of asset to exchange for
+   * @return  Object conforming to 0x's Order inteface
+   */
+  public static generateZeroExOrder(
+    makerAddress: Address,
+    makerToken: Address,
+    takerToken: Address,
+    makerAssetAmount: BigNumber,
+    takerAssetAmount: BigNumber,
+  ): Order {
+    return generateZeroExOrder(makerAddress, makerToken, takerToken, makerAssetAmount, takerAssetAmount);
+  }
+
+  /**
    * Converts an IssuanceOrder into hex
    * @param   order   An object adhering to the IssuanceOrder interface
    * @return  Hex of Issuance Order represented as hex string
    */
   public static hashOrderHex(order: IssuanceOrder): string {
     return hashOrderHex(order);
+  }
+
+  /**
+   * Gets the length of a buffer's contents
+   * @param   buffer   A buffer of arbitray length
+   * @return  Number of bytes in hex representation of the buffer
+   */
+  public static numBytesFromBuffer(buffer: Buffer[]): BigNumber {
+    return numBytesFromBuffer(buffer);
   }
 
   /**
@@ -115,6 +181,15 @@ export class SetProtocolUtils {
   public async signMessage(message: string, address: Address): Promise<ECSig> {
     return signMessage(this.web3, message, address);
   }
+
+  /**
+   * Adds correct signature '0x' and signs 0x order
+   * @param   order   Object conforming to 0x's Order inteface
+   * @return  Hex string representation of 0x 0rder signature
+   */
+  public async signZeroExOrderAsync(order: Order): Promise<string> {
+    return signZeroExOrderAsync(order);
+  }
 }
 
 
@@ -124,6 +199,16 @@ export class SetProtocolUtils {
  */
 export class SetProtocolTestUtils {
   private web3: Web3;
+
+  /**
+   * Address of 0x exchange address contract on test rpc, loaded from snapshot
+   */
+  public static ZERO_EX_EXCHANGE_ADDRESS = constants.ZERO_EX_SNAPSHOT_EXCHANGE_ADDRESS;
+
+  /**
+   * Address of 0x erc20 proxy contract on test rpc, loaded from snapshot
+   */
+  public static ZERO_EX_ERC20_PROXY_ADDRESS = constants.ZERO_EX_SNAPSHOT_ERC20_PROXY_ADDRESS;
 
   /**
    * Initialize a TestUtils class
