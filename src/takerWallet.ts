@@ -43,7 +43,7 @@ export function generateTakerWalletOrdersBuffer(
 ): Buffer {
   // Generate header for taker wallet order
   const takerOrderHeader: Buffer[] = [
-    paddedBufferForPrimitive(constants.EXCHANGES.KYBER),
+    paddedBufferForPrimitive(constants.EXCHANGES.TAKER_WALLET),
     paddedBufferForPrimitive(orders.length), // Include the number of orders as part of header
     paddedBufferForPrimitive(makerTokenAddress),
     paddedBufferForPrimitive(0), // Taker wallet orders do not take any maker token to execute
