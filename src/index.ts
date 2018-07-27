@@ -54,6 +54,8 @@ export class SetProtocolUtils {
     this.web3 = web3 || new Web3();
   }
 
+  /* ============ Static SetProtocolUtils Functions ============ */
+
   /**
    * Converts an array of Buffers into Hex
    * @param   bufferArray   Array of buffers
@@ -182,6 +184,8 @@ export class SetProtocolUtils {
   public static parseSignatureHexAsRSV(signature: string): any {
     return parseSignatureHexAsRSV(signature);
   }
+
+  /* ============ Non-Static SetProtocolUtils Functions ============ */
 
   /**
    * Generates a byte string representing serialized exchange orders across different exchanges.

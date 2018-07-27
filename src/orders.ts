@@ -22,7 +22,8 @@ import * as _ from 'lodash';
 import * as Web3 from 'web3';
 
 import { constants } from './constants';
-import { paddedBufferForPrimitive, bufferObjectWithProperties } from './encoding';
+import { bufferObjectWithProperties } from './encoding';
+import { generateTakerWalletOrdersBuffer } from './takerWallet';
 import { Address, Bytes32, Exchanges, IssuanceOrder, SolidityTypes, TakerWalletOrder } from './types';
 
 export function generateTimestamp(minutes: number): BigNumber {
@@ -91,67 +92,11 @@ export function generateSerializedOrders(
   });
   // Loop through all exchange orders and create buffers
   _.forEach(exchanges, (exchangeOrders, key) => {
-    const exchangeKey: number = constants.EXCHANGES[key];
-    if (exchangeKey === 1) {
-      // Handle Zero Ex
-    } else if (exchangeKey === 2) {
-      // Handle Kyber Network
-    } else if (exchangeKey === 3) {
+    if (key === 'ZERO_EX') {
+    } else if (key === 'KYBER') {
+    } else if (key === 'TAKER_WALLET') {
       orderBuffer.push(generateTakerWalletOrdersBuffer(makerTokenAddress, exchangeOrders, web3));
     }
   });
   return ethUtil.bufferToHex(Buffer.concat(orderBuffer));
-}
-
-/* ============ Taker Wallet Order Functions ============ */
-
-/**
- * Takes a taker wallet order object and turns it into a buffer.
- *
- * @param  takerTokenAddress Address of the token the taker will fill in the taker wallet order
- * @param  takerTokenAmount  Amount of tokens the taker will fill in the order
- * @param  web3              web3 instance instantiated with `new Web3(provider);`
- * @return                   Taker wallet order as a buffer
- */
-
-export function takerWalletOrderToBuffer(
-  takerTokenAddress: Address,
-  takerTokenAmount: BigNumber,
-  web3: Web3,
-): Buffer {
-  const takerWalletOrder: Buffer[] = [];
-  takerWalletOrder.push(paddedBufferForPrimitive(takerTokenAddress));
-  takerWalletOrder.push(paddedBufferForPrimitive(web3.toHex(takerTokenAmount)));
-  return Buffer.concat(takerWalletOrder);
-}
-
-/**
- * Takes taker wallet orders and generates a buffer representing all orders the
- * taker can fill directly from their wallet.
- *
- * @param  makerTokenAddress Address of the token used to pay for the order
- * @param  orders            Array of TakerWalletOrders
- * @param  web3              web3 instance instantiated with `new Web3(provider);`
- * @return                   Entire taker wallet orders data as a buffer
- */
-
-export function generateTakerWalletOrdersBuffer(
-  makerTokenAddress: Address,
-  orders: TakerWalletOrder[],
-  web3: Web3,
-): Buffer {
-  // Generate header for taker wallet order
-  const takerOrderHeader: Buffer[] = [
-    paddedBufferForPrimitive(constants.EXCHANGES.KYBER),
-    paddedBufferForPrimitive(orders.length), // Include the number of orders as part of header
-    paddedBufferForPrimitive(makerTokenAddress),
-    paddedBufferForPrimitive(0), // Taker wallet orders do not take any maker token to execute
-  ];
-  // Turn all taker wallet orders to buffers
-  const takerOrderBody: Buffer[] = _.map(orders, ({takerTokenAddress, takerTokenAmount}) =>
-    takerWalletOrderToBuffer(takerTokenAddress, takerTokenAmount, web3));
-  return Buffer.concat([
-    Buffer.concat(takerOrderHeader),
-    Buffer.concat(takerOrderBody),
-  ]);
 }
