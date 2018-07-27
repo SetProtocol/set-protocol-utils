@@ -3,7 +3,7 @@ import * as Web3 from 'web3';
 import { SignatureType, Order } from '@0xproject/types';
 import { BigNumber } from '@0xproject/utils';
 import { orderHashUtils } from '@0xproject/order-utils';
-import { assetDataUtils, generatePseudoRandomSalt } from '@0xProject/order-utils';
+import { assetDataUtils, generatePseudoRandomSalt } from '@0xproject/order-utils';
 
 import { constants } from './constants';
 import { Address, Bytes } from './types';
