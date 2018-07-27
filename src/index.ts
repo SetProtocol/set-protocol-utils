@@ -26,7 +26,7 @@ import {
  * The Utils class is an entry-point into the set-protocols-util.js library for reusable utility
  * methods that pertain to encoding, order generation, signing, etc.
  */
-export class Utils {
+export class SetProtocolUtils {
   private web3: Web3;
 
   /**
@@ -122,7 +122,7 @@ export class Utils {
  * The TestUtils class is an entry-point into the set-protocols-util.js library for reusable utility
  * methods that pertain to testing
  */
-export class TestUtils {
+export class SetProtocolTestUtils {
   private web3: Web3;
 
   /**
