@@ -18,6 +18,7 @@ import {
 import {
   generateTimestamp,
   generateSalt,
+  generateSerializedOrders,
   hashOrderHex
 } from './orders';
 import {
@@ -180,6 +181,16 @@ export class SetProtocolUtils {
    */
   public static parseSignatureHexAsRSV(signature: string): any {
     return parseSignatureHexAsRSV(signature);
+  }
+
+  /**
+   * Generates a byte string representing serialized exchange orders across different exchanges.
+   * @param  makerTokenAddress Address of the token used to pay for the order
+   * @param  orders            Array of orders from various exchanges
+   * @return                   Buffer with all exchange orders formatted and concatenated
+   */
+  public generateSerializedOrders(makerTokenAddress: Address, orders: object[]): Bytes32 {
+    return generateSerializedOrders(makerTokenAddress, orders, this.web3);
   }
 
   /**

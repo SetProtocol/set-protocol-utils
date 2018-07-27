@@ -41,3 +41,9 @@ export enum SolidityTypes {
   AddressArray = 'address[]',
   UintArray = 'uint256[]',
 }
+
+export interface TakerWalletOrder {
+  exchange: number;
+  takerTokenAddress: Address;
+  takerTokenAmount: BigNumber;
+}
