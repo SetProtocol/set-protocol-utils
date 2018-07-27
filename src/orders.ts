@@ -23,11 +23,7 @@ import * as Web3 from 'web3';
 
 import { constants } from './constants';
 import { paddedBufferForPrimitive, bufferObjectWithProperties } from './encoding';
-import { Address, Bytes32, IssuanceOrder, SolidityTypes, TakerWalletOrder } from './types';
-
-interface Exchanges {
-  [exchangeId: string]: TakerWalletOrder[];
-}
+import { Address, Bytes32, Exchanges, IssuanceOrder, SolidityTypes, TakerWalletOrder } from './types';
 
 export function generateTimestamp(minutes: number): BigNumber {
   const timeToExpiration = minutes * 60 * 1000;
@@ -84,22 +80,23 @@ export function generateSerializedOrders(
   const orderBuffer: Buffer[] = [];
   // Sort exchange orders by exchange
   const exchanges: Exchanges = {
-    '1': [],
-    '2': [],
-    '3': [],
+    'ZERO_EX': [],
+    'KYBER': [],
+    'TAKER_WALLET': [],
   };
   _.forEach(orders, (order: TakerWalletOrder) => {
     const { exchange } = order;
-    const exchangeOrders: object[] = exchanges[exchange];
+    const exchangeOrders: TakerWalletOrder[] = exchanges[exchange];
     exchangeOrders.push(order);
   });
   // Loop through all exchange orders and create buffers
   _.forEach(exchanges, (exchangeOrders, key) => {
-    if (key === '1') { // Todo: Replace with set-protocol-contracts constants
+    const exchangeKey: number = constants.EXCHANGES[key];
+    if (exchangeKey === 1) {
       // Handle Zero Ex
-    } else if (key === '2') {
+    } else if (exchangeKey === 2) {
       // Handle Kyber Network
-    } else if (key === '3') {
+    } else if (exchangeKey === 3) {
       orderBuffer.push(generateTakerWalletOrdersBuffer(makerTokenAddress, exchangeOrders, web3));
     }
   });
@@ -145,7 +142,7 @@ export function generateTakerWalletOrdersBuffer(
 ): Buffer {
   // Generate header for taker wallet order
   const takerOrderHeader: Buffer[] = [
-    paddedBufferForPrimitive(3), // Todo: Replace with set-protocol-contracts constants
+    paddedBufferForPrimitive(constants.EXCHANGES.KYBER),
     paddedBufferForPrimitive(orders.length), // Include the number of orders as part of header
     paddedBufferForPrimitive(makerTokenAddress),
     paddedBufferForPrimitive(0), // Taker wallet orders do not take any maker token to execute

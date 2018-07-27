@@ -6,10 +6,18 @@ export type Bytes32 = string;
 export type Bytes = string;
 export type UInt = number | BigNumber;
 
+export interface Constants {
+  [constantId: string]: any;
+}
+
 export interface ECSig {
   v: UInt;
   r: string;
   s: string;
+}
+
+export interface Exchanges {
+  [exchangeId: string]: TakerWalletOrder[];
 }
 
 export interface IssuanceOrder {
