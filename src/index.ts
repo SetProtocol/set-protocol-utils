@@ -8,6 +8,7 @@ import {
   bufferArrayToHex,
   concatBytes,
   numBytesFromBuffer,
+  numBytesFromHex,
   paddedBufferForBigNumber,
   paddedBufferForPrimitive,
 } from './encoding';
@@ -142,6 +143,15 @@ export class SetProtocolUtils {
    */
   public static numBytesFromBuffer(buffer: Buffer[]): BigNumber {
     return numBytesFromBuffer(buffer);
+  }
+
+  /**
+   * Gets the length of a hex string
+   * @param   hex   Hex string
+   * @return  Number of bytes in hex representation of the hex
+   */
+  public static numBytesFromHex(hex: string): BigNumber {
+    return numBytesFromHex(hex);
   }
 
   /**
