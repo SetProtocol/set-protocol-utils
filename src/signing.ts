@@ -3,6 +3,7 @@ import * as Web3 from 'web3';
 
 import { Address, ECSig } from './types';
 
+
 export function parseSignatureHexAsRSV(signatureHex: string): ECSig {
   const { v, r, s } = ethUtil.fromRpcSig(signatureHex);
 
