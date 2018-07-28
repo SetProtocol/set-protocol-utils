@@ -22,6 +22,7 @@ import * as Web3 from 'web3';
 
 import { constants } from './constants';
 import { paddedBufferForPrimitive } from './encoding';
+import { generateExchangeOrderHeader } from './orders';
 import { Address, TakerWalletOrder } from './types';
 
 /* ============ Taker Wallet Order Functions ============ */
@@ -42,12 +43,12 @@ export function generateTakerWalletOrdersBuffer(
   web3: Web3,
 ): Buffer {
   // Generate header for taker wallet order
-  const takerOrderHeader: Buffer[] = [
-    paddedBufferForPrimitive(constants.EXCHANGES.TAKER_WALLET),
-    paddedBufferForPrimitive(orders.length), // Include the number of orders as part of header
-    paddedBufferForPrimitive(makerTokenAddress),
-    paddedBufferForPrimitive(0), // Taker wallet orders do not take any maker token to execute
-  ];
+  const takerOrderHeader: Buffer[] = generateExchangeOrderHeader(
+    constants.EXCHANGES.TAKER_WALLET,
+    makerTokenAddress,
+    new BigNumber(0), // Taker wallet orders do not take any maker token to execute
+    orders.length,
+  );
   // Turn all taker wallet orders to buffers
   const takerOrderBody: Buffer[] = _.map(orders, ({takerTokenAddress, takerTokenAmount}) =>
     takerWalletOrderToBuffer(takerTokenAddress, takerTokenAmount, web3));
