@@ -32,7 +32,6 @@ import {
   signZeroExOrderAsync,
 } from './zeroEx';
 
-
 /**
  * The Utils class is an entry-point into the set-protocols-util.js library for reusable utility
  * methods that pertain to encoding, order generation, signing, etc.
@@ -72,15 +71,6 @@ export class SetProtocolUtils {
    */
   public static concatBytes(bytes: Bytes[]): Bytes {
     return concatBytes(bytes);
-  }
-
-  /**
-   * Converts a 0x order into binary representation, often to get byte count
-   * @param   order   Object conforming to 0x's Order inteface
-   * @return  Array of buffers representing the order
-   */
-  public static zeroExOrderToBuffer(order: Order): Buffer[] {
-    return zeroExOrderToBuffer(order);
   }
 
   /**
@@ -183,6 +173,15 @@ export class SetProtocolUtils {
    */
   public static parseSignatureHexAsRSV(signature: string): any {
     return parseSignatureHexAsRSV(signature);
+  }
+
+  /**
+   * Converts a 0x order into binary representation, often to get byte count
+   * @param   order   Object conforming to 0x's Order inteface
+   * @return  Array of buffers representing the order
+   */
+  public static zeroExOrderToBuffer(order: Order): Buffer[] {
+    return zeroExOrderToBuffer(order);
   }
 
   /* ============ Non-Static SetProtocolUtils Functions ============ */
