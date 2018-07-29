@@ -20,11 +20,14 @@ import { BigNumber } from 'bignumber.js';
 import * as ethUtil from 'ethereumjs-util';
 import * as _ from 'lodash';
 import * as Web3 from 'web3';
+import { Order as ZeroExOrder } from '@0xproject/types';
 
 import { constants } from './constants';
-import { bufferObjectWithProperties } from './encoding';
+import { bufferObjectWithProperties, paddedBufferForBigNumber, paddedBufferForPrimitive } from './encoding';
 import { generateTakerWalletOrdersBuffer } from './takerWallet';
+import { generateZeroExOrdersBuffer } from './zeroEx';
 import { Address, Bytes32, Exchanges, IssuanceOrder, SolidityTypes, TakerWalletOrder } from './types';
+import { isTakerWalletOrder, isZeroExOrder } from './typeGuards';
 
 export function generateTimestamp(minutes: number): BigNumber {
   const timeToExpiration = minutes * 60 * 1000;
@@ -75,28 +78,58 @@ export function hashOrderHex(order: IssuanceOrder): string {
 
 export function generateSerializedOrders(
   makerTokenAddress: Address,
+  makerTokenAmount: BigNumber,
   orders: object[],
   web3: Web3,
 ): Bytes32 {
   const orderBuffer: Buffer[] = [];
-  // Sort exchange orders by exchange
   const exchanges: Exchanges = {
     'ZERO_EX': [],
     'KYBER': [],
     'TAKER_WALLET': [],
   };
-  _.forEach(orders, (order: TakerWalletOrder) => {
-    const { exchange } = order;
-    const exchangeOrders: TakerWalletOrder[] = exchanges[exchange];
-    exchangeOrders.push(order);
+  // Sort exchange orders by exchange
+  _.forEach(orders, (order: TakerWalletOrder | ZeroExOrder) => {
+    let exchangeOrders: any;
+    if (isZeroExOrder(order)) {
+      exchangeOrders = exchanges.ZERO_EX;
+    } else if (isTakerWalletOrder(order)) {
+      exchangeOrders = exchanges.TAKER_WALLET;
+    }
+    if (exchangeOrders) exchangeOrders.push(order);
   });
   // Loop through all exchange orders and create buffers
-  _.forEach(exchanges, (exchangeOrders, key) => {
+  _.forEach(exchanges, (exchangeOrders: any[], key: string) => {
     if (key === 'ZERO_EX') {
+      orderBuffer.push(generateZeroExOrdersBuffer(makerTokenAddress, makerTokenAmount, exchangeOrders));
     } else if (key === 'KYBER') {
     } else if (key === 'TAKER_WALLET') {
       orderBuffer.push(generateTakerWalletOrdersBuffer(makerTokenAddress, exchangeOrders, web3));
     }
   });
   return ethUtil.bufferToHex(Buffer.concat(orderBuffer));
+}
+
+/**
+ * Generates an exchange order header represented as a buffer array.
+ *
+ * @param  exchangeName      Name of the exchange, ex. 'ZERO_EX'
+ * @param  makerTokenAddress Token address that the maker is willing to pay with
+ * @param  makerTokenAmount  Amount of tokens the maker is willing to pay
+ * @param  orderLength       Number of exchange orders
+ * @return                   Array containing all inputs as buffers
+ */
+
+export function generateExchangeOrderHeader(
+  exchangeName: string,
+  makerTokenAddress: Address,
+  makerTokenAmount: BigNumber,
+  orderLength: number
+): Buffer[] {
+  return [
+    paddedBufferForPrimitive(exchangeName),
+    paddedBufferForPrimitive(makerTokenAddress),
+    paddedBufferForBigNumber(makerTokenAmount),
+    paddedBufferForPrimitive(orderLength),
+  ];
 }

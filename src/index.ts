@@ -26,12 +26,11 @@ import {
   signMessage
 } from './signing';
 import {
-  encodeZeroExOrder,
+  zeroExOrderToBuffer,
   generateZeroExExchangeWrapperOrder,
   generateZeroExOrder,
   signZeroExOrderAsync,
 } from './zeroEx';
-
 
 /**
  * The Utils class is an entry-point into the set-protocols-util.js library for reusable utility
@@ -72,15 +71,6 @@ export class SetProtocolUtils {
    */
   public static concatBytes(bytes: Bytes[]): Bytes {
     return concatBytes(bytes);
-  }
-
-  /**
-   * Converts a 0x order into binary representation, often to get byte count
-   * @param   order   Object conforming to 0x's Order inteface
-   * @return  Array of buffers representing the order
-   */
-  public static encodeZeroExOrder(order: Order): Buffer[] {
-    return encodeZeroExOrder(order);
   }
 
   /**
@@ -185,6 +175,15 @@ export class SetProtocolUtils {
     return parseSignatureHexAsRSV(signature);
   }
 
+  /**
+   * Converts a 0x order into binary representation, often to get byte count
+   * @param   order   Object conforming to 0x's Order inteface
+   * @return  Array of buffers representing the order
+   */
+  public static zeroExOrderToBuffer(order: Order): Buffer[] {
+    return zeroExOrderToBuffer(order);
+  }
+
   /* ============ Non-Static SetProtocolUtils Functions ============ */
 
   /**
@@ -193,8 +192,8 @@ export class SetProtocolUtils {
    * @param  orders            Array of orders from various exchanges
    * @return                   Buffer with all exchange orders formatted and concatenated
    */
-  public generateSerializedOrders(makerTokenAddress: Address, orders: object[]): Bytes32 {
-    return generateSerializedOrders(makerTokenAddress, orders, this.web3);
+  public generateSerializedOrders(makerTokenAddress: Address, makerTokenAmount: BigNumber, orders: object[]): Bytes32 {
+    return generateSerializedOrders(makerTokenAddress, makerTokenAmount, orders, this.web3);
   }
 
   /**
@@ -213,7 +212,7 @@ export class SetProtocolUtils {
    * @return  Hex string representation of 0x 0rder signature
    */
   public async signZeroExOrderAsync(order: Order): Promise<string> {
-    return signZeroExOrderAsync(order);
+    return signZeroExOrderAsync(order, this.web3);
   }
 }
 

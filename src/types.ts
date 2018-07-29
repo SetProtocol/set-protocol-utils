@@ -1,6 +1,5 @@
 import { BigNumber } from 'bignumber.js';
 
-
 export type Address = string;
 export type Bytes32 = string;
 export type Bytes = string;
