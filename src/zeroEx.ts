@@ -21,8 +21,7 @@ import * as _ from 'lodash';
 import * as Web3 from 'web3';
 import { SignatureType, Order } from '@0xproject/types';
 import { BigNumber } from '@0xproject/utils';
-import { orderHashUtils } from '@0xproject/order-utils';
-import { assetDataUtils, generatePseudoRandomSalt } from '@0xproject/order-utils';
+import { assetDataUtils, orderHashUtils } from '@0xproject/order-utils';
 
 import { constants } from './constants';
 import { generateExchangeOrderHeader } from './orders';
@@ -95,32 +94,35 @@ export function generateZeroExExchangeWrapperOrder(zeroExOrder: Order, signature
 }
 
 export function generateZeroExOrder(
+  senderAddress: Address,
   makerAddress: Address,
-  makerToken: Address,
-  takerToken: Address,
+  takerAddress: Address,
+  makerFee: BigNumber,
+  takerFee: BigNumber,
   makerAssetAmount: BigNumber,
   takerAssetAmount: BigNumber,
+  makerTokenAddress: Address,
+  takerTokenAddress: Address,
+  salt: BigNumber,
+  exchangeAddress: Address,
+  feeRecipientAddress: Address,
+  expirationTimeSeconds: BigNumber
 ): Order {
-  const tenMinutes = 10 * 60 * 1000;
-  const randomExpiration = new BigNumber(Date.now() + tenMinutes);
-  const makerAssetData = assetDataUtils.encodeERC20AssetData(makerToken);
-  const takerAssetData = assetDataUtils.encodeERC20AssetData(takerToken);
-  const order = {
-    exchangeAddress: constants.ZERO_EX_SNAPSHOT_EXCHANGE_ADDRESS,
+  return {
+    senderAddress,
     makerAddress,
-    takerAddress: constants.NULL_ADDRESS,
-    senderAddress: constants.NULL_ADDRESS,
-    feeRecipientAddress: constants.NULL_ADDRESS,
-    expirationTimeSeconds: randomExpiration,
-    salt: generatePseudoRandomSalt(),
+    takerAddress,
+    makerFee,
+    takerFee,
     makerAssetAmount,
     takerAssetAmount,
-    makerAssetData,
-    takerAssetData,
-    makerFee: constants.ZERO,
-    takerFee: constants.ZERO,
+    makerAssetData: assetDataUtils.encodeERC20AssetData(makerTokenAddress),
+    takerAssetData: assetDataUtils.encodeERC20AssetData(takerTokenAddress),
+    salt,
+    exchangeAddress,
+    feeRecipientAddress,
+    expirationTimeSeconds,
   } as Order;
-  return order;
 }
 
 export async function signZeroExOrderAsync(order: Order, web3: Web3): Promise<string> {

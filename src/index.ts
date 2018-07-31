@@ -19,17 +19,17 @@ import {
   generateTimestamp,
   generateSalt,
   generateSerializedOrders,
-  hashOrderHex
+  hashOrderHex,
 } from './orders';
 import {
   parseSignatureHexAsRSV,
-  signMessage
+  signMessage,
 } from './signing';
 import {
-  zeroExOrderToBuffer,
   generateZeroExExchangeWrapperOrder,
   generateZeroExOrder,
   signZeroExOrderAsync,
+  zeroExOrderToBuffer,
 } from './zeroEx';
 
 /**
@@ -103,21 +103,51 @@ export class SetProtocolUtils {
 
   /**
    * Generates a 0x order
-   * @param   makerAddress       Maker token owner
-   * @param   makerToken         Asset to exchange
-   * @param   takerToken         Asset to exchange for
-   * @param   makerAssetAmount   Amount of asset to exchange
-   * @param   takerAssetAmount   Amount of asset to exchange for
+   * @param   senderAddress           Address calling 0x Exchange contract
+   * @param   makerAddress            Maker asset owner
+   * @param   takerAddress            Taker assert owner
+   * @param   makerFee                Fee accrused to maker
+   * @param   takerFee                Fee accrued to taker
+   * @param   makerAssetAmount        Amount of asset to exchange
+   * @param   takerAssetAmount        Amount of asset to exchange for
+   * @param   makerTokenAddress       Address of asset to exchange
+   * @param   takerTokenAddress       Address of asset to exchange for
+   * @param   salt                    Pseudo-random number acting as a salt
+   * @param   exchangeAddress         0x Exchange contract address
+   * @param   feeRecipientAddress     Address to send fee
+   * @param   expirationTimeSeconds   Order expiration in unix timestamp
    * @return  Object conforming to 0x's Order inteface
    */
   public static generateZeroExOrder(
+    senderAddress: Address,
     makerAddress: Address,
-    makerToken: Address,
-    takerToken: Address,
+    takerAddress: Address,
+    makerFee: BigNumber,
+    takerFee: BigNumber,
     makerAssetAmount: BigNumber,
     takerAssetAmount: BigNumber,
+    makerTokenAddress: Address,
+    takerTokenAddress: Address,
+    salt: BigNumber,
+    exchangeAddress: Address,
+    feeRecipientAddress: Address,
+    expirationTimeSeconds: BigNumber
   ): Order {
-    return generateZeroExOrder(makerAddress, makerToken, takerToken, makerAssetAmount, takerAssetAmount);
+    return generateZeroExOrder(
+      senderAddress,
+      makerAddress,
+      takerAddress,
+      makerFee,
+      takerFee,
+      makerAssetAmount,
+      takerAssetAmount,
+      makerTokenAddress,
+      takerTokenAddress,
+      salt,
+      exchangeAddress,
+      feeRecipientAddress,
+      expirationTimeSeconds,
+    );
   }
 
   /**
@@ -188,9 +218,9 @@ export class SetProtocolUtils {
 
   /**
    * Generates a byte string representing serialized exchange orders across different exchanges.
-   * @param  makerTokenAddress Address of the token used to pay for the order
-   * @param  orders            Array of orders from various exchanges
-   * @return                   Buffer with all exchange orders formatted and concatenated
+   * @param  makerTokenAddress   Address of the token used to pay for the order
+   * @param  orders              Array of orders from various exchanges
+   * @return                     Buffer with all exchange orders formatted and concatenated
    */
   public generateSerializedOrders(makerTokenAddress: Address, makerTokenAmount: BigNumber, orders: object[]): Bytes32 {
     return generateSerializedOrders(makerTokenAddress, makerTokenAmount, orders, this.web3);
