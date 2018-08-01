@@ -34,6 +34,7 @@ import {
   paddedBufferForBigNumber,
 } from './encoding';
 
+
 export function generateZeroExOrdersBuffer(
   makerTokenAddress: Address,
   makerTokenAmount: BigNumber,
@@ -83,11 +84,11 @@ export function generateZeroExExchangeWrapperOrder(zeroExOrder: Order, signature
     paddedBufferForBigNumber(zeroExOrderLength),
     paddedBufferForBigNumber(makerAssetDataLength),
     paddedBufferForBigNumber(takerAssetDataLength),
+    paddedBufferForBigNumber(fillAmount),
   ];
 
   return bufferArrayToHex(
     orderHeader
-      .concat([paddedBufferForBigNumber(fillAmount)])
       .concat([ethUtil.toBuffer(signature)])
       .concat(zeroExOrderBuffer)
   );
