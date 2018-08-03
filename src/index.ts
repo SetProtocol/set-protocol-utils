@@ -50,7 +50,7 @@ export class SetProtocolUtils {
    * @param web3   Web3 instance to use
    */
   public constructor(web3?: Web3) {
-    this.web3 = web3 || new Web3();
+    this.web3 = web3 || new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
   }
 
   /* ============ Static SetProtocolUtils Functions ============ */
