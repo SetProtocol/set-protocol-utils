@@ -2,7 +2,7 @@ import { BigNumber } from 'bignumber.js';
 import { Order } from '@0xproject/types';
 import * as Web3 from 'web3';
 
-import { Address, Bytes, Bytes32, IssuanceOrder, Log, ECSig } from './types';
+import { Address, Bytes, Bytes32, IssuanceOrder, Log, ECSig, TakerWalletOrder } from './types';
 import { constants } from './constants';
 import {
   bufferArrayToHex,
@@ -31,6 +31,9 @@ import {
   signZeroExOrderAsync,
   zeroExOrderToBuffer,
 } from './zeroEx';
+import {
+  generateTakerWalletOrdersBuffer,
+} from './takerWallet';
 
 /**
  * The Utils class is an entry-point into the set-protocols-util.js library for reusable utility
@@ -224,6 +227,16 @@ export class SetProtocolUtils {
    */
   public generateSerializedOrders(makerTokenAddress: Address, makerTokenAmount: BigNumber, orders: object[]): Bytes32 {
     return generateSerializedOrders(makerTokenAddress, makerTokenAmount, orders, this.web3);
+  }
+
+  /**
+   * Generates a buffer representing taker wallet orders with appropriate headers.
+   * @param  makerTokenAddress   Address of the token used to pay for the order
+   * @param  orders              Array of orders from taker wallet
+   * @return                     Buffer with all exchange orders formatted and concatenated
+   */
+  public generateTakerWalletOrdersBuffer(makerTokenAddress: Address, orders: TakerWalletOrder[]): Buffer {
+    return generateTakerWalletOrdersBuffer(makerTokenAddress, orders, this.web3);
   }
 
   /**

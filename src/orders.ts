@@ -113,23 +113,26 @@ export function generateSerializedOrders(
 /**
  * Generates an exchange order header represented as a buffer array.
  *
- * @param  exchangeName      Name of the exchange, ex. 'ZERO_EX'
- * @param  makerTokenAddress Token address that the maker is willing to pay with
- * @param  makerTokenAmount  Amount of tokens the maker is willing to pay
- * @param  orderLength       Number of exchange orders
- * @return                   Array containing all inputs as buffers
+ * @param  exchangeName          Name of the exchange, ex. 'ZERO_EX'
+ * @param  orderCount            Number of exchange orders
+ * @param  makerTokenAddress     Token address that the maker is willing to pay with
+ * @param  makerTokenAmount      Amount of tokens the maker is willing to pay
+ * @param  totalOrderBodyLength  Length of order data buffer
+ * @return                       Array containing all inputs as buffers
  */
 
 export function generateExchangeOrderHeader(
   exchangeName: string,
+  orderCount: number,
   makerTokenAddress: Address,
   makerTokenAmount: BigNumber,
-  orderLength: number
+  totalOrderBodyLength: number,
 ): Buffer[] {
   return [
     paddedBufferForPrimitive(exchangeName),
+    paddedBufferForPrimitive(orderCount),
     paddedBufferForPrimitive(makerTokenAddress),
     paddedBufferForBigNumber(makerTokenAmount),
-    paddedBufferForPrimitive(orderLength),
+    paddedBufferForPrimitive(totalOrderBodyLength),
   ];
 }

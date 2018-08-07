@@ -42,19 +42,23 @@ export function generateTakerWalletOrdersBuffer(
   orders: TakerWalletOrder[],
   web3: Web3,
 ): Buffer {
-  // Generate header for taker wallet order
-  const takerOrderHeader: Buffer[] = generateExchangeOrderHeader(
-    constants.EXCHANGES.TAKER_WALLET,
-    makerTokenAddress,
-    new BigNumber(0), // Taker wallet orders do not take any maker token to execute
-    orders.length,
-  );
   // Turn all taker wallet orders to buffers
   const takerOrderBody: Buffer[] = _.map(orders, ({takerTokenAddress, takerTokenAmount}) =>
     takerWalletOrderToBuffer(takerTokenAddress, takerTokenAmount, web3));
+  const takerOrderBodyBuffer: Buffer = Buffer.concat(takerOrderBody);
+
+  // Generate header for taker wallet order
+  const takerOrderHeader: Buffer[] = generateExchangeOrderHeader(
+    constants.EXCHANGES.TAKER_WALLET,
+    orders.length,
+    makerTokenAddress,
+    new BigNumber(0), // Taker wallet orders do not take any maker token to execute
+    takerOrderBodyBuffer.length,
+  );
+
   return Buffer.concat([
     Buffer.concat(takerOrderHeader),
-    Buffer.concat(takerOrderBody),
+    takerOrderBodyBuffer,
   ]);
 }
 
