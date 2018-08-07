@@ -40,16 +40,19 @@ export function generateZeroExOrdersBuffer(
   makerTokenAmount: BigNumber,
   orders: Order[],
 ) {
+  const zeroExOrderBody: Buffer[] = _.map(orders, order => Buffer.concat(zeroExOrderToBuffer(order)));
+  const zeroExOrderBodyBuffer: Buffer = Buffer.concat(zeroExOrderBody);
+
   const zeroExOrderHeader: Buffer[] = generateExchangeOrderHeader(
     constants.EXCHANGES.ZERO_EX,
+    orders.length,
     makerTokenAddress,
     makerTokenAmount,
-    orders.length,
+    zeroExOrderBodyBuffer.length,
   );
-  const zeroExOrderBody: Buffer[] = _.map(orders, order => Buffer.concat(zeroExOrderToBuffer(order)));
   return Buffer.concat([
     Buffer.concat(zeroExOrderHeader),
-    Buffer.concat(zeroExOrderBody),
+    zeroExOrderBodyBuffer,
   ]);
 }
 
