@@ -1,7 +1,6 @@
 import { BigNumber } from 'bignumber.js';
 
 export type Address = string;
-export type Bytes32 = string;
 export type Bytes = string;
 export type UInt = number | BigNumber;
 
@@ -28,8 +27,8 @@ export interface IssuanceOrder {
   quantity: BigNumber;
   makerTokenAmount: BigNumber;
   expiration: BigNumber;
-  makerRelayerFee: BigNumber,
-  takerRelayerFee: BigNumber,
+  makerRelayerFee: BigNumber;
+  takerRelayerFee: BigNumber;
   salt: BigNumber;
   requiredComponents: Address[];
   requiredComponentAmounts: BigNumber[];

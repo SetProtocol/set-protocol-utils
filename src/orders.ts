@@ -26,7 +26,7 @@ import { constants } from './constants';
 import { bufferObjectWithProperties, paddedBufferForBigNumber, paddedBufferForPrimitive } from './encoding';
 import { generateTakerWalletOrdersBuffer } from './takerWallet';
 import { generateZeroExOrdersBuffer } from './zeroEx';
-import { Address, Bytes32, Exchanges, IssuanceOrder, SolidityTypes, TakerWalletOrder } from './types';
+import { Address, Bytes, Exchanges, IssuanceOrder, SolidityTypes, TakerWalletOrder } from './types';
 import { isTakerWalletOrder, isZeroExOrder } from './typeGuards';
 
 export function generateTimestamp(minutes: number): BigNumber {
@@ -82,7 +82,7 @@ export function generateSerializedOrders(
   makerTokenAmount: BigNumber,
   orders: object[],
   web3: Web3,
-): Bytes32 {
+): Bytes {
   const orderBuffer: Buffer[] = [];
   const exchanges: Exchanges = {
     'ZERO_EX': [],

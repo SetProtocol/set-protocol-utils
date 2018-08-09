@@ -3,7 +3,7 @@ import * as ethUtil from 'ethereumjs-util';
 import * as Web3 from 'web3';
 import { BigNumber } from 'bignumber.js';
 
-import { Bytes, Bytes32 } from './types';
+import { Bytes } from './types';
 
 const web3 = new Web3();
 
@@ -21,7 +21,7 @@ export function concatBytes(inputs: Bytes[]): Bytes {
   return addHexPrefix(bytes);
 }
 
-export function bufferArrayToHex(bufferArray: Buffer[]): Bytes32 {
+export function bufferArrayToHex(bufferArray: Buffer[]): Bytes {
   const buffer = Buffer.concat(bufferArray);
 
   return ethUtil.bufferToHex(buffer);

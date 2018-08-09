@@ -2,7 +2,7 @@ import { BigNumber } from 'bignumber.js';
 import { Order } from '@0xproject/types';
 import * as Web3 from 'web3';
 
-import { Address, Bytes, Bytes32, IssuanceOrder, Log, ECSig, TakerWalletOrder } from './types';
+import { Address, Bytes, IssuanceOrder, Log, ECSig, TakerWalletOrder } from './types';
 import { constants } from './constants';
 import {
   bufferArrayToHex,
@@ -35,6 +35,19 @@ import {
   generateTakerWalletOrdersBuffer,
 } from './takerWallet';
 
+export {
+  Address,
+  Bytes,
+  UInt,
+  Constants,
+  ECSig,
+  Exchanges,
+  IssuanceOrder,
+  Log,
+  SolidityTypes,
+  TakerWalletOrder,
+} from './types';
+
 /**
  * The Utils class is an entry-point into the set-protocols-util.js library for reusable utility
  * methods that pertain to encoding, order generation, signing, etc.
@@ -61,9 +74,9 @@ export class SetProtocolUtils {
   /**
    * Converts an array of Buffers into Hex
    * @param   bufferArray   Array of buffers
-   * @return  Hex of array of buffers represented as Bytes32 (string)
+   * @return  Hex of array of buffers represented as Bytes (string)
    */
-  public static bufferArrayToHex(bufferArray: Buffer[]): Bytes32 {
+  public static bufferArrayToHex(bufferArray: Buffer[]): Bytes {
     return bufferArrayToHex(bufferArray);
   }
 
@@ -225,7 +238,7 @@ export class SetProtocolUtils {
    * @param  orders              Array of orders from various exchanges
    * @return                     Buffer with all exchange orders formatted and concatenated
    */
-  public generateSerializedOrders(makerTokenAddress: Address, makerTokenAmount: BigNumber, orders: object[]): Bytes32 {
+  public generateSerializedOrders(makerTokenAddress: Address, makerTokenAmount: BigNumber, orders: object[]): Bytes {
     return generateSerializedOrders(makerTokenAddress, makerTokenAmount, orders, this.web3);
   }
 
