@@ -43,6 +43,7 @@ export {
   ECSig,
   Exchanges,
   IssuanceOrder,
+  SignedIssuanceOrder,
   Log,
   SolidityTypes,
   TakerWalletOrder,
