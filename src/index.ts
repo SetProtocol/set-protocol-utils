@@ -35,6 +35,20 @@ import {
   generateTakerWalletOrdersBuffer,
 } from './takerWallet';
 
+export {
+  Address,
+  Bytes32,
+  Bytes,
+  UInt,
+  Constants,
+  ECSig,
+  Exchanges,
+  IssuanceOrder,
+  Log,
+  SolidityTypes,
+  TakerWalletOrder,
+} from './types';
+
 /**
  * The Utils class is an entry-point into the set-protocols-util.js library for reusable utility
  * methods that pertain to encoding, order generation, signing, etc.
