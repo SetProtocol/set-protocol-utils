@@ -29,8 +29,7 @@
     "tslint": "5.8.0",
     "typedoc": "^0.11.1",
     "typescript": "^2.9.2",
-    "web3-typescript-typings": "^0.10.2",
-    "yarn": "^1.9.4"
+    "web3-typescript-typings": "^0.10.2"
   },
   "dependencies": {
     "@0xproject/base-contract": "^1.0.4",
