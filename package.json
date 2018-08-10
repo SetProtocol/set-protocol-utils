@@ -1,6 +1,6 @@
 {
   "name": "set-protocol-utils",
-  "version": "0.3.10",
+  "version": "0.3.11",
   "description": "Common utilities for Set Protocol",
   "main": "dist/index.js",
   "typings": "dist/types/index.d.ts",
@@ -27,7 +27,8 @@
     "@types/lodash": "4.14.104",
     "tslint": "5.8.0",
     "typedoc": "^0.11.1",
-    "typescript": "2.7.1"
+    "typescript": "^2.9.2",
+    "web3-typescript-typings": "^0.10.2"
   },
   "dependencies": {
     "@0xproject/base-contract": "^1.0.4",
