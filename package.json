@@ -25,9 +25,12 @@
     "@0xproject/types": "^1.0.1-rc.3",
     "@0xproject/typescript-typings": "^1.0.3",
     "@types/lodash": "4.14.104",
+    "add": "^2.0.6",
     "tslint": "5.8.0",
     "typedoc": "^0.11.1",
-    "typescript": "2.7.1"
+    "typescript": "^2.9.2",
+    "web3-typescript-typings": "^0.10.2",
+    "yarn": "^1.9.4"
   },
   "dependencies": {
     "@0xproject/base-contract": "^1.0.4",
