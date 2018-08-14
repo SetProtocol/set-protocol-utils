@@ -137,7 +137,7 @@
   dependencies:
     any-observable "^0.3.0"
 
-"@types/bn.js@^4.11.0":
+"@types/bn.js@*", "@types/bn.js@^4.11.0":
   version "4.11.1"
   resolved "https://registry.yarnpkg.com/@types/bn.js/-/bn.js-4.11.1.tgz#6fd07b93490ecf0f3501a31ea9cfd330885b10fa"
   dependencies:
@@ -201,6 +201,17 @@
   dependencies:
     "@types/glob" "*"
     "@types/node" "*"
+
+"@types/underscore@*":
+  version "1.8.8"
+  resolved "https://registry.yarnpkg.com/@types/underscore/-/underscore-1.8.8.tgz#510fe1ca5e7fa87fccd405b9a8b566d420bc3d1b"
+
+"@types/web3@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@types/web3/-/web3-1.0.3.tgz#2c5f6905d46eb6e40da8eb7c1e553463862fa599"
+  dependencies:
+    "@types/bn.js" "*"
+    "@types/underscore" "*"
 
 "@types/yargs@^11.0.0":
   version "11.1.1"
