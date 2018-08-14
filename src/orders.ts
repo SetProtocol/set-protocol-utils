@@ -16,10 +16,10 @@
 
 'use strict';
 
-import { BigNumber } from 'bignumber.js';
-import * as ethUtil from 'ethereumjs-util';
 import * as _ from 'lodash';
-import * as Web3 from 'web3';
+import * as ethUtil from 'ethereumjs-util';
+import Web3 = require('web3');
+import { BigNumber } from 'bignumber.js';
 import { Order as ZeroExOrder } from '@0xproject/types';
 
 import { constants } from './constants';

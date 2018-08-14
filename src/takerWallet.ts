@@ -16,9 +16,9 @@
 
 'use strict';
 
-import { BigNumber } from 'bignumber.js';
 import * as _ from 'lodash';
-import * as Web3 from 'web3';
+import Web3 = require('web3');
+import { BigNumber } from 'bignumber.js';
 
 import { constants } from './constants';
 import { paddedBufferForPrimitive } from './encoding';

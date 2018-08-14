@@ -1,6 +1,6 @@
-import * as ABIDecoder from 'abi-decoder';
 import * as _ from 'lodash';
-import * as Web3 from 'web3';
+import * as ABIDecoder from 'abi-decoder';
+import Web3 = require('web3');
 
 import { BigNumber } from 'bignumber.js';
 import { Log } from './types';
