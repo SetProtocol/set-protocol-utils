@@ -1,6 +1,6 @@
 {
   "name": "set-protocol-utils",
-  "version": "0.3.14",
+  "version": "0.3.15",
   "description": "Common utilities for Set Protocol",
   "main": "dist/index.js",
   "typings": "dist/types/index.d.ts",
@@ -30,11 +30,10 @@
     "@0xproject/base-contract": "^1.0.4",
     "@0xproject/order-utils": "^1.0.1-rc.2",
     "@0xproject/types": "^1.0.1-rc.3",
-    "@0xproject/typescript-typings": "^1.0.3",
+    "@0xproject/typescript-typings": "^1.0.4",
     "@0xproject/web3-wrapper": "^1.1.2",
     "@types/lodash": "4.14.104",
     "@types/node": "^8.0.53",
-    "@types/web3": "^1.0.3",
     "abi-decoder": "^1.0.9",
     "bignumber.js": "~4.1.0",
     "ethereum-types": "^1.0.0",
@@ -45,8 +44,7 @@
     "lint-staged": "^7.2.0",
     "lodash": "^4.17.4",
     "tslint-eslint-rules": "^5.3.1",
-    "web3": "0.20.0",
-    "web3-typescript-typings": "^0.10.2"
+    "web3": "0.20.0"
   },
   "husky": {
     "hooks": {
