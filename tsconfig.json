@@ -14,7 +14,7 @@
       "*": [
         "node_modules/*",
         "types/*",
-        "node_modules/@0xproject/typescript-typings/types"
+        "node_modules/@0xproject/typescript-typings/types/*"
       ]
     },
     "noUnusedLocals": true,
@@ -22,8 +22,7 @@
   },
   "include": [
     "./src/**/*",
-    "./types/*.ts",
-    "./node_modules/web3-typescript-typings/index.d.ts"
+    "./types/**/*"
   ],
   "exclude": [
     "node_modules"

@@ -18,7 +18,7 @@
 
 import * as _ from 'lodash';
 import * as ethUtil from 'ethereumjs-util';
-import Web3 = require('web3');
+import * as Web3 from 'web3';
 import { assetDataUtils, orderHashUtils } from '@0xproject/order-utils';
 import { BigNumber } from '@0xproject/utils';
 import { SignatureType, Order } from '@0xproject/types';
