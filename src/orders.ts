@@ -101,6 +101,9 @@ export function generateSerializedOrders(
   });
   // Loop through all exchange orders and create buffers
   _.forEach(exchanges, (exchangeOrders: any[], key: string) => {
+    if (exchangeOrders.length === 0) {
+      return;
+    }
     if (key === 'ZERO_EX') {
       orderBuffer.push(generateZeroExOrdersBuffer(makerTokenAddress, makerTokenAmount, exchangeOrders));
     } else if (key === 'KYBER') {
