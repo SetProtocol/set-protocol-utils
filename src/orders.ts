@@ -20,7 +20,7 @@ import * as _ from 'lodash';
 import * as ethUtil from 'ethereumjs-util';
 import * as Web3 from 'web3';
 import { BigNumber } from 'bignumber.js';
-import { Order as ZeroExOrder } from '@0xproject/types';
+import { SignedOrder as ZeroExOrder } from '@0xproject/types';
 
 import { constants } from './constants';
 import { bufferObjectWithProperties, paddedBufferForBigNumber, paddedBufferForPrimitive } from './encoding';
@@ -71,15 +71,18 @@ export function hashOrderHex(order: IssuanceOrder): string {
 /**
  * Generates a byte string representing serialized exchange orders across different exchanges.
  *
- * @param  makerTokenAddress Address of the token used to pay for the order
- * @param  orders            Array of orders from various exchanges
- * @param  web3              web3 instance instantiated with `new Web3(provider);`
- * @return                   Buffer with all exchange orders formatted and concatenated
+ * @param  makerTokenAddress   Address of the token used to pay for the order
+ * @param  makerTokenAmount    Amount of token used to pay for orders
+ * @param  fillAmount          Amount of Set being filled
+ * @param  orders              Array of order objects from various exchanges
+ * @param  web3                web3 instance instantiated with `new Web3(provider);`
+ * @return                     Buffer with all exchange orders formatted and concatenated
  */
 
 export function generateSerializedOrders(
   makerTokenAddress: Address,
   makerTokenAmount: BigNumber,
+  fillAmount: BigNumber,
   orders: object[],
   web3: Web3,
 ): Bytes {
@@ -105,7 +108,7 @@ export function generateSerializedOrders(
       return;
     }
     if (key === 'ZERO_EX') {
-      orderBuffer.push(generateZeroExOrdersBuffer(makerTokenAddress, makerTokenAmount, exchangeOrders));
+      orderBuffer.push(generateZeroExOrdersBuffer(makerTokenAddress, makerTokenAmount, fillAmount, exchangeOrders));
     } else if (key === 'KYBER') {
     } else if (key === 'TAKER_WALLET') {
       orderBuffer.push(generateTakerWalletOrdersBuffer(makerTokenAddress, exchangeOrders, web3));

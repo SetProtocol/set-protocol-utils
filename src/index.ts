@@ -236,11 +236,18 @@ export class SetProtocolUtils {
   /**
    * Generates a byte string representing serialized exchange orders across different exchanges.
    * @param  makerTokenAddress   Address of the token used to pay for the order
+   * @param  makerTokenAmount    Amount of token used to pay for orders
+   * @param  fillAmount          Amount of Set being filled
    * @param  orders              Array of orders from various exchanges
    * @return                     Buffer with all exchange orders formatted and concatenated
    */
-  public generateSerializedOrders(makerTokenAddress: Address, makerTokenAmount: BigNumber, orders: object[]): Bytes {
-    return generateSerializedOrders(makerTokenAddress, makerTokenAmount, orders, this.web3);
+  public generateSerializedOrders(
+    makerTokenAddress: Address,
+    makerTokenAmount: BigNumber,
+    fillAmount: BigNumber,
+    orders: object[]
+  ): Bytes {
+    return generateSerializedOrders(makerTokenAddress, makerTokenAmount, fillAmount, orders, this.web3);
   }
 
   /**
