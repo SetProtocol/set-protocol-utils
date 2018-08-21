@@ -245,7 +245,7 @@ export class SetProtocolUtils {
     makerTokenAddress: Address,
     makerTokenAmount: BigNumber,
     fillAmount: BigNumber,
-    orders: object[]
+    orders: object[],
   ): Bytes {
     return generateSerializedOrders(makerTokenAddress, makerTokenAmount, fillAmount, orders, this.web3);
   }
