@@ -21,7 +21,7 @@ import * as ethUtil from 'ethereumjs-util';
 import * as Web3 from 'web3';
 import { assetDataUtils, orderHashUtils } from '@0xproject/order-utils';
 import { BigNumber } from '@0xproject/utils';
-import { SignatureType, Order } from '@0xproject/types';
+import { SignatureType, Order, SignedOrder } from '@0xproject/types';
 
 import { constants } from './constants';
 import { generateExchangeOrderHeader } from './orders';
@@ -38,9 +38,12 @@ import {
 export function generateZeroExOrdersBuffer(
   makerTokenAddress: Address,
   makerTokenAmount: BigNumber,
-  orders: Order[],
+  fillAmount: BigNumber,
+  orders: SignedOrder[],
 ) {
-  const zeroExOrderBody: Buffer[] = _.map(orders, order => Buffer.concat(zeroExOrderToBuffer(order)));
+  const zeroExOrderBody: Buffer[] = _.map(orders, order =>
+    ethUtil.toBuffer(generateZeroExExchangeWrapperOrder(order, order.signature, fillAmount))
+  );
   const zeroExOrderBodyBuffer: Buffer = Buffer.concat(zeroExOrderBody);
 
   const zeroExOrderHeader: Buffer[] = generateExchangeOrderHeader(
