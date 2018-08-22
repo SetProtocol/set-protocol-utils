@@ -11,6 +11,7 @@ import {
   numBytesFromHex,
   paddedBufferForBigNumber,
   paddedBufferForPrimitive,
+  stringToBytes,
 } from './encoding';
 import {
   getLogsFromTxHash
@@ -57,10 +58,27 @@ export class SetProtocolUtils {
   private web3: Web3;
 
   /**
+   * Exposing commonly used non-mapping constants. Mapppings are defined separately,
+   * see EXCHANGES and REBALANCING_STATE for examples. Constants that only apply to
+   * development environments are defined as part of SetProtocolTestUtils
+   */
+  public static CONSTANTS = {
+    MAX_DIGITS_IN_UNSIGNED_256_INT: constants.MAX_DIGITS_IN_UNSIGNED_256_INT,
+    NULL_ADDRESS: constants.NULL_ADDRESS,
+    ZERO: constants.ZERO,
+  };
+
+  /**
    * Enumeration of accepted exchange wrapper ids used as part of Exchange headers
    * { ZERO_EX: 1, KYBER: 2, TAKER_WALLET: 3 }
    */
   public static EXCHANGES = constants.EXCHANGES;
+
+  /**
+   * Enumeration of states of rebalancing token
+   * { DEFAULT: 0, PROPOSAL: 1, REBALANCE: 2 }
+   */
+  public static REBALANCING_STATE = constants.REBALANCING_STATE;
 
   /**
    * Initialize a Utils class
@@ -223,6 +241,15 @@ export class SetProtocolUtils {
   }
 
   /**
+   * Returns the hex string representation of a string padded with '0x'
+   * @param   input   A string primative
+   * @return  Hex of the string which can be used as a bytes32 transaction parameter
+   */
+  public static stringToBytes(input: string): Bytes {
+    return stringToBytes(input);
+  }
+
+  /**
    * Converts a 0x order into binary representation, often to get byte count
    * @param   order   Object conforming to 0x's Order inteface
    * @return  Array of buffers representing the order
@@ -289,14 +316,19 @@ export class SetProtocolTestUtils {
   private web3: Web3;
 
   /**
-   * Address of 0x exchange address contract on test rpc, loaded from snapshot
+   * Address of deployed 0x exchange address contract on test rpc, loaded from snapshot
    */
   public static ZERO_EX_EXCHANGE_ADDRESS = constants.ZERO_EX_SNAPSHOT_EXCHANGE_ADDRESS;
 
   /**
-   * Address of 0x erc20 proxy contract on test rpc, loaded from snapshot
+   * Address of deployed 0x erc20 proxy contract on test rpc, loaded from snapshot
    */
   public static ZERO_EX_ERC20_PROXY_ADDRESS = constants.ZERO_EX_SNAPSHOT_ERC20_PROXY_ADDRESS;
+
+  /**
+   * Address of deployed 0x token on test rpc, loaded from snapshot
+   */
+  public static ZERO_EX_TOKEN_ADDRESS = constants.ZERO_EX_TOKEN_ADDRESS;
 
   /**
    * Initialize a TestUtils class

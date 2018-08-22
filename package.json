@@ -1,6 +1,6 @@
 {
   "name": "set-protocol-utils",
-  "version": "0.3.17",
+  "version": "0.3.18",
   "description": "Common utilities for Set Protocol",
   "main": "dist/index.js",
   "typings": "dist/types/index.d.ts",
@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/SetProtocol/set-protocol-utils#readme",
   "devDependencies": {
+    "chai": "^4.1.2",
     "tslint": "5.8.0",
     "typedoc": "^0.11.1",
     "typescript": "^2.9.2"

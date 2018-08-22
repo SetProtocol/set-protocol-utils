@@ -53,6 +53,11 @@ export function paddedBufferForBigNumber(number: BigNumber): Buffer {
   return paddedBufferForPrimitive(web3.toHex(number));
 }
 
+export function stringToBytes(input: string): Bytes {
+  // Padding 66 to include the '0x' prefix
+  return web3.fromAscii(input).padEnd(66, '0');
+}
+
 function elementaryName (
   name: string,
 ): string {
