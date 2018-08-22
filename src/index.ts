@@ -14,6 +14,7 @@ import {
   stringToBytes,
 } from './encoding';
 import {
+  assertLogEquivalence,
   getLogsFromTxHash
 } from './logs';
 import {
@@ -339,7 +340,21 @@ export class SetProtocolTestUtils {
   }
 
   /**
+   * Asserts that an array of logs is a subject of all of another set of logs, usually
+   * all the logs of a particular transaction
+   *
+   * @param   actual     Formatted logs retrieved via the txHash. See getLogsFromTxHash
+   * @param   expected   A manually generated array of logs for a particular transaction
+   */
+  public static assertLogEquivalence(actual: Log[], expected: Log[]) {
+    assertLogEquivalence(actual, expected);
+  }
+
+  /* ============ Non-Static SetProtocolUtils Functions ============ */
+
+  /**
    * Retrieves readable logs from a transaction hash
+   *
    * @param   txHash   Transaction hash to retrieve logs from
    * @return  Array of logs presented as Log
    */
