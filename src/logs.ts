@@ -1,9 +1,18 @@
 import * as _ from 'lodash';
 import * as ABIDecoder from 'abi-decoder';
+import * as chai from 'chai';
 import * as Web3 from 'web3';
 
 import { BigNumber } from 'bignumber.js';
 import { Log } from './types';
+
+const expect = chai.expect;
+
+export function assertLogEquivalence(actual: Log[], expected: Log[]) {
+  const formattedExpectedLogs = _.map(expected, log => JSON.stringify(log));
+  const formattedActualLogs = _.map(actual, log => JSON.stringify(log));
+  expect(formattedActualLogs).to.include.members(formattedExpectedLogs);
+}
 
 export async function getLogsFromTxHash(web3: Web3, txHash: string): Promise<Log[]> {
   const receipt = await web3.eth.getTransactionReceipt(txHash);
