@@ -89,7 +89,7 @@ export function hashOrderHex(order: IssuanceOrder): string {
 export function generateSerializedOrders(
   makerTokenAddress: Address,
   makerTokenAmount: BigNumber,
-  orders: object[],
+  orders: (TakerWalletOrder | ZeroExSignedFillOrder)[],
   web3: Web3,
 ): Bytes {
   const orderBuffer: Buffer[] = [];
