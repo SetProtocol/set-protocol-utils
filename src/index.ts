@@ -243,7 +243,7 @@ export class SetProtocolUtils {
 
   /**
    * Returns the hex string representation of a string padded with '0x'
-   * @param   input   A string primative
+   * @param   input   A string primitive
    * @return  Hex of the string which can be used as a bytes32 transaction parameter
    */
   public static stringToBytes(input: string): Bytes {
