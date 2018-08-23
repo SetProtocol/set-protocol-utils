@@ -2,7 +2,7 @@ import * as Web3 from 'web3';
 import { BigNumber } from 'bignumber.js';
 import { Order } from '@0xproject/types';
 
-import { Address, Bytes, IssuanceOrder, Log, ECSig, TakerWalletOrder } from './types';
+import { Address, Bytes, IssuanceOrder, Log, ECSig, TakerWalletOrder, ZeroExSignedFillOrder } from './types';
 import { constants } from './constants';
 import {
   bufferArrayToHex,
@@ -30,6 +30,7 @@ import {
 import {
   generateZeroExExchangeWrapperOrder,
   generateZeroExOrder,
+  generateZeroExSignedFillOrder,
   signZeroExOrderAsync,
   zeroExOrderToBuffer,
 } from './zeroEx';
@@ -49,6 +50,7 @@ export {
   Log,
   SolidityTypes,
   TakerWalletOrder,
+  ZeroExSignedFillOrder,
 } from './types';
 
 /**
@@ -138,7 +140,9 @@ export class SetProtocolUtils {
   }
 
   /**
-   * Generates a 0x order
+   * Generates a 0x order. Use if exclusively generating the 0x order body. If generating
+   * IssuanceOrder zeroExExchange Order interfaces, use generateZeroExSignedFillOrder
+   *
    * @param   senderAddress           Address calling 0x Exchange contract
    * @param   makerAddress            Maker asset owner
    * @param   takerAddress            Taker assert owner
@@ -265,17 +269,71 @@ export class SetProtocolUtils {
    * Generates a byte string representing serialized exchange orders across different exchanges.
    * @param  makerTokenAddress   Address of the token used to pay for the order
    * @param  makerTokenAmount    Amount of token used to pay for orders
-   * @param  fillAmount          Amount of Set being filled
    * @param  orders              Array of orders from various exchanges
    * @return                     Buffer with all exchange orders formatted and concatenated
    */
   public generateSerializedOrders(
     makerTokenAddress: Address,
     makerTokenAmount: BigNumber,
-    fillAmount: BigNumber,
     orders: object[],
   ): Bytes {
-    return generateSerializedOrders(makerTokenAddress, makerTokenAmount, fillAmount, orders, this.web3);
+    return generateSerializedOrders(makerTokenAddress, makerTokenAmount, orders, this.web3);
+  }
+
+  /**
+   * Generates a ZeroExSignedFillOrder with signature that can be passed
+   * into generateSerializedOrders to generate valid exchange orders data
+   * Caller passes in the fillAmount
+   *
+   * @param   senderAddress           Address calling 0x Exchange contract
+   * @param   makerAddress            Maker asset owner
+   * @param   takerAddress            Taker assert owner
+   * @param   makerFee                Fee accrused to maker
+   * @param   takerFee                Fee accrued to taker
+   * @param   makerAssetAmount        Amount of asset to exchange
+   * @param   takerAssetAmount        Amount of asset to exchange for
+   * @param   makerTokenAddress       Address of asset to exchange
+   * @param   takerTokenAddress       Address of asset to exchange for
+   * @param   salt                    Pseudo-random number acting as a salt
+   * @param   exchangeAddress         0x Exchange contract address
+   * @param   feeRecipientAddress     Address to send fee
+   * @param   expirationTimeSeconds   Order expiration in unix timestamp
+   * @param   fillAmount              The amount of the 0x order to fill
+   * @return  Object conforming to ZeroExSignedFillOrder inteface
+   */
+  public async generateZeroExSignedFillOrder(
+    senderAddress: Address,
+    makerAddress: Address,
+    takerAddress: Address,
+    makerFee: BigNumber,
+    takerFee: BigNumber,
+    makerAssetAmount: BigNumber,
+    takerAssetAmount: BigNumber,
+    makerTokenAddress: Address,
+    takerTokenAddress: Address,
+    salt: BigNumber,
+    exchangeAddress: Address,
+    feeRecipientAddress: Address,
+    expirationTimeSeconds: BigNumber,
+    fillAmount: BigNumber,
+  ): Promise<ZeroExSignedFillOrder> {
+    return generateZeroExSignedFillOrder(
+      senderAddress,
+      makerAddress,
+      takerAddress,
+      makerFee,
+      takerFee,
+      makerAssetAmount,
+      takerAssetAmount,
+      makerTokenAddress,
+      takerTokenAddress,
+      salt,
+      exchangeAddress,
+      feeRecipientAddress,
+      expirationTimeSeconds,
+      fillAmount,
+      this.web3,
+    );
   }
 
   /**

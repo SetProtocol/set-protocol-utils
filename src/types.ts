@@ -1,4 +1,5 @@
 import { BigNumber } from 'bignumber.js';
+import { SignedOrder } from '@0xproject/types';
 
 export type Address = string;
 export type Bytes = string;
@@ -7,6 +8,23 @@ export type UInt = number | BigNumber;
 export interface Constants {
   [constantId: string]: any;
 }
+
+export interface Log {
+  event: string;
+  address: Address;
+  args: any;
+}
+
+export enum SolidityTypes {
+  Address = 'address',
+  Uint256 = 'uint256',
+  Uint8 = 'uint8',
+  Uint = 'uint',
+  AddressArray = 'address[]',
+  UintArray = 'uint256[]',
+}
+
+/* ============ Issuance Orders ============ */
 
 export interface ECSig {
   v: UInt;
@@ -51,19 +69,8 @@ export interface SignedIssuanceOrder {
   signature: ECSig;
 }
 
-export interface Log {
-  event: string;
-  address: Address;
-  args: any;
-}
-
-export enum SolidityTypes {
-  Address = 'address',
-  Uint256 = 'uint256',
-  Uint8 = 'uint8',
-  Uint = 'uint',
-  AddressArray = 'address[]',
-  UintArray = 'uint256[]',
+export interface ZeroExSignedFillOrder extends SignedOrder {
+    fillAmount: BigNumber;
 }
 
 export interface TakerWalletOrder {

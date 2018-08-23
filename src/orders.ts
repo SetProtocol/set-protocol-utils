@@ -20,13 +20,20 @@ import * as _ from 'lodash';
 import * as ethUtil from 'ethereumjs-util';
 import * as Web3 from 'web3';
 import { BigNumber } from 'bignumber.js';
-import { SignedOrder as ZeroExOrder } from '@0xproject/types';
 
 import { constants } from './constants';
 import { bufferObjectWithProperties, paddedBufferForBigNumber, paddedBufferForPrimitive } from './encoding';
 import { generateTakerWalletOrdersBuffer } from './takerWallet';
 import { generateZeroExOrdersBuffer } from './zeroEx';
-import { Address, Bytes, Exchanges, IssuanceOrder, SolidityTypes, TakerWalletOrder } from './types';
+import {
+  Address,
+  Bytes,
+  Exchanges,
+  IssuanceOrder,
+  SolidityTypes,
+  TakerWalletOrder,
+  ZeroExSignedFillOrder
+} from './types';
 import { isTakerWalletOrder, isZeroExOrder } from './typeGuards';
 
 export function generateTimestamp(minutes: number): BigNumber {
@@ -82,7 +89,6 @@ export function hashOrderHex(order: IssuanceOrder): string {
 export function generateSerializedOrders(
   makerTokenAddress: Address,
   makerTokenAmount: BigNumber,
-  fillAmount: BigNumber,
   orders: object[],
   web3: Web3,
 ): Bytes {
@@ -93,7 +99,7 @@ export function generateSerializedOrders(
     'TAKER_WALLET': [],
   };
   // Sort exchange orders by exchange
-  _.forEach(orders, (order: TakerWalletOrder | ZeroExOrder) => {
+  _.forEach(orders, (order: TakerWalletOrder | ZeroExSignedFillOrder) => {
     let exchangeOrders: any;
     if (isZeroExOrder(order)) {
       exchangeOrders = exchanges.ZERO_EX;
@@ -108,7 +114,7 @@ export function generateSerializedOrders(
       return;
     }
     if (key === 'ZERO_EX') {
-      orderBuffer.push(generateZeroExOrdersBuffer(makerTokenAddress, makerTokenAmount, fillAmount, exchangeOrders));
+      orderBuffer.push(generateZeroExOrdersBuffer(makerTokenAddress, makerTokenAmount, exchangeOrders));
     } else if (key === 'KYBER') {
     } else if (key === 'TAKER_WALLET') {
       orderBuffer.push(generateTakerWalletOrdersBuffer(makerTokenAddress, exchangeOrders, web3));

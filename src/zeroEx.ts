@@ -21,11 +21,11 @@ import * as ethUtil from 'ethereumjs-util';
 import * as Web3 from 'web3';
 import { assetDataUtils, orderHashUtils } from '@0xproject/order-utils';
 import { BigNumber } from '@0xproject/utils';
-import { SignatureType, Order, SignedOrder } from '@0xproject/types';
+import { SignatureType, Order } from '@0xproject/types';
 
 import { constants } from './constants';
 import { generateExchangeOrderHeader } from './orders';
-import { Address, Bytes } from './types';
+import { Address, Bytes, ZeroExSignedFillOrder } from './types';
 import {
   bufferArrayToHex,
   numBytesFromHex,
@@ -34,15 +34,13 @@ import {
   paddedBufferForBigNumber,
 } from './encoding';
 
-
 export function generateZeroExOrdersBuffer(
   makerTokenAddress: Address,
   makerTokenAmount: BigNumber,
-  fillAmount: BigNumber,
-  orders: SignedOrder[],
+  orders: ZeroExSignedFillOrder[],
 ) {
   const zeroExOrderBody: Buffer[] = _.map(orders, order =>
-    ethUtil.toBuffer(generateZeroExExchangeWrapperOrder(order, order.signature, fillAmount))
+    ethUtil.toBuffer(generateZeroExExchangeWrapperOrder(order, order.signature, order.fillAmount))
   );
   const zeroExOrderBodyBuffer: Buffer = Buffer.concat(zeroExOrderBody);
 
@@ -130,6 +128,47 @@ export function generateZeroExOrder(
     feeRecipientAddress,
     expirationTimeSeconds,
   } as Order;
+}
+
+export async function generateZeroExSignedFillOrder(
+  senderAddress: Address,
+  makerAddress: Address,
+  takerAddress: Address,
+  makerFee: BigNumber,
+  takerFee: BigNumber,
+  makerAssetAmount: BigNumber,
+  takerAssetAmount: BigNumber,
+  makerTokenAddress: Address,
+  takerTokenAddress: Address,
+  salt: BigNumber,
+  exchangeAddress: Address,
+  feeRecipientAddress: Address,
+  expirationTimeSeconds: BigNumber,
+  fillAmount: BigNumber,
+  web3: Web3,
+): Promise<ZeroExSignedFillOrder> {
+  const zeroExOrder = {
+    senderAddress,
+    makerAddress,
+    takerAddress,
+    makerFee,
+    takerFee,
+    makerAssetAmount,
+    takerAssetAmount,
+    makerAssetData: assetDataUtils.encodeERC20AssetData(makerTokenAddress),
+    takerAssetData: assetDataUtils.encodeERC20AssetData(takerTokenAddress),
+    salt,
+    exchangeAddress,
+    feeRecipientAddress,
+    expirationTimeSeconds,
+  } as Order;
+
+  const signature = await signZeroExOrderAsync(zeroExOrder, web3);
+  const fillOrder = zeroExOrder as ZeroExSignedFillOrder;
+  fillOrder.signature = signature;
+  fillOrder.fillAmount = fillAmount;
+
+  return fillOrder;
 }
 
 export async function signZeroExOrderAsync(order: Order, web3: Web3): Promise<string> {
