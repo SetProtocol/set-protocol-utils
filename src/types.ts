@@ -70,7 +70,7 @@ export interface SignedIssuanceOrder {
 }
 
 export interface ZeroExSignedFillOrder extends SignedOrder {
-    fillAmount: BigNumber;
+  fillAmount: BigNumber;
 }
 
 export interface TakerWalletOrder {
