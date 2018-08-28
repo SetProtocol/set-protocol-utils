@@ -68,6 +68,7 @@ export class SetProtocolUtils {
   public static CONSTANTS = {
     MAX_DIGITS_IN_UNSIGNED_256_INT: constants.MAX_DIGITS_IN_UNSIGNED_256_INT,
     NULL_ADDRESS: constants.NULL_ADDRESS,
+    UNLIMITED_ALLOWANCE_IN_BASE_UNITS: constants.UNLIMITED_ALLOWANCE_IN_BASE_UNITS,
     ZERO: constants.ZERO,
   };
 
@@ -83,18 +84,11 @@ export class SetProtocolUtils {
    */
   public static REBALANCING_STATE = constants.REBALANCING_STATE;
 
-  /**
-   * Initialize a Utils class
-   * @param web3   Web3 instance to use
-   */
-  public constructor(web3?: Web3) {
-    this.web3 = web3 || new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
-  }
-
   /* ============ Static SetProtocolUtils Functions ============ */
 
   /**
    * Converts an array of Buffers into Hex
+   *
    * @param   bufferArray   Array of buffers
    * @return  Hex of array of buffers represented as Bytes (string)
    */
@@ -104,6 +98,7 @@ export class SetProtocolUtils {
 
   /**
    * Converts an array of Bytes (each prefixed 0x) into one byte array
+   *
    * @param   bytes   Array of byte strings
    * @return  A single byte string representing the array of bytes
    */
@@ -113,6 +108,7 @@ export class SetProtocolUtils {
 
   /**
    * Generates expiration timestamp that can be used as part of IssuanceOrder
+   *
    * @param   minutes   Number of minutes from now
    * @return  Expiration timestamp represented as BigNumber
    */
@@ -122,6 +118,7 @@ export class SetProtocolUtils {
 
   /**
    * Generates a pseudo-random 256-bit salt
+   *
    * @return  A pseudo-random 256-bit number that can be used as a salt
    */
   public static generateSalt(): BigNumber {
@@ -130,6 +127,7 @@ export class SetProtocolUtils {
 
   /**
    * Generates a byte array with a valid 0x order that can be passed into ZeroExExchangeWrapper
+   *
    * @param   order       Object conforming to 0x's Order inteface
    * @param   signature   Elliptic curve signature as hex string
    * @param   fillAmount  Amount of 0x order to fill
@@ -192,6 +190,7 @@ export class SetProtocolUtils {
 
   /**
    * Converts an IssuanceOrder into hex
+   *
    * @param   order   An object adhering to the IssuanceOrder interface
    * @return  Hex of Issuance Order represented as hex string
    */
@@ -201,6 +200,7 @@ export class SetProtocolUtils {
 
   /**
    * Gets the length of a buffer's contents
+   *
    * @param   buffer   A buffer of arbitray length
    * @return  Number of bytes in hex representation of the buffer
    */
@@ -210,6 +210,7 @@ export class SetProtocolUtils {
 
   /**
    * Gets the length of a hex string
+   *
    * @param   hex   Hex string
    * @return  Number of bytes in hex representation of the hex
    */
@@ -220,6 +221,7 @@ export class SetProtocolUtils {
   /**
    * Generates a buffer for a primitive value padded to 32 bytes. Use for encoding addresses (string),
    * enum, etc. Use paddedBufferForBigNumber for token amounts that need to be expressed in high numbers
+   *
    * @param   value   Any primitive value (string, number) to encode
    * @return  Primitive value represented as Buffer
    */
@@ -229,6 +231,7 @@ export class SetProtocolUtils {
 
   /**
    * Generates a buffer for a BigNumber padded to 32 bytes
+   *
    * @param   number   BigNumber to encode
    * @return  BigNumber value represented as Buffer
    */
@@ -238,6 +241,7 @@ export class SetProtocolUtils {
 
   /**
    * Parses a signature and returns its elliptic curve signature
+   *
    * @param   signature   Hex signature to parse
    * @return  An object containing the Elliptic curve signature parameters
    */
@@ -247,6 +251,7 @@ export class SetProtocolUtils {
 
   /**
    * Returns the hex string representation of a string padded with '0x'
+   *
    * @param   input   A string primitive
    * @return  Hex of the string which can be used as a bytes32 transaction parameter
    */
@@ -256,6 +261,7 @@ export class SetProtocolUtils {
 
   /**
    * Converts a 0x order into binary representation, often to get byte count
+   *
    * @param   order   Object conforming to 0x's Order inteface
    * @return  Array of buffers representing the order
    */
@@ -263,10 +269,20 @@ export class SetProtocolUtils {
     return zeroExOrderToBuffer(order);
   }
 
+  /**
+   * Initialize a Utils class
+   *
+   * @param web3   Web3 instance to use
+   */
+  public constructor(web3?: Web3) {
+    this.web3 = web3 || new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
+  }
+
   /* ============ Non-Static SetProtocolUtils Functions ============ */
 
   /**
    * Generates a byte string representing serialized exchange orders across different exchanges.
+   *
    * @param  makerTokenAddress   Address of the token used to pay for the order
    * @param  makerTokenAmount    Amount of token used to pay for orders
    * @param  orders              Array of orders from various exchanges
@@ -338,6 +354,7 @@ export class SetProtocolUtils {
 
   /**
    * Generates a buffer representing taker wallet orders with appropriate headers.
+   *
    * @param  makerTokenAddress   Address of the token used to pay for the order
    * @param  orders              Array of orders from taker wallet
    * @return                     Buffer with all exchange orders formatted and concatenated
@@ -348,6 +365,7 @@ export class SetProtocolUtils {
 
   /**
    * Signs a message and returns it's elliptic curve signature
+   *
    * @param   message   Data to sign
    * @param   address   Address to sign with
    * @return  An object containing the Elliptic curve signature parameters
@@ -358,6 +376,7 @@ export class SetProtocolUtils {
 
   /**
    * Adds correct signature '0x' and signs 0x order
+   *
    * @param   order   Object conforming to 0x's Order inteface
    * @return  Hex string representation of 0x 0rder signature
    */

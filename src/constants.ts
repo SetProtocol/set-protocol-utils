@@ -14,6 +14,7 @@ export const constants: Constants = {
     PROPOSAL: 1,
     REBALANCE: 2,
   },
+  UNLIMITED_ALLOWANCE_IN_BASE_UNITS: new BigNumber(2).pow(256).minus(1),
   ZERO: new BigNumber(0),
   ZERO_EX_SNAPSHOT_EXCHANGE_ADDRESS: '0x48bacb9266a570d521063ef5dd96e61686dbe788',
   ZERO_EX_SNAPSHOT_ERC20_PROXY_ADDRESS: '0x1dc4c1cefef38a777b15aa20260a54e584b16c48',
