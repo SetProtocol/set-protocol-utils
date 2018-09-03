@@ -19,6 +19,7 @@
 import * as _ from 'lodash';
 import * as ethUtil from 'ethereumjs-util';
 import * as Web3 from 'web3';
+import * as promisify from 'tiny-promisify';
 import { assetDataUtils, orderHashUtils } from '@0xproject/order-utils';
 import { BigNumber } from '@0xproject/utils';
 import { SignatureType, Order } from '@0xproject/types';
@@ -180,7 +181,7 @@ export async function signZeroExOrderAsync(order: Order, web3: Web3): Promise<st
 }
 
 async function signMessageAsync(hexMsg: Bytes, address: Address, sigType: SignatureType, web3: Web3): Promise<string> {
-  const sig = web3.eth.sign(address, hexMsg);
+  const sig = await promisify(web3.eth.sign)(address, hexMsg);
   const rpcSig = ethUtil.fromRpcSig(sig);
   const signature = Buffer.concat([
     ethUtil.toBuffer(rpcSig.v),

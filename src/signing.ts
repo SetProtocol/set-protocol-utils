@@ -1,5 +1,6 @@
 import * as ethUtil from 'ethereumjs-util';
 import * as Web3 from 'web3';
+import * as promisify from 'tiny-promisify';
 
 import { Address, ECSig } from './types';
 
@@ -15,7 +16,7 @@ export function parseSignatureHexAsRSV(signatureHex: string): ECSig {
 }
 
 export async function signMessage(web3: Web3, message: string, address: Address): Promise<ECSig> {
-  const signature = web3.eth.sign(address, message);
+  const signature = await promisify(web3.eth.sign)(address, message);
 
   return parseSignatureHexAsRSV(signature);
 }
