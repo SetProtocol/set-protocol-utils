@@ -15,7 +15,7 @@ export function parseSignatureHexAsRSV(signatureHex: string): ECSig {
 }
 
 export async function signMessage(web3: Web3, message: string, address: Address): Promise<ECSig> {
-  const signature = web3.eth.sign(address, message);
+  const signature = await web3.eth.sign(address, message);
 
   return parseSignatureHexAsRSV(signature);
 }
