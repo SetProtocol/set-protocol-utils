@@ -2,6 +2,7 @@ import * as _ from 'lodash';
 import * as ABIDecoder from 'abi-decoder';
 import * as chai from 'chai';
 import * as Web3 from 'web3';
+import * as promisify from 'tiny-promisify';
 
 import { BigNumber } from 'bignumber.js';
 import { Log } from './types';
@@ -15,7 +16,7 @@ export function assertLogEquivalence(actual: Log[], expected: Log[]) {
 }
 
 export async function getLogsFromTxHash(web3: Web3, txHash: string): Promise<Log[]> {
-  const receipt = await web3.eth.getTransactionReceipt(txHash);
+  const receipt = await promisify(web3.eth.getTransactionReceipt)(txHash);
   const logs: ABIDecoder.DecodedLog[] = _.compact(ABIDecoder.decodeLogs(receipt.logs));
 
   return _.map(logs, log => formatLogEntry(log));
