@@ -30,6 +30,7 @@ import {
   Bytes,
   Exchanges,
   IssuanceOrder,
+  SignedIssuanceOrder,
   SolidityTypes,
   TakerWalletOrder,
   ZeroExSignedFillOrder
@@ -49,7 +50,7 @@ export function generateSalt(): BigNumber {
   return randomNumber.times(factor).round();
 }
 
-export function hashOrderHex(order: IssuanceOrder): string {
+export function hashOrderHex(order: (IssuanceOrder | SignedIssuanceOrder)): string {
   const orderBody = [
     { value: order.setAddress, type: SolidityTypes.Address },
     { value: order.makerAddress, type: SolidityTypes.Address },
