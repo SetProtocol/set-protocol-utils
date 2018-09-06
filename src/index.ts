@@ -370,8 +370,8 @@ export class SetProtocolUtils {
    * @param   address   Address to sign with
    * @return  An object containing the Elliptic curve signature parameters
    */
-  public async signMessage(message: string, address: Address): Promise<ECSig> {
-    return signMessage(this.web3, message, address);
+  public async signMessage(message: string, address: Address, addPrefix: boolean = false): Promise<ECSig> {
+    return signMessage(this.web3, message, address, addPrefix);
   }
 
   /**
