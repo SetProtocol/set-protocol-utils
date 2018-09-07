@@ -19,7 +19,7 @@
 import * as _ from 'lodash';
 import * as ethUtil from 'ethereumjs-util';
 import * as Web3 from 'web3';
-import { BigNumber } from 'bignumber.js';
+import { BigNumber } from './bignumber';
 
 import { constants } from './constants';
 import { bufferObjectWithProperties, paddedBufferForBigNumber, paddedBufferForPrimitive } from './encoding';
