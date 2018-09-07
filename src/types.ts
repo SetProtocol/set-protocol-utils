@@ -1,4 +1,4 @@
-import { BigNumber } from 'bignumber.js';
+import { BigNumber } from './bignumber';
 import { SignedOrder } from '@0xproject/types';
 
 export type Address = string;
