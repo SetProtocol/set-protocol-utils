@@ -1,9 +1,9 @@
 import * as Web3 from 'web3';
-import { BigNumber } from 'bignumber.js';
 import { Order } from '@0xproject/types';
 
 import { Address, Bytes, IssuanceOrder, Log, ECSig, TakerWalletOrder, ZeroExSignedFillOrder } from './types';
 import { constants } from './constants';
+import { BigNumber } from './bignumber';
 import {
   bufferArrayToHex,
   concatBytes,
@@ -38,6 +38,7 @@ import {
   generateTakerWalletOrdersBuffer,
 } from './takerWallet';
 
+export { BigNumber };
 export {
   Address,
   Bytes,
