@@ -1,7 +1,16 @@
 import * as Web3 from 'web3';
 import { Order } from '@0xproject/types';
 
-import { Address, Bytes, IssuanceOrder, Log, ECSig, TakerWalletOrder, ZeroExSignedFillOrder } from './types';
+import {
+  Address,
+  Bytes,
+  IssuanceOrder,
+  Log,
+  ECSig,
+  TakerWalletOrder,
+  ZeroExSignedFillOrder,
+  FillOrder,
+} from './types';
 import { constants } from './constants';
 import { BigNumber } from './bignumber';
 import {
@@ -28,6 +37,7 @@ import {
   signMessage,
 } from './signing';
 import {
+  extractAddressFromAssetData,
   generateZeroExExchangeWrapperOrder,
   generateZeroExOrder,
   generateZeroExSignedFillOrder,
@@ -37,6 +47,10 @@ import {
 import {
   generateTakerWalletOrdersBuffer,
 } from './takerWallet';
+import {
+  isZeroExOrder,
+  isTakerWalletOrder,
+} from './typeGuards';
 
 export { BigNumber };
 export {
@@ -52,6 +66,7 @@ export {
   SolidityTypes,
   TakerWalletOrder,
   ZeroExSignedFillOrder,
+  FillOrder,
 } from './types';
 
 /**
@@ -268,6 +283,36 @@ export class SetProtocolUtils {
    */
   public static zeroExOrderToBuffer(order: Order): Buffer[] {
     return zeroExOrderToBuffer(order);
+  }
+
+  /**
+   * Determines if an order is a ZeroExSignedFillOrder
+   *
+   * @param   order   A fill order for an issuance order
+   * @return  Boolean for whether or not fill order is a ZeroExOrder
+   */
+  public static isZeroExOrder(order: FillOrder): boolean {
+    return isZeroExOrder(order);
+  }
+
+  /**
+   * Determines if an order is a TakerWalletOrder
+   *
+   * @param   order   A fill order for an issuance order
+   * @return  Boolean for whether or not fill order is a TakerWalletOrder
+   */
+  public static isTakerWalletOrder(order: FillOrder): boolean {
+    return isTakerWalletOrder(order);
+  }
+
+  /**
+   * Decodes the ERC20 token asset data to get the original address
+   *
+   * @param   assetData   A string representing the encoded ERC20 asset details
+   * @return  Original token address after decoding
+   */
+  public static extractAddressFromAssetData(assetData: string): string {
+    return extractAddressFromAssetData(assetData);
   }
 
   /**

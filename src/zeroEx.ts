@@ -131,6 +131,10 @@ export function generateZeroExOrder(
   } as Order;
 }
 
+export function extractAddressFromAssetData(assetData: string) {
+  return assetDataUtils.decodeERC20AssetData(assetData).tokenAddress;
+}
+
 export async function generateZeroExSignedFillOrder(
   senderAddress: Address,
   makerAddress: Address,
