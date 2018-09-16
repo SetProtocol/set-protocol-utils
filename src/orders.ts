@@ -31,7 +31,7 @@ import {
   Exchanges,
   ExchangeOrder,
   IssuanceOrder,
-  SolidityTypes
+  SolidityTypes,
 } from './types';
 import { isTakerWalletOrder, isZeroExOrder } from './typeGuards';
 
