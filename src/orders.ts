@@ -29,6 +29,7 @@ import {
   Address,
   Bytes,
   Exchanges,
+  ExchangeOrder,
   IssuanceOrder,
   SolidityTypes
 } from './types';
