@@ -30,9 +30,7 @@ import {
   Bytes,
   Exchanges,
   IssuanceOrder,
-  SolidityTypes,
-  TakerWalletOrder,
-  ZeroExSignedFillOrder
+  SolidityTypes
 } from './types';
 import { isTakerWalletOrder, isZeroExOrder } from './typeGuards';
 
@@ -89,7 +87,7 @@ export function hashOrderHex(order: IssuanceOrder): string {
 export function generateSerializedOrders(
   makerTokenAddress: Address,
   makerTokenAmount: BigNumber,
-  orders: (TakerWalletOrder | ZeroExSignedFillOrder)[],
+  orders: ExchangeOrder[],
   web3: Web3,
 ): Bytes {
   const orderBuffer: Buffer[] = [];
@@ -99,7 +97,7 @@ export function generateSerializedOrders(
     'TAKER_WALLET': [],
   };
   // Sort exchange orders by exchange
-  _.forEach(orders, (order: TakerWalletOrder | ZeroExSignedFillOrder) => {
+  _.forEach(orders, (order: ExchangeOrder) => {
     let exchangeOrders: any;
     if (isZeroExOrder(order)) {
       exchangeOrders = exchanges.ZERO_EX;

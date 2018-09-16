@@ -4,12 +4,12 @@ import { Order } from '@0xproject/types';
 import {
   Address,
   Bytes,
+  ECSig,
+  ExchangeOrder,
   IssuanceOrder,
   Log,
-  ECSig,
   TakerWalletOrder,
   ZeroExSignedFillOrder,
-  FillOrder,
 } from './types';
 import { constants } from './constants';
 import { BigNumber } from './bignumber';
@@ -56,17 +56,17 @@ export { BigNumber };
 export {
   Address,
   Bytes,
-  UInt,
   Constants,
   ECSig,
   Exchanges,
+  ExchangeOrder,
   IssuanceOrder,
-  SignedIssuanceOrder,
   Log,
+  SignedIssuanceOrder,
   SolidityTypes,
   TakerWalletOrder,
+  UInt,
   ZeroExSignedFillOrder,
-  FillOrder,
 } from './types';
 
 /**
@@ -288,20 +288,20 @@ export class SetProtocolUtils {
   /**
    * Determines if an order is a ZeroExSignedFillOrder
    *
-   * @param   order   A fill order for an issuance order
+   * @param   order   An exchange order for an issuance order
    * @return  Boolean for whether or not fill order is a ZeroExOrder
    */
-  public static isZeroExOrder(order: FillOrder): boolean {
+  public static isZeroExOrder(order: ExchangeOrder): boolean {
     return isZeroExOrder(order);
   }
 
   /**
    * Determines if an order is a TakerWalletOrder
    *
-   * @param   order   A fill order for an issuance order
+   * @param   order   An exchange order for an issuance order
    * @return  Boolean for whether or not fill order is a TakerWalletOrder
    */
-  public static isTakerWalletOrder(order: FillOrder): boolean {
+  public static isTakerWalletOrder(order: ExchangeOrder): boolean {
     return isTakerWalletOrder(order);
   }
 
@@ -337,7 +337,7 @@ export class SetProtocolUtils {
   public generateSerializedOrders(
     makerTokenAddress: Address,
     makerTokenAmount: BigNumber,
-    orders: (TakerWalletOrder | ZeroExSignedFillOrder)[],
+    orders: ExchangeOrder[],
   ): Bytes {
     return generateSerializedOrders(makerTokenAddress, makerTokenAmount, orders, this.web3);
   }

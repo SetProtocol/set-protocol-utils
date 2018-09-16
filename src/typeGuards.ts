@@ -1,6 +1,6 @@
-import { FillOrder } from './types';
+import { ExchangeOrder } from './types';
 
-export function isZeroExOrder(object: FillOrder): boolean {
+export function isZeroExOrder(object: ExchangeOrder): boolean {
   return (
     'exchangeAddress' in object &&
     'makerAddress' in object &&
@@ -18,7 +18,7 @@ export function isZeroExOrder(object: FillOrder): boolean {
   );
 }
 
-export function isTakerWalletOrder(object: FillOrder): boolean {
+export function isTakerWalletOrder(object: ExchangeOrder): boolean {
   return (
     'takerTokenAddress' in object &&
     'takerTokenAmount' in object
