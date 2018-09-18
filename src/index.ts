@@ -37,6 +37,7 @@ import {
   signMessage,
 } from './signing';
 import {
+  encodeAddressAsAssetData,
   extractAddressFromAssetData,
   generateZeroExExchangeWrapperOrder,
   generateZeroExOrder,
@@ -313,6 +314,16 @@ export class SetProtocolUtils {
    */
   public static extractAddressFromAssetData(assetData: string): string {
     return extractAddressFromAssetData(assetData);
+  }
+
+  /**
+   * Encodes a ERC20 token address into a 0x ERC20 token asset data
+   *
+   * @param   tokenAddress   The ERC20 address to encode
+   * @return  A string representing the encoded ERC20 asset details
+   */
+  public static encodeAddressAsAssetData(tokenAddress: Address): string {
+    return encodeAddressAsAssetData(tokenAddress);
   }
 
   /**
