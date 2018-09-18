@@ -53,20 +53,7 @@ export interface IssuanceOrder {
   requiredComponentAmounts: BigNumber[];
 }
 
-export interface SignedIssuanceOrder {
-  setAddress: Address;
-  makerAddress: Address;
-  makerToken: Address;
-  relayerAddress: Address;
-  relayerToken: Address;
-  quantity: BigNumber;
-  makerTokenAmount: BigNumber;
-  expiration: BigNumber;
-  makerRelayerFee: BigNumber;
-  takerRelayerFee: BigNumber;
-  salt: BigNumber;
-  requiredComponents: Address[];
-  requiredComponentAmounts: BigNumber[];
+export interface SignedIssuanceOrder extends IssuanceOrder {
   signature: ECSig;
 }
 
