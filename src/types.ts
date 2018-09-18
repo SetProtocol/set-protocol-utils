@@ -1,5 +1,4 @@
 import { BigNumber } from './bignumber';
-import { SignedOrder } from '@0xproject/types';
 
 export type Address = string;
 export type Bytes = string;
@@ -70,7 +69,21 @@ export interface SignedIssuanceOrder {
   signature: ECSig;
 }
 
-export interface ZeroExSignedFillOrder extends SignedOrder {
+export interface ZeroExSignedFillOrder {
+  senderAddress: string;
+  makerAddress: string;
+  takerAddress: string;
+  makerFee: BigNumber;
+  takerFee: BigNumber;
+  makerAssetAmount: BigNumber;
+  takerAssetAmount: BigNumber;
+  makerAssetData: string;
+  takerAssetData: string;
+  salt: BigNumber;
+  exchangeAddress: string;
+  feeRecipientAddress: string;
+  expirationTimeSeconds: BigNumber;
+  signature: string;
   fillAmount: BigNumber;
 }
 
