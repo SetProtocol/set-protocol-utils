@@ -1,9 +1,18 @@
 import * as Web3 from 'web3';
-import { BigNumber } from 'bignumber.js';
 import { Order } from '@0xproject/types';
 
-import { Address, Bytes, IssuanceOrder, Log, ECSig, TakerWalletOrder, ZeroExSignedFillOrder } from './types';
+import {
+  Address,
+  Bytes,
+  ECSig,
+  ExchangeOrder,
+  IssuanceOrder,
+  Log,
+  TakerWalletOrder,
+  ZeroExSignedFillOrder,
+} from './types';
 import { constants } from './constants';
+import { BigNumber } from './bignumber';
 import {
   bufferArrayToHex,
   concatBytes,
@@ -28,6 +37,7 @@ import {
   signMessage,
 } from './signing';
 import {
+  extractAddressFromAssetData,
   generateZeroExExchangeWrapperOrder,
   generateZeroExOrder,
   generateZeroExSignedFillOrder,
@@ -37,19 +47,25 @@ import {
 import {
   generateTakerWalletOrdersBuffer,
 } from './takerWallet';
+import {
+  isZeroExOrder,
+  isTakerWalletOrder,
+} from './typeGuards';
 
+export { BigNumber };
 export {
   Address,
   Bytes,
-  UInt,
   Constants,
   ECSig,
   Exchanges,
+  ExchangeOrder,
   IssuanceOrder,
-  SignedIssuanceOrder,
   Log,
+  SignedIssuanceOrder,
   SolidityTypes,
   TakerWalletOrder,
+  UInt,
   ZeroExSignedFillOrder,
 } from './types';
 
@@ -270,6 +286,36 @@ export class SetProtocolUtils {
   }
 
   /**
+   * Determines if an order is a ZeroExSignedFillOrder
+   *
+   * @param   order   An exchange order for an issuance order
+   * @return  Boolean for whether or not fill order is a ZeroExOrder
+   */
+  public static isZeroExOrder(order: ExchangeOrder): boolean {
+    return isZeroExOrder(order);
+  }
+
+  /**
+   * Determines if an order is a TakerWalletOrder
+   *
+   * @param   order   An exchange order for an issuance order
+   * @return  Boolean for whether or not fill order is a TakerWalletOrder
+   */
+  public static isTakerWalletOrder(order: ExchangeOrder): boolean {
+    return isTakerWalletOrder(order);
+  }
+
+  /**
+   * Decodes the ERC20 token asset data to get the original address
+   *
+   * @param   assetData   A string representing the encoded ERC20 asset details
+   * @return  Original token address after decoding
+   */
+  public static extractAddressFromAssetData(assetData: string): string {
+    return extractAddressFromAssetData(assetData);
+  }
+
+  /**
    * Initialize a Utils class
    *
    * @param web3   Web3 instance to use
@@ -291,7 +337,7 @@ export class SetProtocolUtils {
   public generateSerializedOrders(
     makerTokenAddress: Address,
     makerTokenAmount: BigNumber,
-    orders: (TakerWalletOrder | ZeroExSignedFillOrder)[],
+    orders: ExchangeOrder[],
   ): Bytes {
     return generateSerializedOrders(makerTokenAddress, makerTokenAmount, orders, this.web3);
   }
@@ -370,8 +416,8 @@ export class SetProtocolUtils {
    * @param   address   Address to sign with
    * @return  An object containing the Elliptic curve signature parameters
    */
-  public async signMessage(message: string, address: Address): Promise<ECSig> {
-    return signMessage(this.web3, message, address);
+  public async signMessage(message: string, address: Address, addPrefix: boolean = false): Promise<ECSig> {
+    return signMessage(this.web3, message, address, addPrefix);
   }
 
   /**

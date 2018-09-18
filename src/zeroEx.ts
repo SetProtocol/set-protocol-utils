@@ -21,9 +21,9 @@ import * as ethUtil from 'ethereumjs-util';
 import * as Web3 from 'web3';
 import * as promisify from 'tiny-promisify';
 import { assetDataUtils, orderHashUtils } from '@0xproject/order-utils';
-import { BigNumber } from '@0xproject/utils';
 import { SignatureType, Order } from '@0xproject/types';
 
+import { BigNumber } from './bignumber';
 import { constants } from './constants';
 import { generateExchangeOrderHeader } from './orders';
 import { Address, Bytes, ZeroExSignedFillOrder } from './types';
@@ -129,6 +129,10 @@ export function generateZeroExOrder(
     feeRecipientAddress,
     expirationTimeSeconds,
   } as Order;
+}
+
+export function extractAddressFromAssetData(assetData: string) {
+  return assetDataUtils.decodeERC20AssetData(assetData).tokenAddress;
 }
 
 export async function generateZeroExSignedFillOrder(

@@ -15,8 +15,29 @@ export function parseSignatureHexAsRSV(signatureHex: string): ECSig {
   };
 }
 
-export async function signMessage(web3: Web3, message: string, address: Address): Promise<ECSig> {
-  const signature = await promisify(web3.eth.sign)(address, message);
+export async function signMessage(
+  web3: Web3,
+  message: string,
+  address: Address,
+  addPrefix: boolean = false,
+): Promise<ECSig> {
+  let msgBuff;
+  let prefixedMsgBuff;
+  let prefixedMsgHex;
+  let messageToSign;
+
+  // By default we don't need to add prefix because eth.sign will do it. However, some providers like
+  // Metamask incorrectly implements eth_sign and does not prefix the message as per the spec.
+  // https://github.com/MetaMask/metamask-extension/commit/a9d36860bec424dcee8db043d3e7da6a5ff5672e
+  if (addPrefix) {
+    msgBuff = ethUtil.toBuffer(message);
+    prefixedMsgBuff = ethUtil.hashPersonalMessage(msgBuff);
+    prefixedMsgHex = ethUtil.bufferToHex(prefixedMsgBuff);
+  }
+
+  messageToSign = addPrefix ? prefixedMsgHex : message;
+
+  const signature = await promisify(web3.eth.sign)(address, messageToSign);
 
   return parseSignatureHexAsRSV(signature);
 }

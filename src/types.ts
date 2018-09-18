@@ -1,9 +1,10 @@
-import { BigNumber } from 'bignumber.js';
+import { BigNumber } from './bignumber';
 import { SignedOrder } from '@0xproject/types';
 
 export type Address = string;
 export type Bytes = string;
 export type UInt = number | BigNumber;
+export type ExchangeOrder = ZeroExSignedFillOrder | TakerWalletOrder;
 
 export interface Constants {
   [constantId: string]: any;
