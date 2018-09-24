@@ -3,7 +3,7 @@ import { BigNumber } from './bignumber';
 export type Address = string;
 export type Bytes = string;
 export type UInt = number | BigNumber;
-export type ExchangeOrder = ZeroExSignedFillOrder | TakerWalletOrder;
+export type ExchangeOrder = ZeroExSignedFillOrder | TakerWalletOrder | KyberTrade;
 
 export interface Constants {
   [constantId: string]: any;
@@ -23,8 +23,6 @@ export enum SolidityTypes {
   AddressArray = 'address[]',
   UintArray = 'uint256[]',
 }
-
-/* ============ Issuance Orders ============ */
 
 export interface ECSig {
   v: UInt;
@@ -56,10 +54,23 @@ export interface SignedIssuanceOrder extends IssuanceOrder {
   signature: ECSig;
 }
 
+export interface KyberTrade {
+  sourceToken: Address;
+  destinationToken: Address;
+  sourceTokenQuantity: BigNumber;
+  minimumConversionRate: BigNumber;
+  maxDestinationQuantity: BigNumber;
+}
+
+export interface TakerWalletOrder {
+  takerTokenAddress: Address;
+  takerTokenAmount: BigNumber;
+}
+
 export interface ZeroExSignedFillOrder {
-  senderAddress: string;
-  makerAddress: string;
-  takerAddress: string;
+  senderAddress: Address;
+  makerAddress: Address;
+  takerAddress: Address;
   makerFee: BigNumber;
   takerFee: BigNumber;
   makerAssetAmount: BigNumber;
@@ -67,14 +78,9 @@ export interface ZeroExSignedFillOrder {
   makerAssetData: string;
   takerAssetData: string;
   salt: BigNumber;
-  exchangeAddress: string;
-  feeRecipientAddress: string;
+  exchangeAddress: Address;
+  feeRecipientAddress: Address;
   expirationTimeSeconds: BigNumber;
   signature: string;
   fillAmount: BigNumber;
-}
-
-export interface TakerWalletOrder {
-  takerTokenAddress: Address;
-  takerTokenAmount: BigNumber;
 }

@@ -7,6 +7,7 @@ import {
   ECSig,
   ExchangeOrder,
   IssuanceOrder,
+  KyberTrade,
   Log,
   TakerWalletOrder,
   ZeroExSignedFillOrder,
@@ -37,6 +38,9 @@ import {
   signMessage,
 } from './signing';
 import {
+  kyberTradeToBuffer,
+} from './kyber';
+import {
   encodeAddressAsAssetData,
   extractAddressFromAssetData,
   generateZeroExExchangeWrapperOrder,
@@ -59,9 +63,10 @@ export {
   Bytes,
   Constants,
   ECSig,
-  Exchanges,
   ExchangeOrder,
+  Exchanges,
   IssuanceOrder,
+  KyberTrade,
   Log,
   SignedIssuanceOrder,
   SolidityTypes,
@@ -216,6 +221,20 @@ export class SetProtocolUtils {
   }
 
   /**
+   * Generates a buffer representing a single Kyber trade without the exchange header. Used for testing
+   * KyberNetworkWrapper directly. For issuance order testing flows, use generateSerializedOrders which
+   * includes the exchange header that core uses for dispatching the buffer to the correct wrapper
+   *
+   * @param  trade         An object conforming to KyberTrade to transform into buffer
+   * @return               Buffer for single Kyber trade
+   */
+  public kyberTradeToBuffer(
+    trade: KyberTrade
+  ): Buffer {
+    return kyberTradeToBuffer(trade);
+  }
+
+  /**
    * Gets the length of a buffer's contents
    *
    * @param   buffer   A buffer of arbitray length
@@ -338,7 +357,7 @@ export class SetProtocolUtils {
   /* ============ Non-Static SetProtocolUtils Functions ============ */
 
   /**
-   * Generates a byte string representing serialized exchange orders across different exchanges.
+   * Generates a byte string representing serialized exchange orders across different exchanges
    *
    * @param  makerTokenAddress   Address of the token used to pay for the order
    * @param  makerTokenAmount    Amount of token used to pay for orders
@@ -350,7 +369,18 @@ export class SetProtocolUtils {
     makerTokenAmount: BigNumber,
     orders: ExchangeOrder[],
   ): Bytes {
-    return generateSerializedOrders(makerTokenAddress, makerTokenAmount, orders, this.web3);
+    return generateSerializedOrders(makerTokenAddress, makerTokenAmount, orders);
+  }
+
+  /**
+   * Generates a buffer representing taker wallet orders with appropriate exchange headers.
+   *
+   * @param  makerTokenAddress   Address of the token used to pay for the order
+   * @param  orders              Array of orders from taker wallet
+   * @return                     Buffer with all exchange orders formatted and concatenated
+   */
+  public generateTakerWalletOrdersBuffer(makerTokenAddress: Address, orders: TakerWalletOrder[]): Buffer {
+    return generateTakerWalletOrdersBuffer(makerTokenAddress, orders);
   }
 
   /**
@@ -410,17 +440,6 @@ export class SetProtocolUtils {
   }
 
   /**
-   * Generates a buffer representing taker wallet orders with appropriate headers.
-   *
-   * @param  makerTokenAddress   Address of the token used to pay for the order
-   * @param  orders              Array of orders from taker wallet
-   * @return                     Buffer with all exchange orders formatted and concatenated
-   */
-  public generateTakerWalletOrdersBuffer(makerTokenAddress: Address, orders: TakerWalletOrder[]): Buffer {
-    return generateTakerWalletOrdersBuffer(makerTokenAddress, orders, this.web3);
-  }
-
-  /**
    * Signs a message and returns it's elliptic curve signature
    *
    * @param   message   Data to sign
@@ -449,6 +468,21 @@ export class SetProtocolUtils {
  */
 export class SetProtocolTestUtils {
   private web3: Web3;
+
+  /**
+   * Address of deployed KyberNetworkProxy contract on test rpc, loaded from snapshot
+   */
+  public static KYBER_NETWORK_PROXY_ADDRESS = constants.KYBER_NETWORK_PROXY_ADDRESS;
+
+  /**
+   * Address of deployed token to use in Kyber swap on test rpc, loaded from snapshot on account[3]
+   */
+  public static KYBER_RESERVE_SOURCE_TOKEN_ADDRESS = constants.KYBER_RESERVE_SOURCE_TOKEN_ADDRESS;
+
+  /**
+   * Address of deployed token to receive in Kyber swap on test rpc, loaded from snapshot
+   */
+  public static KYBER_RESERVE_DESTINATION_TOKEN_ADDRESS = constants.KYBER_RESERVE_DESTINATION_TOKEN_ADDRESS;
 
   /**
    * Address of deployed 0x exchange address contract on test rpc, loaded from snapshot

@@ -17,11 +17,10 @@
 'use strict';
 
 import * as _ from 'lodash';
-import * as Web3 from 'web3';
-import { BigNumber } from './bignumber';
 
+import { BigNumber } from './bignumber';
 import { constants } from './constants';
-import { paddedBufferForPrimitive } from './encoding';
+import { paddedBufferForPrimitive, paddedBufferForBigNumber } from './encoding';
 import { generateExchangeOrderHeader } from './orders';
 import { Address, TakerWalletOrder } from './types';
 
@@ -33,18 +32,17 @@ import { Address, TakerWalletOrder } from './types';
  *
  * @param  makerTokenAddress Address of the token used to pay for the order
  * @param  orders            Array of TakerWalletOrders
- * @param  web3              web3 instance instantiated with `new Web3(provider);`
  * @return                   Entire taker wallet orders data as a buffer
  */
 
 export function generateTakerWalletOrdersBuffer(
   makerTokenAddress: Address,
   orders: TakerWalletOrder[],
-  web3: Web3,
 ): Buffer {
   // Turn all taker wallet orders to buffers
   const takerOrderBody: Buffer[] = _.map(orders, ({takerTokenAddress, takerTokenAmount}) =>
-    takerWalletOrderToBuffer(takerTokenAddress, takerTokenAmount, web3));
+    takerWalletOrderToBuffer(takerTokenAddress, takerTokenAmount)
+  );
   const takerOrderBodyBuffer: Buffer = Buffer.concat(takerOrderBody);
 
   // Generate header for taker wallet order
@@ -67,17 +65,15 @@ export function generateTakerWalletOrdersBuffer(
  *
  * @param  takerTokenAddress Address of the token the taker will fill in the taker wallet order
  * @param  takerTokenAmount  Amount of tokens the taker will fill in the order
- * @param  web3              web3 instance instantiated with `new Web3(provider);`
  * @return                   Taker wallet order as a buffer
  */
 
 export function takerWalletOrderToBuffer(
   takerTokenAddress: Address,
   takerTokenAmount: BigNumber,
-  web3: Web3,
 ): Buffer {
   const takerWalletOrder: Buffer[] = [];
   takerWalletOrder.push(paddedBufferForPrimitive(takerTokenAddress));
-  takerWalletOrder.push(paddedBufferForPrimitive(web3.toHex(takerTokenAmount)));
+  takerWalletOrder.push(paddedBufferForBigNumber(takerTokenAmount));
   return Buffer.concat(takerWalletOrder);
 }
