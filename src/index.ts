@@ -7,6 +7,7 @@ import {
   ECSig,
   ExchangeOrder,
   IssuanceOrder,
+  KyberTrade,
   Log,
   TakerWalletOrder,
   ZeroExSignedFillOrder,
@@ -37,6 +38,9 @@ import {
   signMessage,
 } from './signing';
 import {
+  generateKyberTradesBuffer,
+} from './kyber';
+import {
   encodeAddressAsAssetData,
   extractAddressFromAssetData,
   generateZeroExExchangeWrapperOrder,
@@ -59,9 +63,10 @@ export {
   Bytes,
   Constants,
   ECSig,
-  Exchanges,
   ExchangeOrder,
+  Exchanges,
   IssuanceOrder,
+  KyberTrade,
   Log,
   SignedIssuanceOrder,
   SolidityTypes,
@@ -338,7 +343,7 @@ export class SetProtocolUtils {
   /* ============ Non-Static SetProtocolUtils Functions ============ */
 
   /**
-   * Generates a byte string representing serialized exchange orders across different exchanges.
+   * Generates a byte string representing serialized exchange orders across different exchanges
    *
    * @param  makerTokenAddress   Address of the token used to pay for the order
    * @param  makerTokenAmount    Amount of token used to pay for orders
@@ -350,7 +355,34 @@ export class SetProtocolUtils {
     makerTokenAmount: BigNumber,
     orders: ExchangeOrder[],
   ): Bytes {
-    return generateSerializedOrders(makerTokenAddress, makerTokenAmount, orders, this.web3);
+    return generateSerializedOrders(makerTokenAddress, makerTokenAmount, orders);
+  }
+
+  /**
+   * Generates a buffer representing Kyber trades with appropriate headers
+   *
+   * @param  makerTokenAddress   Address of the token used to pay for the trade
+   * @param  makerTokenAmount    Amount of token used to pay for the trades
+   * @param  trades              Array of trades from taker wallet
+   * @return                     Buffer with all exchange trades formatted and concatenated
+   */
+  public generateKyberTradesBuffer(
+    makerTokenAddress: Address,
+    makerTokenAmount: BigNumber,
+    trades: KyberTrade[]
+  ): Buffer {
+    return generateKyberTradesBuffer(makerTokenAddress, makerTokenAmount, trades);
+  }
+
+  /**
+   * Generates a buffer representing taker wallet orders with appropriate headers.
+   *
+   * @param  makerTokenAddress   Address of the token used to pay for the order
+   * @param  orders              Array of orders from taker wallet
+   * @return                     Buffer with all exchange orders formatted and concatenated
+   */
+  public generateTakerWalletOrdersBuffer(makerTokenAddress: Address, orders: TakerWalletOrder[]): Buffer {
+    return generateTakerWalletOrdersBuffer(makerTokenAddress, orders);
   }
 
   /**
@@ -407,17 +439,6 @@ export class SetProtocolUtils {
       fillAmount,
       this.web3,
     );
-  }
-
-  /**
-   * Generates a buffer representing taker wallet orders with appropriate headers.
-   *
-   * @param  makerTokenAddress   Address of the token used to pay for the order
-   * @param  orders              Array of orders from taker wallet
-   * @return                     Buffer with all exchange orders formatted and concatenated
-   */
-  public generateTakerWalletOrdersBuffer(makerTokenAddress: Address, orders: TakerWalletOrder[]): Buffer {
-    return generateTakerWalletOrdersBuffer(makerTokenAddress, orders, this.web3);
   }
 
   /**

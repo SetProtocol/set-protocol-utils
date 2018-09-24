@@ -18,11 +18,11 @@
 
 import * as _ from 'lodash';
 import * as ethUtil from 'ethereumjs-util';
-import * as Web3 from 'web3';
 import { BigNumber } from './bignumber';
 
 import { constants } from './constants';
 import { bufferObjectWithProperties, paddedBufferForBigNumber, paddedBufferForPrimitive } from './encoding';
+import { generateKyberTradesBuffer } from './kyber';
 import { generateTakerWalletOrdersBuffer } from './takerWallet';
 import { generateZeroExOrdersBuffer } from './zeroEx';
 import {
@@ -89,7 +89,6 @@ export function generateSerializedOrders(
   makerTokenAddress: Address,
   makerTokenAmount: BigNumber,
   orders: ExchangeOrder[],
-  web3: Web3,
 ): Bytes {
   const orderBuffer: Buffer[] = [];
   const exchanges: Exchanges = {
@@ -115,8 +114,9 @@ export function generateSerializedOrders(
     if (key === 'ZERO_EX') {
       orderBuffer.push(generateZeroExOrdersBuffer(makerTokenAddress, makerTokenAmount, exchangeOrders));
     } else if (key === 'KYBER') {
+      orderBuffer.push(generateKyberTradesBuffer(makerTokenAddress, makerTokenAmount, exchangeOrders));
     } else if (key === 'TAKER_WALLET') {
-      orderBuffer.push(generateTakerWalletOrdersBuffer(makerTokenAddress, exchangeOrders, web3));
+      orderBuffer.push(generateTakerWalletOrdersBuffer(makerTokenAddress, exchangeOrders));
     }
   });
   return ethUtil.bufferToHex(Buffer.concat(orderBuffer));
