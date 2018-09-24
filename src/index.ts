@@ -38,7 +38,7 @@ import {
   signMessage,
 } from './signing';
 import {
-  generateKyberTradesBuffer,
+  kyberTradeToBuffer,
 } from './kyber';
 import {
   encodeAddressAsAssetData,
@@ -221,6 +221,20 @@ export class SetProtocolUtils {
   }
 
   /**
+   * Generates a buffer representing a single Kyber trade without the exchange header. Used for testing
+   * KyberNetworkWrapper directly. For issuance order testing flows, use generateSerializedOrders which
+   * includes the exchange header that core uses for dispatching the buffer to the correct wrapper
+   *
+   * @param  trade         An object conforming to KyberTrade to transform into buffer
+   * @return               Buffer for single Kyber trade
+   */
+  public kyberTradeToBuffer(
+    trade: KyberTrade
+  ): Buffer {
+    return kyberTradeToBuffer(trade);
+  }
+
+  /**
    * Gets the length of a buffer's contents
    *
    * @param   buffer   A buffer of arbitray length
@@ -359,23 +373,7 @@ export class SetProtocolUtils {
   }
 
   /**
-   * Generates a buffer representing Kyber trades with appropriate headers
-   *
-   * @param  makerTokenAddress   Address of the token used to pay for the trade
-   * @param  makerTokenAmount    Amount of token used to pay for the trades
-   * @param  trades              Array of trades from taker wallet
-   * @return                     Buffer with all exchange trades formatted and concatenated
-   */
-  public generateKyberTradesBuffer(
-    makerTokenAddress: Address,
-    makerTokenAmount: BigNumber,
-    trades: KyberTrade[]
-  ): Buffer {
-    return generateKyberTradesBuffer(makerTokenAddress, makerTokenAmount, trades);
-  }
-
-  /**
-   * Generates a buffer representing taker wallet orders with appropriate headers.
+   * Generates a buffer representing taker wallet orders with appropriate exchange headers.
    *
    * @param  makerTokenAddress   Address of the token used to pay for the order
    * @param  orders              Array of orders from taker wallet
