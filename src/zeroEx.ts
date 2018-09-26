@@ -36,7 +36,6 @@ import {
 } from './encoding';
 
 export function generateZeroExOrdersBuffer(
-  makerTokenAddress: Address,
   makerTokenAmount: BigNumber,
   orders: ZeroExSignedFillOrder[],
 ) {
@@ -48,7 +47,6 @@ export function generateZeroExOrdersBuffer(
   const zeroExOrderHeader: Buffer[] = generateExchangeOrderHeader(
     constants.EXCHANGES.ZERO_EX,
     orders.length,
-    makerTokenAddress,
     makerTokenAmount,
     zeroExOrderBodyBuffer.length,
   );

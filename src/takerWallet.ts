@@ -30,13 +30,11 @@ import { Address, TakerWalletOrder } from './types';
  * Takes taker wallet orders and generates a buffer representing all orders the
  * taker can fill directly from their wallet.
  *
- * @param  makerTokenAddress Address of the token used to pay for the order
  * @param  orders            Array of TakerWalletOrders
  * @return                   Entire taker wallet orders data as a buffer
  */
 
 export function generateTakerWalletOrdersBuffer(
-  makerTokenAddress: Address,
   orders: TakerWalletOrder[],
 ): Buffer {
   // Turn all taker wallet orders to buffers
@@ -49,7 +47,6 @@ export function generateTakerWalletOrdersBuffer(
   const takerOrderHeader: Buffer[] = generateExchangeOrderHeader(
     constants.EXCHANGES.TAKER_WALLET,
     orders.length,
-    makerTokenAddress,
     new BigNumber(0), // Taker wallet orders do not take any maker token to execute
     takerOrderBodyBuffer.length,
   );

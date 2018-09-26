@@ -359,28 +359,25 @@ export class SetProtocolUtils {
   /**
    * Generates a byte string representing serialized exchange orders across different exchanges
    *
-   * @param  makerTokenAddress   Address of the token used to pay for the order
    * @param  makerTokenAmount    Amount of token used to pay for orders
    * @param  orders              Array of orders from various exchanges
    * @return                     Buffer with all exchange orders formatted and concatenated
    */
   public generateSerializedOrders(
-    makerTokenAddress: Address,
     makerTokenAmount: BigNumber,
     orders: ExchangeOrder[],
   ): Bytes {
-    return generateSerializedOrders(makerTokenAddress, makerTokenAmount, orders);
+    return generateSerializedOrders(makerTokenAmount, orders);
   }
 
   /**
    * Generates a buffer representing taker wallet orders with appropriate exchange headers.
    *
-   * @param  makerTokenAddress   Address of the token used to pay for the order
    * @param  orders              Array of orders from taker wallet
    * @return                     Buffer with all exchange orders formatted and concatenated
    */
-  public generateTakerWalletOrdersBuffer(makerTokenAddress: Address, orders: TakerWalletOrder[]): Buffer {
-    return generateTakerWalletOrdersBuffer(makerTokenAddress, orders);
+  public generateTakerWalletOrdersBuffer(orders: TakerWalletOrder[]): Buffer {
+    return generateTakerWalletOrdersBuffer(orders);
   }
 
   /**

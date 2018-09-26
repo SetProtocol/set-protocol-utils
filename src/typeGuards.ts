@@ -24,3 +24,13 @@ export function isTakerWalletOrder(object: ExchangeOrder): boolean {
     'takerTokenAmount' in object
   );
 }
+
+export function isKyberTrade(object: ExchangeOrder): boolean {
+  return (
+    'sourceToken' in object &&
+    'destinationToken' in object &&
+    'sourceTokenQuantity' in object &&
+    'minimumConversionRate' in object &&
+    'maxDestinationQuantity' in object
+  );
+}

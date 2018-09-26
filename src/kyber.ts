@@ -22,21 +22,19 @@ import { BigNumber } from './bignumber';
 import { constants } from './constants';
 import { paddedBufferForPrimitive, paddedBufferForBigNumber } from './encoding';
 import { generateExchangeOrderHeader } from './orders';
-import { Address, KyberTrade } from './types';
+import { KyberTrade } from './types';
 
 /* ============ Kyber Trades Functions ============ */
 
 /**
  * Takes Kyber trades and generates a buffer representing all trades
  *
- * @param  makerTokenAddress   Address of the token used to pay for the order
  * @param  makerTokenAmount    Amount of maker token to contribute to a particular trade
  * @param  trades              Array of KyberTrade interface
  * @return                     Entire kyber trades data as a buffer
  */
 
 export function generateKyberTradesBuffer(
-  makerTokenAddress: Address,
   makerTokenAmount: BigNumber,
   trades: KyberTrade[],
 ): Buffer {
@@ -48,7 +46,6 @@ export function generateKyberTradesBuffer(
   const kyberTradesHeader: Buffer[] = generateExchangeOrderHeader(
     constants.EXCHANGES.KYBER,
     trades.length,
-    makerTokenAddress,
     makerTokenAmount,
     kyberTradesBuffer.length,
   );
