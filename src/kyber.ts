@@ -29,24 +29,28 @@ import { KyberTrade } from './types';
 /**
  * Takes Kyber trades and generates a buffer representing all trades
  *
- * @param  makerTokenAmount    Amount of maker token to contribute to a particular trade
  * @param  trades              Array of KyberTrade interface
  * @return                     Entire kyber trades data as a buffer
  */
 
 export function generateKyberTradesBuffer(
-  makerTokenAmount: BigNumber,
   trades: KyberTrade[],
 ): Buffer {
+  let totalMakerTokenAmount: BigNumber = constants.ZERO;
+  const kyberTradesAsBuffers: Buffer[] = [];
+
   // Turn all Kyber trades to buffer
-  const kyberTradesBody: Buffer[] = _.map(trades, trade => kyberTradeToBuffer(trade));
-  const kyberTradesBuffer: Buffer = Buffer.concat(kyberTradesBody);
+  _.map(trades, trade => {
+    totalMakerTokenAmount = totalMakerTokenAmount.add(trade.sourceTokenQuantity);
+    kyberTradesAsBuffers.push(kyberTradeToBuffer(trade));
+  });
+  const kyberTradesBuffer: Buffer = Buffer.concat(kyberTradesAsBuffers);
 
   // Generate header for Kyber trades
   const kyberTradesHeader: Buffer[] = generateExchangeOrderHeader(
     constants.EXCHANGES.KYBER,
     trades.length,
-    makerTokenAmount,
+    totalMakerTokenAmount,
     kyberTradesBuffer.length,
   );
 

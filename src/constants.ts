@@ -1,6 +1,7 @@
 import { BigNumber } from './bignumber';
 import { Constants } from './types';
 
+
 export const constants: Constants = {
   EXCHANGES: {
     ZERO_EX: 1,
