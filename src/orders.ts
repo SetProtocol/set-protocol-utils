@@ -34,6 +34,7 @@ import {
 } from './types';
 import { isTakerWalletOrder, isZeroExOrder, isKyberTrade } from './typeGuards';
 
+
 export function generateTimestamp(minutes: number): BigNumber {
   const timeToExpiration = minutes * 60 * 1000;
 
@@ -76,17 +77,13 @@ export function hashOrderHex(order: IssuanceOrder): string {
 /**
  * Generates a byte string representing serialized exchange orders across different exchanges.
  *
- * @param  makerTokenAmount    Amount of token used to pay for orders
  * @param  fillAmount          Amount of Set being filled
  * @param  orders              Array of order objects from various exchanges
  * @param  web3                web3 instance instantiated with `new Web3(provider);`
  * @return                     Buffer with all exchange orders formatted and concatenated
  */
 
-export function generateSerializedOrders(
-  makerTokenAmount: BigNumber,
-  orders: ExchangeOrder[],
-): Bytes {
+export function generateSerializedOrders(orders: ExchangeOrder[]): Bytes {
   const orderBuffer: Buffer[] = [];
   const exchanges: Exchanges = {
     'ZERO_EX': [],
@@ -110,13 +107,12 @@ export function generateSerializedOrders(
 
   // Loop through all exchange orders and create buffers
   _.forEach(exchanges, (exchangeOrders: any[], key: string) => {
-    if (exchangeOrders.length === 0) {
-      return;
-    }
+    if (exchangeOrders.length === 0) return;
+
     if (key === 'ZERO_EX') {
-      orderBuffer.push(generateZeroExOrdersBuffer(makerTokenAmount, exchangeOrders));
+      orderBuffer.push(generateZeroExOrdersBuffer(exchangeOrders));
     } else if (key === 'KYBER') {
-      orderBuffer.push(generateKyberTradesBuffer(makerTokenAmount, exchangeOrders));
+      orderBuffer.push(generateKyberTradesBuffer(exchangeOrders));
     } else if (key === 'TAKER_WALLET') {
       orderBuffer.push(generateTakerWalletOrdersBuffer(exchangeOrders));
     }

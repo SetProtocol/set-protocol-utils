@@ -35,21 +35,28 @@ import {
   paddedBufferForBigNumber,
 } from './encoding';
 
+
 export function generateZeroExOrdersBuffer(
-  makerTokenAmount: BigNumber,
   orders: ZeroExSignedFillOrder[],
 ) {
-  const zeroExOrderBody: Buffer[] = _.map(orders, order =>
-    ethUtil.toBuffer(generateZeroExExchangeWrapperOrder(order, order.signature, order.fillAmount))
-  );
-  const zeroExOrderBodyBuffer: Buffer = Buffer.concat(zeroExOrderBody);
+  let totalMakerTokenAmount: BigNumber = constants.ZERO;
+  const zeroExOrdersAsBuffers: Buffer[] = [];
+
+  _.map(orders, order => {
+    totalMakerTokenAmount = totalMakerTokenAmount.add(order.fillAmount);
+
+    const zeroExOrderHex = generateZeroExExchangeWrapperOrder(order, order.signature, order.fillAmount);
+    zeroExOrdersAsBuffers.push(ethUtil.toBuffer(zeroExOrderHex));
+  });
+  const zeroExOrderBodyBuffer: Buffer = Buffer.concat(zeroExOrdersAsBuffers);
 
   const zeroExOrderHeader: Buffer[] = generateExchangeOrderHeader(
     constants.EXCHANGES.ZERO_EX,
     orders.length,
-    makerTokenAmount,
+    totalMakerTokenAmount,
     zeroExOrderBodyBuffer.length,
   );
+
   return Buffer.concat([
     Buffer.concat(zeroExOrderHeader),
     zeroExOrderBodyBuffer,

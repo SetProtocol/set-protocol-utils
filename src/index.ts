@@ -359,15 +359,17 @@ export class SetProtocolUtils {
   /**
    * Generates a byte string representing serialized exchange orders across different exchanges
    *
-   * @param  makerTokenAmount    Amount of token used to pay for orders
+   * For 0x orders, it sums the fillAmounts of all 0x order and uses the total as the makerTokenAmount
+   * in the exchange header that goes in front of all 0x orders
+   *
+   * For Kyber trades,it sums the sourceTokenAmount all each kyber trades and uses the total as the makerTokenAmount
+   * in the exchange header that goes in front of all Kyber trades
+   *
    * @param  orders              Array of orders from various exchanges
    * @return                     Buffer with all exchange orders formatted and concatenated
    */
-  public generateSerializedOrders(
-    makerTokenAmount: BigNumber,
-    orders: ExchangeOrder[],
-  ): Bytes {
-    return generateSerializedOrders(makerTokenAmount, orders);
+  public generateSerializedOrders(orders: ExchangeOrder[]): Bytes {
+    return generateSerializedOrders(orders);
   }
 
   /**

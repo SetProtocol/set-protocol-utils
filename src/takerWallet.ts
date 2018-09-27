@@ -24,6 +24,7 @@ import { paddedBufferForPrimitive, paddedBufferForBigNumber } from './encoding';
 import { generateExchangeOrderHeader } from './orders';
 import { Address, TakerWalletOrder } from './types';
 
+
 /* ============ Taker Wallet Order Functions ============ */
 
 /**
