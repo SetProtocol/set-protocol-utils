@@ -9,7 +9,6 @@ import {
   IssuanceOrder,
   KyberTrade,
   Log,
-  TakerWalletOrder,
   ZeroExSignedFillOrder,
 } from './types';
 import { constants } from './constants';
@@ -28,6 +27,7 @@ import {
   getLogsFromTxHash
 } from './logs';
 import {
+  generateExchangeOrderHeader,
   generateTimestamp,
   generateSalt,
   generateSerializedOrders,
@@ -37,9 +37,7 @@ import {
   parseSignatureHexAsRSV,
   signMessage,
 } from './signing';
-import {
-  kyberTradeToBuffer,
-} from './kyber';
+import { kyberTradesToBytes } from './kyber';
 import {
   encodeAddressAsAssetData,
   extractAddressFromAssetData,
@@ -49,9 +47,6 @@ import {
   signZeroExOrderAsync,
   zeroExOrderToBuffer,
 } from './zeroEx';
-import {
-  generateTakerWalletOrdersBuffer,
-} from './takerWallet';
 import {
   isZeroExOrder,
   isTakerWalletOrder,
@@ -109,105 +104,12 @@ export class SetProtocolUtils {
   /* ============ Static SetProtocolUtils Functions ============ */
 
   /**
-   * Converts an array of Buffers into Hex
-   *
-   * @param   bufferArray   Array of buffers
-   * @return  Hex of array of buffers represented as Bytes (string)
-   */
-  public static bufferArrayToHex(bufferArray: Buffer[]): Bytes {
-    return bufferArrayToHex(bufferArray);
-  }
-
-  /**
-   * Converts an array of Bytes (each prefixed 0x) into one byte array
-   *
-   * @param   bytes   Array of byte strings
-   * @return  A single byte string representing the array of bytes
-   */
-  public static concatBytes(bytes: Bytes[]): Bytes {
-    return concatBytes(bytes);
-  }
-
-  /**
-   * Generates expiration timestamp that can be used as part of IssuanceOrder
-   *
-   * @param   minutes   Number of minutes from now
-   * @return  Expiration timestamp represented as BigNumber
-   */
-  public static generateTimestamp(minutes: number): BigNumber {
-    return generateTimestamp(minutes);
-  }
-
-  /**
    * Generates a pseudo-random 256-bit salt
    *
    * @return  A pseudo-random 256-bit number that can be used as a salt
    */
   public static generateSalt(): BigNumber {
     return generateSalt();
-  }
-
-  /**
-   * Generates a byte array with a valid 0x order that can be passed into ZeroExExchangeWrapper
-   *
-   * @param   order       Object conforming to 0x's Order inteface
-   * @param   signature   Elliptic curve signature as hex string
-   * @param   fillAmount  Amount of 0x order to fill
-   * @return  Hex string representation of valid 0xExchangeWrapper order
-   */
-  public static generateZeroExExchangeWrapperOrder(order: Order, signature: Bytes, fillAmount: BigNumber): Bytes {
-    return generateZeroExExchangeWrapperOrder(order, signature, fillAmount);
-  }
-
-  /**
-   * Generates a 0x order. Use if exclusively generating the 0x order body. If generating
-   * IssuanceOrder zeroExExchange Order interfaces, use generateZeroExSignedFillOrder
-   *
-   * @param   senderAddress           Address calling 0x Exchange contract
-   * @param   makerAddress            Maker asset owner
-   * @param   takerAddress            Taker assert owner
-   * @param   makerFee                Fee accrused to maker
-   * @param   takerFee                Fee accrued to taker
-   * @param   makerAssetAmount        Amount of asset to exchange
-   * @param   takerAssetAmount        Amount of asset to exchange for
-   * @param   makerTokenAddress       Address of asset to exchange
-   * @param   takerTokenAddress       Address of asset to exchange for
-   * @param   salt                    Pseudo-random number acting as a salt
-   * @param   exchangeAddress         0x Exchange contract address
-   * @param   feeRecipientAddress     Address to send fee
-   * @param   expirationTimeSeconds   Order expiration in unix timestamp
-   * @return  Object conforming to 0x's Order inteface
-   */
-  public static generateZeroExOrder(
-    senderAddress: Address,
-    makerAddress: Address,
-    takerAddress: Address,
-    makerFee: BigNumber,
-    takerFee: BigNumber,
-    makerAssetAmount: BigNumber,
-    takerAssetAmount: BigNumber,
-    makerTokenAddress: Address,
-    takerTokenAddress: Address,
-    salt: BigNumber,
-    exchangeAddress: Address,
-    feeRecipientAddress: Address,
-    expirationTimeSeconds: BigNumber
-  ): Order {
-    return generateZeroExOrder(
-      senderAddress,
-      makerAddress,
-      takerAddress,
-      makerFee,
-      takerFee,
-      makerAssetAmount,
-      takerAssetAmount,
-      makerTokenAddress,
-      takerTokenAddress,
-      salt,
-      exchangeAddress,
-      feeRecipientAddress,
-      expirationTimeSeconds,
-    );
   }
 
   /**
@@ -218,20 +120,6 @@ export class SetProtocolUtils {
    */
   public static hashOrderHex(order: IssuanceOrder): string {
     return hashOrderHex(order);
-  }
-
-  /**
-   * Generates a buffer representing a single Kyber trade without the exchange header. Used for testing
-   * KyberNetworkWrapper directly. For issuance order testing flows, use generateSerializedOrders which
-   * includes the exchange header that core uses for dispatching the buffer to the correct wrapper
-   *
-   * @param  trade         An object conforming to KyberTrade to transform into buffer
-   * @return               Buffer for single Kyber trade
-   */
-  public kyberTradeToBuffer(
-    trade: KyberTrade
-  ): Buffer {
-    return kyberTradeToBuffer(trade);
   }
 
   /**
@@ -268,6 +156,8 @@ export class SetProtocolUtils {
   /**
    * Generates a buffer for a BigNumber padded to 32 bytes
    *
+   * Used by various
+   *
    * @param   number   BigNumber to encode
    * @return  BigNumber value represented as Buffer
    */
@@ -277,6 +167,8 @@ export class SetProtocolUtils {
 
   /**
    * Parses a signature and returns its elliptic curve signature
+   *
+   * Used by setProtocol.js in SignatureUtils
    *
    * @param   signature   Hex signature to parse
    * @return  An object containing the Elliptic curve signature parameters
@@ -288,6 +180,8 @@ export class SetProtocolUtils {
   /**
    * Returns the hex string representation of a string padded with '0x'
    *
+   * Used by setProtocol.js in various wrappers to convert string to bytes to match transaction parameter type
+   *
    * @param   input   A string primitive
    * @return  Hex of the string which can be used as a bytes32 transaction parameter
    */
@@ -296,17 +190,9 @@ export class SetProtocolUtils {
   }
 
   /**
-   * Converts a 0x order into binary representation, often to get byte count
-   *
-   * @param   order   Object conforming to 0x's Order inteface
-   * @return  Array of buffers representing the order
-   */
-  public static zeroExOrderToBuffer(order: Order): Buffer[] {
-    return zeroExOrderToBuffer(order);
-  }
-
-  /**
    * Determines if an order is a ZeroExSignedFillOrder
+   *
+   * Used by setProtocol.js OrderAssertions
    *
    * @param   order   An exchange order for an issuance order
    * @return  Boolean for whether or not fill order is a ZeroExOrder
@@ -318,6 +204,8 @@ export class SetProtocolUtils {
   /**
    * Determines if an order is a TakerWalletOrder
    *
+   * Used by setProtocol.js OrderAssertions
+   *
    * @param   order   An exchange order for an issuance order
    * @return  Boolean for whether or not fill order is a TakerWalletOrder
    */
@@ -328,21 +216,13 @@ export class SetProtocolUtils {
   /**
    * Decodes the ERC20 token asset data to get the original address
    *
+   * Used by setProtocol.js OrderAssertions
+   *
    * @param   assetData   A string representing the encoded ERC20 asset details
    * @return  Original token address after decoding
    */
   public static extractAddressFromAssetData(assetData: string): string {
     return extractAddressFromAssetData(assetData);
-  }
-
-  /**
-   * Encodes a ERC20 token address into a 0x ERC20 token asset data
-   *
-   * @param   tokenAddress   The ERC20 address to encode
-   * @return  A string representing the encoded ERC20 asset details
-   */
-  public static encodeAddressAsAssetData(tokenAddress: Address): string {
-    return encodeAddressAsAssetData(tokenAddress);
   }
 
   /**
@@ -370,16 +250,6 @@ export class SetProtocolUtils {
    */
   public generateSerializedOrders(orders: ExchangeOrder[]): Bytes {
     return generateSerializedOrders(orders);
-  }
-
-  /**
-   * Generates a buffer representing taker wallet orders with appropriate exchange headers.
-   *
-   * @param  orders              Array of orders from taker wallet
-   * @return                     Buffer with all exchange orders formatted and concatenated
-   */
-  public generateTakerWalletOrdersBuffer(orders: TakerWalletOrder[]): Buffer {
-    return generateTakerWalletOrdersBuffer(orders);
   }
 
   /**
@@ -468,6 +338,8 @@ export class SetProtocolUtils {
 export class SetProtocolTestUtils {
   private web3: Web3;
 
+  /* ============ SetProtocolTestUtils Constants  ============ */
+
   /**
    * Address of deployed KyberNetworkProxy contract on test rpc, loaded from snapshot
    */
@@ -498,13 +370,7 @@ export class SetProtocolTestUtils {
    */
   public static ZERO_EX_TOKEN_ADDRESS = constants.ZERO_EX_TOKEN_ADDRESS;
 
-  /**
-   * Initialize a TestUtils class
-   * @param web3   Web3 instance to use
-   */
-  public constructor(web3?: Web3) {
-    this.web3 = web3 || new Web3();
-  }
+  /* ============ Static SetProtocolTestUtils Functions ============ */
 
   /**
    * Asserts that an array of logs is a subject of all of another set of logs, usually
@@ -518,6 +384,157 @@ export class SetProtocolTestUtils {
   }
 
   /* ============ Non-Static SetProtocolUtils Functions ============ */
+
+  /**
+   * Encodes a ERC20 token address into a 0x ERC20 token asset data
+   *
+   * @param   tokenAddress   The ERC20 address to encode
+   * @return  A string representing the encoded ERC20 asset details
+   */
+  public static encodeAddressAsAssetData(tokenAddress: Address): string {
+    return encodeAddressAsAssetData(tokenAddress);
+  }
+
+  /**
+   * Converts an array of Buffers into Hex
+   *
+   * @param   bufferArray   Array of buffers
+   * @return  Hex of array of buffers represented as Bytes (string)
+   */
+  public static bufferArrayToHex(bufferArray: Buffer[]): Bytes {
+    return bufferArrayToHex(bufferArray);
+  }
+
+  /**
+   * Converts an array of Bytes (each prefixed 0x) into one byte array
+   *
+   * @param   bytes   Array of byte strings
+   * @return  A single byte string representing the array of bytes
+   */
+  public static concatBytes(bytes: Bytes[]): Bytes {
+    return concatBytes(bytes);
+  }
+
+  /**
+   * Generates an exchange order header represented as a buffer array.
+   *
+   * @param  exchangeId            Enum corresponding to exchange id, see constants.EXCHANGES
+   * @param  orderCount            Number of exchange orders
+   * @param  makerTokenAmount      Amount of tokens the maker is willing to pay
+   * @param  totalOrderBodyLength  Length of order data buffer
+   * @return                       Array containing all inputs as buffers
+   */
+  public static generateExchangeOrderHeader(
+    exchangeName: string,
+    orderCount: number,
+    makerTokenAmount: BigNumber,
+    totalOrderBodyLength: number,
+  ): Buffer[] {
+    return generateExchangeOrderHeader(exchangeName, orderCount, makerTokenAmount, totalOrderBodyLength);
+  }
+
+  /**
+   * Generates expiration timestamp that can be used as part of IssuanceOrder
+   *
+   * @param   minutes   Number of minutes from now
+   * @return  Expiration timestamp represented as BigNumber
+   */
+  public static generateTimestamp(minutes: number): BigNumber {
+    return generateTimestamp(minutes);
+  }
+
+  /**
+   * Generates a byte array with a valid 0x order that can be passed into ZeroExExchangeWrapper
+   *
+   * @param   order       Object conforming to 0x's Order inteface
+   * @param   signature   Elliptic curve signature as hex string
+   * @param   fillAmount  Amount of 0x order to fill
+   * @return  Hex string representation of valid 0xExchangeWrapper order
+   */
+  public static generateZeroExExchangeWrapperOrder(order: Order, signature: Bytes, fillAmount: BigNumber): Bytes {
+    return generateZeroExExchangeWrapperOrder(order, signature, fillAmount);
+  }
+
+  /**
+   * Generates a 0x order. Use if exclusively generating the 0x order body. If generating
+   * IssuanceOrder zeroExExchange Order interfaces, use generateZeroExSignedFillOrder
+   *
+   * @param   senderAddress           Address calling 0x Exchange contract
+   * @param   makerAddress            Maker asset owner
+   * @param   takerAddress            Taker assert owner
+   * @param   makerFee                Fee accrused to maker
+   * @param   takerFee                Fee accrued to taker
+   * @param   makerAssetAmount        Amount of asset to exchange
+   * @param   takerAssetAmount        Amount of asset to exchange for
+   * @param   makerTokenAddress       Address of asset to exchange
+   * @param   takerTokenAddress       Address of asset to exchange for
+   * @param   salt                    Pseudo-random number acting as a salt
+   * @param   exchangeAddress         0x Exchange contract address
+   * @param   feeRecipientAddress     Address to send fee
+   * @param   expirationTimeSeconds   Order expiration in unix timestamp
+   * @return  Object conforming to 0x's Order inteface
+   */
+  public static generateZeroExOrder(
+    senderAddress: Address,
+    makerAddress: Address,
+    takerAddress: Address,
+    makerFee: BigNumber,
+    takerFee: BigNumber,
+    makerAssetAmount: BigNumber,
+    takerAssetAmount: BigNumber,
+    makerTokenAddress: Address,
+    takerTokenAddress: Address,
+    salt: BigNumber,
+    exchangeAddress: Address,
+    feeRecipientAddress: Address,
+    expirationTimeSeconds: BigNumber
+  ): Order {
+    return generateZeroExOrder(
+      senderAddress,
+      makerAddress,
+      takerAddress,
+      makerFee,
+      takerFee,
+      makerAssetAmount,
+      takerAssetAmount,
+      makerTokenAddress,
+      takerTokenAddress,
+      salt,
+      exchangeAddress,
+      feeRecipientAddress,
+      expirationTimeSeconds,
+    );
+  }
+
+  /**
+   * Generates a hex string representing a single Kyber trade without the exchange header. Used for testing
+   * KyberNetworkWrapper directly. For issuance order testing flows, use generateSerializedOrders which
+   * includes the exchange header that core uses for dispatching the buffer to the correct wrapper
+   *
+   * @param  trade         An object conforming to KyberTrade to transform into buffer
+   * @return               Hex string for single Kyber trade
+   */
+  public static kyberTradeToBytes(trade: KyberTrade): Bytes {
+    return kyberTradesToBytes(trade);
+  }
+
+  /**
+   * Converts a 0x order into binary representation, often to get byte count
+   *
+   * @param   order   Object conforming to 0x's Order inteface
+   * @return  Array of buffers representing the order
+   */
+  public static zeroExOrderToBuffer(order: Order): Buffer[] {
+    return zeroExOrderToBuffer(order);
+  }
+
+  /**
+   * Initialize a TestUtils class
+   * @param web3   Web3 instance to use
+   */
+  public constructor(web3?: Web3) {
+    this.web3 = web3 || new Web3();
+  }
 
   /**
    * Retrieves readable logs from a transaction hash
