@@ -17,12 +17,13 @@
 'use strict';
 
 import * as _ from 'lodash';
+import * as ethUtil from 'ethereumjs-util';
 
 import { BigNumber } from './bignumber';
 import { constants } from './constants';
 import { paddedBufferForPrimitive, paddedBufferForBigNumber } from './encoding';
 import { generateExchangeOrderHeader } from './orders';
-import { KyberTrade } from './types';
+import { Bytes, KyberTrade } from './types';
 
 /* ============ Kyber Trades Functions ============ */
 
@@ -61,13 +62,25 @@ export function generateKyberTradesBuffer(
 }
 
 /**
+ * Takes a Kyber trade object and turns it in hex form. Used to test KyberNetworkWrapper where
+ * exchange header is not necessary
+ *
+ * @param  trade   Object conforming to Kyber trade
+ * @return         Kyber trade as a hex string
+ */
+export function kyberTradesToBytes(
+  trade: KyberTrade
+): Bytes {
+  return ethUtil.bufferToHex(kyberTradeToBuffer(trade));
+}
+
+/**
  * Takes a Kyber trade object and turns it into a buffer
  *
  * @param  trade   Object conforming to Kyber trade
  * @return         Kyber trade as a buffer
  */
-
-export function kyberTradeToBuffer(
+function kyberTradeToBuffer(
   trade: KyberTrade
 ): Buffer {
   const kyberSwapBuffer: Buffer[] = [];

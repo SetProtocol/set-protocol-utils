@@ -123,21 +123,20 @@ export function generateSerializedOrders(orders: ExchangeOrder[]): Bytes {
 /**
  * Generates an exchange order header represented as a buffer array.
  *
- * @param  exchangeName          Name of the exchange, ex. 'ZERO_EX'
+ * @param  exchangeId            Enum corresponding to exchange id, see constants.EXCHANGES
  * @param  orderCount            Number of exchange orders
  * @param  makerTokenAmount      Amount of tokens the maker is willing to pay
  * @param  totalOrderBodyLength  Length of order data buffer
  * @return                       Array containing all inputs as buffers
  */
-
 export function generateExchangeOrderHeader(
-  exchangeName: string,
+  exchangeId: string,
   orderCount: number,
   makerTokenAmount: BigNumber,
   totalOrderBodyLength: number,
 ): Buffer[] {
   return [
-    paddedBufferForPrimitive(exchangeName),
+    paddedBufferForPrimitive(exchangeId),
     paddedBufferForPrimitive(orderCount),
     paddedBufferForBigNumber(makerTokenAmount),
     paddedBufferForPrimitive(totalOrderBodyLength),
