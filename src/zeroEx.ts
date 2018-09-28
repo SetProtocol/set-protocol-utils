@@ -38,7 +38,7 @@ import {
 
 export function generateZeroExOrdersBuffer(
   orders: ZeroExSignedFillOrder[],
-) {
+): Buffer {
   let totalMakerTokenAmount: BigNumber = constants.ZERO;
   const zeroExOrdersAsBuffers: Buffer[] = [];
 
@@ -102,6 +102,26 @@ export function generateZeroExExchangeWrapperOrder(zeroExOrder: Order, signature
       .concat([ethUtil.toBuffer(signature)])
       .concat(zeroExOrderBuffer)
   );
+}
+
+export function zeroExSignedFillOrderToBuffer(zeroExOrder: Order, signature: Bytes, fillAmount: BigNumber): Buffer[] {
+  const { makerAssetData, takerAssetData } = zeroExOrder;
+
+  const makerAssetDataLength = numBytesFromHex(makerAssetData);
+  const takerAssetDataLength = numBytesFromHex(takerAssetData);
+  const signatureLength: BigNumber = numBytesFromHex(signature);
+  const zeroExOrderBuffer = zeroExOrderToBuffer(zeroExOrder);
+  const zeroExOrderLength = numBytesFromBuffer(zeroExOrderBuffer);
+
+  const orderHeader: Buffer[] = [
+    paddedBufferForBigNumber(signatureLength),
+    paddedBufferForBigNumber(zeroExOrderLength),
+    paddedBufferForBigNumber(makerAssetDataLength),
+    paddedBufferForBigNumber(takerAssetDataLength),
+    paddedBufferForBigNumber(fillAmount),
+  ];
+
+  return orderHeader.concat([ethUtil.toBuffer(signature)]).concat(zeroExOrderBuffer);
 }
 
 export function generateZeroExOrder(

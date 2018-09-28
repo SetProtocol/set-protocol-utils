@@ -46,6 +46,7 @@ import {
   generateZeroExSignedFillOrder,
   signZeroExOrderAsync,
   zeroExOrderToBuffer,
+  zeroExSignedFillOrderToBuffer,
 } from './zeroEx';
 import {
   isZeroExOrder,
@@ -526,6 +527,17 @@ export class SetProtocolTestUtils {
    */
   public static zeroExOrderToBuffer(order: Order): Buffer[] {
     return zeroExOrderToBuffer(order);
+  }
+
+  /**
+   * Generates a buffer with a valid 0x order that can be passed into ZeroExExchangeWrapper. Used to generate the
+   * orders data separately from the header to test invalid values.
+   *
+   * @param   orders       ZeroExSignedFillOrder objects
+   * @return  Buffer representation of valid 0xExchangeWrapper order
+   */
+  public static zeroExSignedFillOrderToBuffer(order: ZeroExSignedFillOrder): Buffer[] {
+    return zeroExSignedFillOrderToBuffer(order, order.signature, order.fillAmount);
   }
 
   /**
