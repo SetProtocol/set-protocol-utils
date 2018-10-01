@@ -1,6 +1,6 @@
 {
   "name": "set-protocol-utils",
-  "version": "0.3.37",
+  "version": "0.3.38",
   "description": "Common utilities for Set Protocol",
   "main": "dist/index.js",
   "typings": "dist/types/index.d.ts",

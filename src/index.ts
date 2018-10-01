@@ -215,6 +215,16 @@ export class SetProtocolUtils {
   }
 
   /**
+   * Encodes a ERC20 token address into a 0x ERC20 token asset data
+   *
+   * @param   tokenAddress   The ERC20 address to encode
+   * @return  A string representing the encoded ERC20 asset details
+   */
+  public static encodeAddressAsAssetData(tokenAddress: Address): string {
+    return encodeAddressAsAssetData(tokenAddress);
+  }
+
+  /**
    * Decodes the ERC20 token asset data to get the original address
    *
    * Used by setProtocol.js OrderAssertions
@@ -384,17 +394,7 @@ export class SetProtocolTestUtils {
     assertLogEquivalence(actual, expected);
   }
 
-  /* ============ Non-Static SetProtocolUtils Functions ============ */
-
-  /**
-   * Encodes a ERC20 token address into a 0x ERC20 token asset data
-   *
-   * @param   tokenAddress   The ERC20 address to encode
-   * @return  A string representing the encoded ERC20 asset details
-   */
-  public static encodeAddressAsAssetData(tokenAddress: Address): string {
-    return encodeAddressAsAssetData(tokenAddress);
-  }
+  /* ============ Non-Static SetProtocolTestUtils Functions ============ */
 
   /**
    * Converts an array of Buffers into Hex

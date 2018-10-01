@@ -48,17 +48,16 @@ export function generateKyberTradesBuffer(
   const kyberTradesBuffer: Buffer = Buffer.concat(kyberTradesAsBuffers);
 
   // Generate header for Kyber trades
-  const kyberTradesHeader: Buffer[] = generateExchangeOrderHeader(
-    constants.EXCHANGES.KYBER,
-    trades.length,
-    totalMakerTokenAmount,
-    kyberTradesBuffer.length,
+  const kyberTradesHeader: Buffer = Buffer.concat(
+    generateExchangeOrderHeader(
+      constants.EXCHANGES.KYBER,
+      trades.length,
+      totalMakerTokenAmount,
+      kyberTradesBuffer.length,
+    )
   );
 
-  return Buffer.concat([
-    Buffer.concat(kyberTradesHeader),
-    kyberTradesBuffer,
-  ]);
+  return Buffer.concat([kyberTradesHeader, kyberTradesBuffer]);
 }
 
 /**
