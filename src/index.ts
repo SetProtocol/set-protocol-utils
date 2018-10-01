@@ -51,6 +51,7 @@ import {
 import {
   isZeroExOrder,
   isTakerWalletOrder,
+  isKyberTrade,
 } from './typeGuards';
 
 export { BigNumber };
@@ -191,11 +192,23 @@ export class SetProtocolUtils {
   }
 
   /**
+   * Determines if a liquidity source is a KyberTrade
+   *
+   * Used by setProtocol.js OrderAssertions
+   *
+   * @param   trade   A liquiduity fill source object
+   * @return  Boolean for whether or not fill order is a KyberTrade
+   */
+  public static isKyberTrade(trade: ExchangeOrder): boolean {
+    return isKyberTrade(trade);
+  }
+
+  /**
    * Determines if an order is a ZeroExSignedFillOrder
    *
    * Used by setProtocol.js OrderAssertions
    *
-   * @param   order   An exchange order for an issuance order
+   * @param   order   A liquiduity fill source object
    * @return  Boolean for whether or not fill order is a ZeroExOrder
    */
   public static isZeroExOrder(order: ExchangeOrder): boolean {
@@ -207,7 +220,7 @@ export class SetProtocolUtils {
    *
    * Used by setProtocol.js OrderAssertions
    *
-   * @param   order   An exchange order for an issuance order
+   * @param   order   A liquiduity fill source object
    * @return  Boolean for whether or not fill order is a TakerWalletOrder
    */
   public static isTakerWalletOrder(order: ExchangeOrder): boolean {
