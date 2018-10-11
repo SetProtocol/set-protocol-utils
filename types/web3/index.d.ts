@@ -6,7 +6,6 @@ declare module 'web3' {
         BlockWithoutTransactionData,
         BlockParam,
         CallData,
-        Provider,
         Unit,
         TxData,
         Transaction,
@@ -14,11 +13,18 @@ declare module 'web3' {
         TransactionReceipt,
         FilterObject,
         LogEntryEvent,
+        JSONRPCErrorCallback,
         JSONRPCRequestPayload,
         JSONRPCResponsePayload,
     } from 'ethereum-types';
 
     type MixedData = string | number | object | any[] | BigNumber.BigNumber;
+
+    // Web3 1.0
+    interface Provider {
+        sendAsync(payload: JSONRPCRequestPayload, callback: JSONRPCErrorCallback): void;
+        send(payload: JSONRPCRequestPayload, callback: JSONRPCErrorCallback): void;
+    }
 
     class Web3 {
         public static providers: typeof providers;
