@@ -105,6 +105,7 @@ declare module 'web3' {
             defaultAccount?: string;
             defaultBlock: BlockParam;
             syncing: Web3.SyncingResult;
+            net: Web3.EthNetApi;
             compile: {
                 solidity(sourceString: string, cb?: (err: Error, result: any) => void): object;
             };
@@ -238,6 +239,11 @@ declare module 'web3' {
             toWei(amount: number | string, unit: Unit): string;
             toWei(amount: BigNumber.BigNumber, unit: Unit): BigNumber.BigNumber;
             toBigNumber(value: number | string): BigNumber.BigNumber;
+        }
+
+        interface EthNetApi {
+            getId(): number;
+            getId(callback: (err: Error, networkId: number) => void): void;
         }
 
         interface SyncingState {

@@ -38,7 +38,7 @@ export class Web3Utils {
   }
 
   public async getNetworkIdAsync(): Promise<number> {
-    return promisify(this.web3.version.getNetwork)();
+    return promisify(this.web3.eth.net.getId)();
   }
 
   public async getAvailableAddressesAsync(): Promise<string[]> {
