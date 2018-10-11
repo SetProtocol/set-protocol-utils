@@ -56,8 +56,12 @@ import {
   isTakerWalletOrder,
   isKyberTrade,
 } from './typeGuards';
+import {
+  Web3Utils,
+} from './Web3Utils';
 
 export { BigNumber };
+export { Web3Utils };
 export {
   Address,
   Bytes,
