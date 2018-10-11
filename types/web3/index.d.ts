@@ -157,6 +157,7 @@ declare module 'web3' {
             ): void;
 
             contract(abi: AbiDefinition[]): Web3.Contract<any>;
+            Contract(abi: AbiDefinition[], address: string): Web3.ContractInstance;
 
             // TODO block param
             getBalance(addressHexString: string): BigNumber.BigNumber;
