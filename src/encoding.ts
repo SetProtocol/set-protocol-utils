@@ -50,12 +50,12 @@ export function paddedBufferForPrimitive(input: any): Buffer {
 }
 
 export function paddedBufferForBigNumber(number: BigNumber): Buffer {
-  return paddedBufferForPrimitive(web3.toHex(number));
+  return paddedBufferForPrimitive(web3.utils.toHex(number));
 }
 
 export function stringToBytes(input: string): Bytes {
   // Padding 66 to include the '0x' prefix
-  return web3.fromAscii(input).padEnd(66, '0');
+  return web3.utils.fromAscii(input).padEnd(66, '0');
 }
 
 function elementaryName (
