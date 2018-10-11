@@ -109,17 +109,6 @@
     ethereum-types "^1.0.3"
     popper.js "1.14.3"
 
-"@0xproject/typescript-typings@^1.0.4":
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/@0xproject/typescript-typings/-/typescript-typings-1.0.4.tgz#ba69ccfeed76844cc993877e9c903365f4e0aa72"
-  integrity sha512-HPb4cjeGPDXUqlIhVjLyj0gfhaBw+WxCIThtTHL+VKlFgnAtXn7vlD7uLHr/OTYA/k9xn+/vwRagIx3dGpC+ZA==
-  dependencies:
-    "@types/bn.js" "^4.11.0"
-    "@types/react" "*"
-    bignumber.js "~4.1.0"
-    ethereum-types "^1.0.4"
-    popper.js "1.14.3"
-
 "@0xproject/utils@^1.0.4":
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/@0xproject/utils/-/utils-1.0.4.tgz#2d67b089d5830788de50ce807e7df031c200db49"
@@ -165,18 +154,6 @@
   integrity sha512-ialVHUVjhSH/96vKDd20XGokJ9ktVdeBrDY5w7hpHva/2ZiB3ZhZ4VZQOmSYe/vpZEkDy+ydtr9hMckxw+/MMw==
   dependencies:
     "@types/node" "*"
-
-"@types/chai-as-promised@^7.1.0":
-  version "7.1.0"
-  resolved "https://registry.yarnpkg.com/@types/chai-as-promised/-/chai-as-promised-7.1.0.tgz#010b04cde78eacfb6e72bfddb3e58fe23c2e78b9"
-  integrity sha512-MFiW54UOSt+f2bRw8J7LgQeIvE/9b4oGvwU7XW30S9QGAiHGnU/fmiOprsyMkdmH2rl8xSPc0/yrQw8juXU6bQ==
-  dependencies:
-    "@types/chai" "*"
-
-"@types/chai@*":
-  version "4.1.6"
-  resolved "https://registry.yarnpkg.com/@types/chai/-/chai-4.1.6.tgz#1eb26c040e3a84205b1008ad55c800e5e8a94e34"
-  integrity sha512-CBk7KTZt3FhPsEkYioG6kuCIpWISw+YI8o+3op4+NXwTpvAPxE1ES8+PY8zfaK2L98b1z5oq03UHa4VYpeUxnw==
 
 "@types/events@*":
   version "1.2.0"
@@ -1334,6 +1311,18 @@ center-align@^0.1.1:
     align-text "^0.1.3"
     lazy-cache "^1.0.3"
 
+chai-as-promised@^7.1.1:
+  version "7.1.1"
+  resolved "https://registry.yarnpkg.com/chai-as-promised/-/chai-as-promised-7.1.1.tgz#08645d825deb8696ee61725dbf590c012eb00ca0"
+  integrity sha512-azL6xMoi+uxu6z4rhWQ1jbdUhOMhis2PvscD/xjLqNMkv3BPPp2JyyuTHOrf9BOosGpNQ11v6BKv/g57RXbiaA==
+  dependencies:
+    check-error "^1.0.2"
+
+chai-bignumber@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/chai-bignumber/-/chai-bignumber-2.0.2.tgz#de6c219c690b2d66b646ad6930096f9ba2199643"
+  integrity sha512-BIdRNjRaoRj4bMsZLKbIZPMNKqmwnzNiyxqBYDSs6dFOCs9w8OHPuUE8e1bH60i1IhOzT0NjLtCD+lKEWB1KTQ==
+
 chai@^3.5.0:
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/chai/-/chai-3.5.0.tgz#4d02637b067fe958bdbfdd3a40ec56fef7373247"
@@ -1375,7 +1364,7 @@ chalk@^2.0.1, chalk@^2.1.0, chalk@^2.3.0, chalk@^2.3.1:
     escape-string-regexp "^1.0.5"
     supports-color "^5.3.0"
 
-check-error@^1.0.1:
+check-error@^1.0.1, check-error@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/check-error/-/check-error-1.0.2.tgz#574d312edd88bb5dd8912e9286dd6c0aed4aac82"
   integrity sha1-V00xLt2Iu13YkS6Sht1sCu1KrII=
@@ -2093,14 +2082,6 @@ ethereum-types@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/ethereum-types/-/ethereum-types-1.0.3.tgz#9f4e33b9954c5a237d004832a8d0cb1fb46506a1"
   integrity sha1-n04zuZVMWiN9AEgyqNDLH7RlBqE=
-  dependencies:
-    "@types/node" "^8.0.53"
-    bignumber.js "~4.1.0"
-
-ethereum-types@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/ethereum-types/-/ethereum-types-1.0.4.tgz#ad4158a0efd8a2ba9d8d693bad4ee8411128785c"
-  integrity sha512-bttTRgncrap73xnkCQEke7Lt7MEDQcjcTA3irh3nTuJGdRKkbetUx58IphS0MHfWT/TxebqKYk6YZFAlLtrZtA==
   dependencies:
     "@types/node" "^8.0.53"
     bignumber.js "~4.1.0"
