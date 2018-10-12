@@ -1,4 +1,4 @@
-import * as Web3 from 'web3';
+import Web3 from 'web3';
 import { Order } from '@0xproject/types';
 
 import {

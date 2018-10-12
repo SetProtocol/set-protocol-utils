@@ -1,6 +1,6 @@
 import * as ethUtil from 'ethereumjs-util';
-import * as Web3 from 'web3';
-import * as promisify from 'tiny-promisify';
+import Web3 from 'web3';
+import promisify from 'tiny-promisify';
 
 import { Address, ECSig } from './types';
 
