@@ -59,8 +59,12 @@ import {
 import {
   Web3Utils,
 } from './Web3Utils';
+import {
+  BN,
+} from './bn';
 
 export { BigNumber };
+export { BN };
 export { Web3Utils };
 export {
   Address,
