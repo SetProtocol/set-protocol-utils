@@ -2,6 +2,7 @@ import * as _ from 'lodash';
 import * as ethUtil from 'ethereumjs-util';
 import Web3 from 'web3';
 import { BigNumber } from './bignumber';
+import { BN } from './bn';
 
 import { Bytes } from './types';
 
@@ -50,6 +51,10 @@ export function paddedBufferForPrimitive(input: any): Buffer {
 }
 
 export function paddedBufferForBigNumber(number: BigNumber): Buffer {
+  return paddedBufferForPrimitive(web3.utils.toHex(number));
+}
+
+export function paddedBufferForBN(number: BN): Buffer {
   return paddedBufferForPrimitive(web3.utils.toHex(number));
 }
 

@@ -1,6 +1,6 @@
 {
   "name": "set-protocol-utils",
-  "version": "1.0.0-beta.4",
+  "version": "1.0.0-beta.5",
   "description": "Common utilities for Set Protocol",
   "main": "dist/index.js",
   "typings": "dist/types/index.d.ts",
@@ -32,7 +32,7 @@
     "@0xproject/types": "^1.0.1-rc.3",
     "@0xproject/web3-wrapper": "^1.1.2",
     "@types/lodash": "4.14.104",
-    "@types/node": "^8.0.53",
+    "@types/node": "^8.5.1",
     "@types/web3": "^1.0.10",
     "abi-decoder": "^1.0.9",
     "bignumber.js": "~4.1.0",
