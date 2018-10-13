@@ -1,4 +1,4 @@
-import * as Web3 from 'web3';
+import Web3 from 'web3';
 import { Order } from '@0xproject/types';
 
 import {
@@ -59,8 +59,12 @@ import {
 import {
   Web3Utils,
 } from './Web3Utils';
+import {
+  BN,
+} from './bn';
 
 export { BigNumber };
+export { BN };
 export { Web3Utils };
 export {
   Address,

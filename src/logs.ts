@@ -1,8 +1,8 @@
 import * as _ from 'lodash';
 import * as ABIDecoder from 'abi-decoder';
 import * as chai from 'chai';
-import * as Web3 from 'web3';
-import * as promisify from 'tiny-promisify';
+import Web3 from 'web3';
+import promisify from 'tiny-promisify';
 
 import { BigNumber } from './bignumber';
 import { Log } from './types';

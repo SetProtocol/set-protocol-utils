@@ -16,11 +16,13 @@
       ]
     },
     "noUnusedLocals": true,
-    "noUnusedParameters": true
+    "noUnusedParameters": true,
+    "esModuleInterop": true
   },
   "include": [
     "./src/**/*",
-    "./types/**/*"
+    "./types/**/*",
+    "./node_modules/types-bn/index.d.ts"
   ],
   "exclude": [
     "node_modules"

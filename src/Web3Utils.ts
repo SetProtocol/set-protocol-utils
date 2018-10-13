@@ -17,8 +17,8 @@
 'use strict';
 
 import { JSONRPCResponsePayload, TransactionReceipt } from 'ethereum-types';
-import * as promisify from 'tiny-promisify';
-import * as Web3 from 'web3';
+import promisify from 'tiny-promisify';
+import Web3 from 'web3';
 
 // Web3 1.0.0 and onwards is currently in beta, but has some
 // useful utils builtin we like to leverage -- particularly

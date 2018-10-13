@@ -18,8 +18,8 @@
 
 import * as _ from 'lodash';
 import * as ethUtil from 'ethereumjs-util';
-import * as Web3 from 'web3';
-import * as promisify from 'tiny-promisify';
+import Web3 from 'web3';
+import promisify from 'tiny-promisify';
 import { assetDataUtils, orderHashUtils } from '@0xproject/order-utils';
 import { SignatureType, Order } from '@0xproject/types';
 
