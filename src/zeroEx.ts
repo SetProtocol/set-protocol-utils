@@ -214,7 +214,7 @@ export async function signZeroExOrderAsync(order: Order, web3: Web3): Promise<st
 }
 
 async function signMessageAsync(hexMsg: Bytes, address: Address, sigType: SignatureType, web3: Web3): Promise<string> {
-  const sig = await promisify(web3.eth.sign)(address, hexMsg);
+  const sig = await promisify(web3.eth.sign)(hexMsg, web3.utils.toChecksumAddress(address));
   const rpcSig = ethUtil.fromRpcSig(sig);
   const signature = Buffer.concat([
     ethUtil.toBuffer(rpcSig.v),
