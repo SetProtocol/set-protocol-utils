@@ -19,10 +19,10 @@ export async function getLogsFromTxHash(web3: Web3, txHash: string): Promise<Log
   const receipt = await promisify(web3.eth.getTransactionReceipt)(txHash);
   const logs: ABIDecoder.DecodedLog[] = _.compact(ABIDecoder.decodeLogs(receipt.logs));
 
-  return _.map(logs, log => formatLogEntry(log));
+  return _.map(logs, log => formatLogEntry(web3, log));
 }
 
-function formatLogEntry(logs: ABIDecoder.DecodedLog): Log {
+function formatLogEntry(web3: Web3, logs: ABIDecoder.DecodedLog): Log {
   const { name, events, address } = logs;
   const args: any = {};
 
@@ -38,7 +38,9 @@ function formatLogEntry(logs: ABIDecoder.DecodedLog): Log {
         break;
       }
     }
-
+    if (web3.utils.isAddress(argValue)) {
+      argValue = web3.utils.toChecksumAddress(argValue);
+    }
     args[name] = argValue;
   });
 
