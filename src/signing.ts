@@ -37,7 +37,7 @@ export async function signMessage(
 
   messageToSign = addPrefix ? prefixedMsgHex : message;
 
-  const signature = await promisify(web3.eth.sign)(address, messageToSign);
+  const signature = await promisify(web3.eth.sign)(web3.utils.toChecksumAddress(address), messageToSign);
 
   return parseSignatureHexAsRSV(signature);
 }
