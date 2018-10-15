@@ -38,8 +38,10 @@ function formatLogEntry(web3: Web3, logs: ABIDecoder.DecodedLog): Log {
         break;
       }
     }
-    if (web3.utils.isAddress(argValue)) {
+    if (type === 'address' && web3.utils.isAddress(argValue)) {
       argValue = web3.utils.toChecksumAddress(argValue);
+    } else if (type === 'address[]') {
+      argValue = argValue.map((address: string) => web3.utils.toChecksumAddress(address));
     }
     args[name] = argValue;
   });
