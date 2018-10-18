@@ -30,7 +30,6 @@ import { Address, Bytes, ZeroExSignedFillOrder } from './types';
 import {
   bufferArrayToHex,
   numBytesFromHex,
-  numBytesFromBuffer,
   paddedBufferForPrimitive,
   paddedBufferForBigNumber,
 } from './encoding';
@@ -75,51 +74,27 @@ export function zeroExOrderToBuffer(order: Order): Buffer[] {
     paddedBufferForBigNumber(order.takerFee),
     paddedBufferForBigNumber(order.expirationTimeSeconds),
     paddedBufferForBigNumber(order.salt),
-    ethUtil.toBuffer(order.makerAssetData),
-    ethUtil.toBuffer(order.takerAssetData),
   ];
 }
 
 export function generateZeroExExchangeWrapperOrder(zeroExOrder: Order, signature: Bytes, fillAmount: BigNumber): Bytes {
-  const { makerAssetData, takerAssetData } = zeroExOrder;
+  const zeroExOrderBuffer: Buffer[] = zeroExSignedFillOrderToBuffer(zeroExOrder, signature, fillAmount);
 
-  const makerAssetDataLength = numBytesFromHex(makerAssetData);
-  const takerAssetDataLength = numBytesFromHex(takerAssetData);
-  const signatureLength: BigNumber = numBytesFromHex(signature);
-  const zeroExOrderBuffer = zeroExOrderToBuffer(zeroExOrder);
-  const zeroExOrderLength = numBytesFromBuffer(zeroExOrderBuffer);
-
-  const orderHeader: Buffer[] = [
-    paddedBufferForBigNumber(signatureLength),
-    paddedBufferForBigNumber(zeroExOrderLength),
-    paddedBufferForBigNumber(makerAssetDataLength),
-    paddedBufferForBigNumber(takerAssetDataLength),
-    paddedBufferForBigNumber(fillAmount),
-  ];
-
-  return bufferArrayToHex(
-    orderHeader
-      .concat([ethUtil.toBuffer(signature)])
-      .concat(zeroExOrderBuffer)
-  );
+  return bufferArrayToHex(zeroExOrderBuffer);
 }
 
 export function zeroExSignedFillOrderToBuffer(zeroExOrder: Order, signature: Bytes, fillAmount: BigNumber): Buffer[] {
-  const { makerAssetData, takerAssetData } = zeroExOrder;
+  const { makerAssetData } = zeroExOrder;
 
-  const makerAssetDataLength = numBytesFromHex(makerAssetData);
-  const takerAssetDataLength = numBytesFromHex(takerAssetData);
   const signatureLength: BigNumber = numBytesFromHex(signature);
-  const zeroExOrderBuffer = zeroExOrderToBuffer(zeroExOrder);
-  const zeroExOrderLength = numBytesFromBuffer(zeroExOrderBuffer);
-
+  const makerTokenAddress: Address = extractAddressFromAssetData(makerAssetData);
   const orderHeader: Buffer[] = [
     paddedBufferForBigNumber(signatureLength),
-    paddedBufferForBigNumber(zeroExOrderLength),
-    paddedBufferForBigNumber(makerAssetDataLength),
-    paddedBufferForBigNumber(takerAssetDataLength),
     paddedBufferForBigNumber(fillAmount),
+    paddedBufferForPrimitive(makerTokenAddress),
   ];
+
+  const zeroExOrderBuffer = zeroExOrderToBuffer(zeroExOrder);
 
   return orderHeader.concat([ethUtil.toBuffer(signature)]).concat(zeroExOrderBuffer);
 }
