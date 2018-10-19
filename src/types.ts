@@ -55,7 +55,6 @@ export interface SignedIssuanceOrder extends IssuanceOrder {
 }
 
 export interface KyberTrade {
-  sourceToken: Address;
   destinationToken: Address;
   sourceTokenQuantity: BigNumber;
   minimumConversionRate: BigNumber;

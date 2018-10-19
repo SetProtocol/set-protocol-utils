@@ -83,7 +83,6 @@ function kyberTradeToBuffer(
   trade: KyberTrade
 ): Buffer {
   const kyberSwapBuffer: Buffer[] = [];
-  kyberSwapBuffer.push(paddedBufferForPrimitive(trade.sourceToken));
   kyberSwapBuffer.push(paddedBufferForPrimitive(trade.destinationToken));
   kyberSwapBuffer.push(paddedBufferForBigNumber(trade.sourceTokenQuantity));
   kyberSwapBuffer.push(paddedBufferForBigNumber(trade.minimumConversionRate));
