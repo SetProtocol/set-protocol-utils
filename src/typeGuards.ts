@@ -27,7 +27,6 @@ export function isTakerWalletOrder(object: ExchangeOrder): boolean {
 
 export function isKyberTrade(object: ExchangeOrder): boolean {
   return (
-    'sourceToken' in object &&
     'destinationToken' in object &&
     'sourceTokenQuantity' in object &&
     'minimumConversionRate' in object &&
