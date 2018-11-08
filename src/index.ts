@@ -31,7 +31,7 @@ import {
   generateTimestamp,
   generateSalt,
   generateSerializedOrders,
-  hashOrderHex,
+  generateOrderHash,
 } from './orders';
 import {
   generateRebalancingSetTokenCallData
@@ -154,13 +154,13 @@ export class SetProtocolUtils {
   }
 
   /**
-   * Converts an IssuanceOrder into hex
+   * Generates an EIP712 compatible issuance order hash
    *
    * @param   order   An object adhering to the IssuanceOrder interface
-   * @return  Hex of Issuance Order represented as hex string
+   * @return  Hash of Issuance Order represented as hex string
    */
-  public static hashOrderHex(order: IssuanceOrder): string {
-    return hashOrderHex(order);
+  public static generateOrderHash(order: IssuanceOrder): string {
+    return generateOrderHash(order);
   }
 
   /**
