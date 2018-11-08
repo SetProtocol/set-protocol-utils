@@ -1,0 +1,32 @@
+
+import * as chai from 'chai';
+
+import {
+  IssuanceOrder,
+} from './types';
+import { generateEIP712IssuanceOrderHash, generateOrderHash } from '../src/orders';
+
+const { expect } = chai;
+
+describe('Orders', () => {
+	describe('#generateEIP712IssuanceOrderHash', () => {
+		function subject(): string {
+      return generateEIP712IssuanceOrderHash();
+    }
+
+    it('should return the correct hash', () => {
+    	const issuanceOrderHash = subject();
+
+    	const expectedHash = '0x4afd830c587fce611387a38350e760b2d2fb1b2b469a292353fe64b76cb4f3c4';
+
+    	expect(issuanceOrderHash).to.equal(expectedHash);
+    });
+	});
+
+	describe('#generateOrderHash', () => {
+		function subject(): string {
+      return generateEIP712IssuanceOrderHash();
+    }
+
+	});
+});

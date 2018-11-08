@@ -9,7 +9,8 @@
     "lint": "tslint -c tslint.json -p tsconfig.json --fix",
     "build": "tsc",
     "precommit": "lint-staged",
-    "prepublishOnly": "yarn build"
+    "prepublishOnly": "yarn build",
+    "test": "jest --runInBand"
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,10 @@
   },
   "homepage": "https://github.com/SetProtocol/set-protocol-utils#readme",
   "devDependencies": {
+    "@types/chai": "^4.1.7",
+    "@types/jest": "^23.3.9",
+    "jest": "^23.6.0",
+    "ts-jest": "^23.10.4",
     "tslint": "5.8.0",
     "typedoc": "^0.11.1",
     "typescript": "^3.1.2"
@@ -42,7 +47,7 @@
     "chai-as-promised": "^7.1.1",
     "chai-bignumber": "^2.0.2",
     "ethereum-types": "^1.0.0",
-    "ethereumjs-util": "^6.0.0",
+    "ethereumjs-util": "^5.0.0",
     "ethers": "3.0.22",
     "husky": "^0.14.3",
     "js-sha3": "^0.7.0",

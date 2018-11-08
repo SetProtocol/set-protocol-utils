@@ -29,7 +29,7 @@ export function bufferArrayToHex(bufferArray: Buffer[]): Bytes {
 }
 
 export function hashObject(types: string[], values: any[]): Buffer {
-  return ethUtil.keccak256(solidityPack(types, values));
+  return ethUtil.sha3(solidityPack(types, values));
 }
 
 export function numBytesFromBuffer(buffer: Buffer[]): BigNumber {
