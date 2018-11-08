@@ -15,18 +15,33 @@ describe('Orders', () => {
     }
 
     it('should return the correct hash', () => {
-    	const issuanceOrderHash = subject();
+    	const EIP712Hash = subject();
 
     	const expectedHash = '0x4afd830c587fce611387a38350e760b2d2fb1b2b469a292353fe64b76cb4f3c4';
 
-    	expect(issuanceOrderHash).to.equal(expectedHash);
+    	expect(EIP712Hash).to.equal(expectedHash);
     });
 	});
 
 	describe('#generateOrderHash', () => {
+		let subjectIssuanceOrder: IssuanceOrder;
+
 		function subject(): string {
-      return generateEIP712IssuanceOrderHash();
+      return generateOrderHash();
     }
+
+    describe('', () => {
+    	beforeEach(() => {
+
+    	});
+
+    	it('should generate the correct issuance order hash', () => {
+    		const issuanceOrderHash = subject();
+
+    		const expectedHash = '';
+
+    	});
+    });
 
 	});
 });
