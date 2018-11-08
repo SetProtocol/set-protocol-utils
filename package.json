@@ -1,6 +1,6 @@
 {
   "name": "set-protocol-utils",
-  "version": "1.0.0-beta.15",
+  "version": "1.0.0-beta.16",
   "description": "Common utilities for Set Protocol",
   "main": "dist/index.js",
   "typings": "dist/types/index.d.ts",
@@ -23,7 +23,6 @@
   },
   "homepage": "https://github.com/SetProtocol/set-protocol-utils#readme",
   "devDependencies": {
-    "@types/chai": "^4.1.7",
     "@types/jest": "^23.3.9",
     "jest": "^23.6.0",
     "ts-jest": "^23.10.4",
