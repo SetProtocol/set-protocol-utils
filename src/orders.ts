@@ -92,7 +92,7 @@ export function generateEIP712IssuanceOrderHash(): string {
   return ethUtil.bufferToHex(orderHash);
 }
 
-export function generateOrderHash(order: IssuanceOrder): string {
+export function hashOrderHex(order: IssuanceOrder): string {
   const orderBody = [
     { value: generateEIP712IssuanceOrderHash(), type: SolidityTypes.Bytes32 },
     { value: order.setAddress, type: SolidityTypes.Address },

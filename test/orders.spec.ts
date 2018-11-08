@@ -5,7 +5,7 @@ import { BigNumber } from '../src/bignumber';
 import {
   IssuanceOrder,
 } from '../src/types';
-import { generateEIP712IssuanceOrderHash, generateOrderHash } from '../src/orders';
+import { generateEIP712IssuanceOrderHash, hashOrderHex } from '../src/orders';
 
 const { expect } = chai;
 
@@ -24,11 +24,11 @@ describe('Orders', () => {
     });
 	});
 
-	describe('#generateOrderHash', () => {
+	describe('#hashOrderHex', () => {
 		let subjectIssuanceOrder: IssuanceOrder;
 
 		function subject(): string {
-      return generateOrderHash(subjectIssuanceOrder);
+      return hashOrderHex(subjectIssuanceOrder);
     }
 
   	it('should generate the correct issuance order hash', () => {
