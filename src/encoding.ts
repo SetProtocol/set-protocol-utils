@@ -28,7 +28,7 @@ export function bufferArrayToHex(bufferArray: Buffer[]): Bytes {
   return ethUtil.bufferToHex(buffer);
 }
 
-export function bufferObjectWithProperties(types: string[], values: any[]): Buffer {
+export function hashObject(types: string[], values: any[]): Buffer {
   return ethUtil.sha3(solidityPack(types, values));
 }
 

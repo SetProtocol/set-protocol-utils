@@ -21,7 +21,7 @@ import * as ethUtil from 'ethereumjs-util';
 import { BigNumber } from './bignumber';
 
 import { constants } from './constants';
-import { bufferObjectWithProperties, paddedBufferForBigNumber, paddedBufferForPrimitive } from './encoding';
+import { hashObject, paddedBufferForBigNumber, paddedBufferForPrimitive } from './encoding';
 import { generateKyberTradesBuffer } from './kyber';
 import { generateTakerWalletOrdersBuffer } from './takerWallet';
 import { generateZeroExOrdersBuffer } from './zeroEx';
@@ -48,8 +48,53 @@ export function generateSalt(): BigNumber {
   return randomNumber.times(factor).round();
 }
 
+export function generateEIP712IssuanceOrderHash(): string {
+  // Hash for the EIP712 Order Schema
+  // bytes32 constant EIP712_ORDER_SCHEMA_HASH = keccak256(abi.encodePacked(
+  //     "IssuanceOrder(",
+  //     "address setAddress",
+  //     "address makerAddress",
+  //     "address makerToken",
+  //     "address relayerAddress",
+  //     "address relayerToken",
+  //     "uint256 quantity",
+  //     "uint256 makerTokenAmount",
+  //     "uint256 expiration",
+  //     "uint256 makerRelayerFee",
+  //     "uint256 takerRelayerFee",
+  //     "uint256 salt",
+  //     "address[] requiredComponents",
+  //     "uint256[] requiredComponentAmounts",
+  //     ")"
+  // ));
+  const schemaBody = [
+    { value: 'IssuanceOrder(', type: SolidityTypes.String },
+    { value: 'address setAddress', type: SolidityTypes.String },
+    { value: 'address makerAddress', type: SolidityTypes.String },
+    { value: 'address makerToken', type: SolidityTypes.String },
+    { value: 'address relayerAddress', type: SolidityTypes.String },
+    { value: 'address relayerToken', type: SolidityTypes.String },
+    { value: 'uint256 quantity', type: SolidityTypes.String },
+    { value: 'uint256 makerTokenAmount', type: SolidityTypes.String },
+    { value: 'uint256 expiration', type: SolidityTypes.String },
+    { value: 'uint256 makerRelayerFee', type: SolidityTypes.String },
+    { value: 'uint256 takerRelayerFee', type: SolidityTypes.String },
+    { value: 'uint256 salt', type: SolidityTypes.String },
+    { value: 'address[] requiredComponents', type: SolidityTypes.String },
+    { value: 'uint256[] requiredComponentAmounts', type: SolidityTypes.String },
+    { value: ')', type: SolidityTypes.String },
+  ];
+
+  const types = _.map(schemaBody, order => order.type);
+  const values = _.map(schemaBody, order => order.value);
+  const orderHash: Buffer = hashObject(types, values);
+
+  return ethUtil.bufferToHex(orderHash);
+}
+
 export function hashOrderHex(order: IssuanceOrder): string {
   const orderBody = [
+    { value: generateEIP712IssuanceOrderHash(), type: SolidityTypes.Bytes32 },
     { value: order.setAddress, type: SolidityTypes.Address },
     { value: order.makerAddress, type: SolidityTypes.Address },
     { value: order.makerToken, type: SolidityTypes.Address },
@@ -67,9 +112,9 @@ export function hashOrderHex(order: IssuanceOrder): string {
 
   const types = _.map(orderBody, order => order.type);
   const values = _.map(orderBody, order => order.value);
-  const buffer = bufferObjectWithProperties(types, values);
+  const orderHash: Buffer = hashObject(types, values);
 
-  return ethUtil.bufferToHex(buffer);
+  return ethUtil.bufferToHex(orderHash);
 }
 
 /* ============ Order Data Serialization ============ */

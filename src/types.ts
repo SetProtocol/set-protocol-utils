@@ -17,11 +17,13 @@ export interface Log {
 
 export enum SolidityTypes {
   Address = 'address',
+  Bytes32 = 'bytes32',
   Uint256 = 'uint256',
   Uint8 = 'uint8',
   Uint = 'uint',
   AddressArray = 'address[]',
   UintArray = 'uint256[]',
+  String = 'string',
 }
 
 export interface ECSig {
