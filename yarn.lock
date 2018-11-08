@@ -68,7 +68,7 @@
     jsonschema "^1.2.0"
     lodash.values "^4.3.0"
 
-"@0xproject/order-utils@^1.0.1-rc.2":
+"@0xproject/order-utils@^1.0.1":
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/@0xproject/order-utils/-/order-utils-1.0.7.tgz#475cd5f1a11dc7816847abb4d3fd17bbaf32bf4f"
   integrity sha512-OgGo1hZY5N4U12T0OXX0ldV0FK/asCLp7f1lwtYjl3ME3riOXxIq5vHun7y1yEgm/VokPUUBODQp5X+FsisACQ==
@@ -97,7 +97,7 @@
     bignumber.js "~4.1.0"
     ethereum-types "^1.0.3"
 
-"@0xproject/types@^1.1.4":
+"@0xproject/types@^1.0.7", "@0xproject/types@^1.1.4":
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/@0xproject/types/-/types-1.1.4.tgz#3ffd65e670d6a21dab19ee0ffd5fad0056291b8e"
   integrity sha512-kPVXvVDDoHhi/q3PSe3F5NbBFiIT8FfPG73J2WrLrXptf54vTSffbK3D+NMpwb12tk/q0KgdEPwNz6nhY1+xmw==
