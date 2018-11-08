@@ -32,6 +32,10 @@ export function hashObject(types: string[], values: any[]): Buffer {
   return ethUtil.sha3(solidityPack(types, values));
 }
 
+export function hashString(value: string): Buffer {
+  return ethUtil.sha3(value);
+}
+
 export function numBytesFromBuffer(buffer: Buffer[]): BigNumber {
     const hex = bufferArrayToHex(buffer);
 
