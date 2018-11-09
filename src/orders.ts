@@ -22,6 +22,7 @@ import { BigNumber } from './bignumber';
 
 import { constants } from './constants';
 import { hashObject, paddedBufferForBigNumber, paddedBufferForPrimitive } from './encoding';
+import { generateEIP712MessageHash } from './eip712';
 import { generateKyberTradesBuffer } from './kyber';
 import { generateTakerWalletOrdersBuffer } from './takerWallet';
 import { generateZeroExOrdersBuffer } from './zeroEx';
@@ -114,7 +115,9 @@ export function hashOrderHex(order: IssuanceOrder): string {
   const values = _.map(orderBody, order => order.value);
   const orderHash: Buffer = hashObject(types, values);
 
-  return ethUtil.bufferToHex(orderHash);
+  const orderHashHex = ethUtil.bufferToHex(orderHash);
+
+  return generateEIP712MessageHash(orderHashHex);
 }
 
 /* ============ Order Data Serialization ============ */
