@@ -23,26 +23,10 @@ import {
   Bytes,
   SolidityTypes,
 } from './types';
-
-// EIP191 header for EIP712 prefix
-const EIP191_HEADER = '\x19\x01';
-
-// EIP712 Domain Name value
-const EIP712_DOMAIN_NAME = 'Set Protocol';
-
-// EIP712 Domain Version value
-const EIP712_DOMAIN_VERSION = '1';
+import { constants } from './constants';
+const { EIP712 } = constants;
 
 export function getEIP712DomainSeparatorSchemaHash(): string {
-  // // Hash of the EIP712 Domain Separator Schema
-  // bytes32 constant internal EIP712_DOMAIN_SEPARATOR_SCHEMA_HASH = keccak256(
-  //     abi.encodePacked(
-  //         "EIP712Domain(",
-  //         "string name,",
-  //         "string version,",
-  //         ")"
-  //     )
-  // );
   const domainSeparatorBody = [
     { value: 'EIP712Domain(', type: SolidityTypes.String },
     { value: 'string name,', type: SolidityTypes.String },
@@ -58,16 +42,10 @@ export function getEIP712DomainSeparatorSchemaHash(): string {
 }
 
 export function getEIP712DomainHash(): string {
-  // bytes32 constant internal EIP712_DOMAIN_HASH = keccak256(abi.encodePacked(
-  //     EIP712_DOMAIN_SEPARATOR_SCHEMA_HASH,
-  //     keccak256(bytes(EIP712_DOMAIN_NAME)),
-  //     keccak256(bytes(EIP712_DOMAIN_VERSION))
-  // ));
-
   const domainSeparatorBody = [
     { value: getEIP712DomainSeparatorSchemaHash(), type: SolidityTypes.Bytes32 },
-    { value: ethUtil.bufferToHex(hashString(EIP712_DOMAIN_NAME)), type: SolidityTypes.Bytes32 },
-    { value: ethUtil.bufferToHex(hashString(EIP712_DOMAIN_VERSION)), type: SolidityTypes.Bytes32 },
+    { value: ethUtil.bufferToHex(hashString(EIP712.DOMAIN_NAME)), type: SolidityTypes.Bytes32 },
+    { value: ethUtil.bufferToHex(hashString(EIP712.DOMAIN_VERSION)), type: SolidityTypes.Bytes32 },
   ];
 
   const types = _.map(domainSeparatorBody, order => order.type);
@@ -78,15 +56,9 @@ export function getEIP712DomainHash(): string {
 }
 
 export function generateEIP712MessageHash(hashStruct: Bytes): string {
-  // keccak256(abi.encodePacked(
-  //     EIP191_HEADER,
-  //     EIP712_DOMAIN_HASH,
-  //     hashStruct
-  // ));
-
   const messageBody = [
-    { value: EIP191_HEADER, type: SolidityTypes.String },
-    { value: getEIP712DomainSeparatorSchemaHash(), type: SolidityTypes.Bytes32 },
+    { value: EIP712.EIP191_HEADER, type: SolidityTypes.String },
+    { value: getEIP712DomainHash(), type: SolidityTypes.Bytes32 },
     { value: hashStruct, type: SolidityTypes.Bytes32 },
   ];
 
@@ -96,7 +68,3 @@ export function generateEIP712MessageHash(hashStruct: Bytes): string {
 
   return ethUtil.bufferToHex(messageHash);
 }
-
-
-
-
