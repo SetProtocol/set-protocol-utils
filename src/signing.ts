@@ -41,3 +41,13 @@ export async function signMessage(
 
   return parseSignatureHexAsRSV(signature);
 }
+
+export function convertSigToHex(ecSignature: ECSig): string {
+  const signatureBuffer = Buffer.concat([
+    ethUtil.toBuffer(ecSignature.v),
+    ethUtil.toBuffer(ecSignature.r),
+    ethUtil.toBuffer(ecSignature.s),
+  ]);
+
+  return ethUtil.bufferToHex(signatureBuffer);
+}
