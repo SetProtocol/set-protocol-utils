@@ -37,6 +37,7 @@ import {
   generateRebalancingSetTokenCallData
 } from './rebalancing';
 import {
+  convertSigToHex,
   parseSignatureHexAsRSV,
   signMessage,
 } from './signing';
@@ -380,6 +381,16 @@ export class SetProtocolUtils {
    */
   public async signMessage(message: string, address: Address, addPrefix: boolean = false): Promise<ECSig> {
     return signMessage(this.web3, message, address, addPrefix);
+  }
+
+  /**
+   * Convert an EC Signature into hex format
+   *
+   * @param   ecSig   EC Signature object
+   * @return  Hex string representation of an ECDSA signature
+   */
+  public convertSigToHex(ecSig: ECSig): string {
+    return convertSigToHex(ecSig);
   }
 
   /**
