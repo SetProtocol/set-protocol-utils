@@ -52,6 +52,15 @@ export interface IssuanceOrder {
   requiredComponentAmounts: BigNumber[];
 }
 
+export interface ExchangeIssue {
+  setAddress: Address;
+  paymentToken: Address;
+  paymentTokenAmount: BigNumber;
+  quantity: BigNumber;
+  requiredComponents: Address[];
+  requiredComponentAmounts: BigNumber[];
+}
+
 export interface SignedIssuanceOrder extends IssuanceOrder {
   signature: ECSig;
 }
