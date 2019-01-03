@@ -29,22 +29,16 @@ import { Address } from './types';
  * @param  proposalPeriod      Time the participants of the Set can withdraw from a rebalance
  *                               once a new Set has been proposed
  * @param  rebalanceInterval   Time between when the manager can initiate another rebalance
- * @param  entranceFee         Entrance fee as a percentage of initialSet when minting the Rebalancing Set
- * @param  rebalanceFee        Rebalance fee as a percentage of the nextSet when rebalance is settled
  * @return                     String representing call data to send to Core contracts
  */
 export function generateRebalancingSetTokenCallData(
   managerAddress: Address,
   proposalPeriod: BigNumber,
   rebalanceInterval: BigNumber,
-  entranceFee: BigNumber,
-  rebalanceFee: BigNumber,
 ): string {
   return bufferArrayToHex([
     paddedBufferForPrimitive(managerAddress),
     paddedBufferForBigNumber(proposalPeriod),
     paddedBufferForBigNumber(rebalanceInterval),
-    paddedBufferForBigNumber(entranceFee),
-    paddedBufferForBigNumber(rebalanceFee),
   ]);
 }
