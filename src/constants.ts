@@ -22,6 +22,7 @@ export const constants: Constants = {
     DEFAULT: 0,
     PROPOSAL: 1,
     REBALANCE: 2,
+    DRAWDOWN: 3,
   },
   UNLIMITED_ALLOWANCE_IN_BASE_UNITS: new BigNumber(2).pow(256).minus(1),
   ZERO: new BigNumber(0),
