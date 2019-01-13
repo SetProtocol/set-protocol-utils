@@ -34,6 +34,9 @@ import {
   hashOrderHex,
 } from './orders';
 import {
+  hashPriceFeedHex
+} from './oracle';
+import {
   generateRSetTokenCallData,
   generateRebalancingSetTokenCallData
 } from './rebalancing';
@@ -186,6 +189,18 @@ export class SetProtocolUtils {
    */
   public static hashOrderHex(order: IssuanceOrder): string {
     return hashOrderHex(order);
+  }
+
+  /**
+   * Generates hash for price feed update
+   *
+   * @param   price        Price feed update
+   * @param   timestamp    Timestamp for price feed update in unix time
+   * @param   identifier   Salt identifying the trading pair of the price feed
+   * @return  Hash of price feed update as hex string
+   */
+  public static hashPriceFeedHex(price: BigNumber, timestamp: BigNumber, identifier: string = 'ETHUSD'): string {
+    return hashPriceFeedHex(price, timestamp, identifier);
   }
 
   /**
