@@ -52,7 +52,7 @@ export interface IssuanceOrder {
   requiredComponentAmounts: BigNumber[];
 }
 
-export interface ExchangeIssue {
+export interface ExchangeIssueParams {
   setAddress: Address;
   paymentToken: Address;
   paymentTokenAmount: BigNumber;

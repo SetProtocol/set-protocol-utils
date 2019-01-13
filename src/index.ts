@@ -76,7 +76,7 @@ export {
   Bytes,
   Constants,
   ECSig,
-  ExchangeIssue,
+  ExchangeIssueParams,
   ExchangeOrder,
   Exchanges,
   IssuanceOrder,
