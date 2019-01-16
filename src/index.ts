@@ -101,12 +101,7 @@ export class SetProtocolUtils {
    * see EXCHANGES and REBALANCING_STATE for examples. Constants that only apply to
    * development environments are defined as part of SetProtocolTestUtils
    */
-  public static CONSTANTS = {
-    MAX_DIGITS_IN_UNSIGNED_256_INT: constants.MAX_DIGITS_IN_UNSIGNED_256_INT,
-    NULL_ADDRESS: constants.NULL_ADDRESS,
-    UNLIMITED_ALLOWANCE_IN_BASE_UNITS: constants.UNLIMITED_ALLOWANCE_IN_BASE_UNITS,
-    ZERO: constants.ZERO,
-  };
+  public static CONSTANTS = constants;
 
   /**
    * Enumeration of accepted exchange wrapper ids used as part of Exchange headers
