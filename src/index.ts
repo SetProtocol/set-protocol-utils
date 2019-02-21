@@ -74,6 +74,7 @@ export {
   Constants,
   ECSig,
   ExchangeIssueParams,
+  ExchangeRedemptionParams,
   ExchangeOrder,
   Exchanges,
   KyberTrade,

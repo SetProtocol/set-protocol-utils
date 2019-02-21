@@ -45,6 +45,15 @@ export interface ExchangeIssueParams {
   requiredComponentAmounts: BigNumber[];
 }
 
+export interface ExchangeRedemptionParams {
+  setAddress: Address;
+  redemptionToken: Address;
+  redemptionTokenAmount: BigNumber;
+  quantity: BigNumber;
+  requiredComponents: Address[];
+  requiredComponentAmounts: BigNumber[];
+}
+
 export interface KyberTrade {
   destinationToken: Address;
   sourceTokenQuantity: BigNumber;
