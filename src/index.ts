@@ -6,7 +6,6 @@ import {
   Bytes,
   ECSig,
   ExchangeOrder,
-  IssuanceOrder,
   KyberTrade,
   Log,
   ZeroExSignedFillOrder,
@@ -31,7 +30,6 @@ import {
   generateTimestamp,
   generateSalt,
   generateSerializedOrders,
-  hashOrderHex,
 } from './orders';
 import {
   hashPriceFeedHex
@@ -78,10 +76,8 @@ export {
   ExchangeIssueParams,
   ExchangeOrder,
   Exchanges,
-  IssuanceOrder,
   KyberTrade,
   Log,
-  SignedIssuanceOrder,
   SolidityTypes,
   TakerWalletOrder,
   UInt,
@@ -145,16 +141,6 @@ export class SetProtocolUtils {
       proposalPeriod,
       rebalanceInterval,
     );
-  }
-
-  /**
-   * Generates an EIP712 compatible issuance order hash
-   *
-   * @param   order   An object adhering to the IssuanceOrder interface
-   * @return  Hash of Issuance Order represented as hex string
-   */
-  public static hashOrderHex(order: IssuanceOrder): string {
-    return hashOrderHex(order);
   }
 
   /**

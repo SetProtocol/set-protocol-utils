@@ -36,22 +36,6 @@ export interface Exchanges {
   [exchangeId: string]: TakerWalletOrder[];
 }
 
-export interface IssuanceOrder {
-  setAddress: Address;
-  makerAddress: Address;
-  makerToken: Address;
-  relayerAddress: Address;
-  relayerToken: Address;
-  quantity: BigNumber;
-  makerTokenAmount: BigNumber;
-  expiration: BigNumber;
-  makerRelayerFee: BigNumber;
-  takerRelayerFee: BigNumber;
-  salt: BigNumber;
-  requiredComponents: Address[];
-  requiredComponentAmounts: BigNumber[];
-}
-
 export interface ExchangeIssueParams {
   setAddress: Address;
   paymentToken: Address;
@@ -59,10 +43,6 @@ export interface ExchangeIssueParams {
   quantity: BigNumber;
   requiredComponents: Address[];
   requiredComponentAmounts: BigNumber[];
-}
-
-export interface SignedIssuanceOrder extends IssuanceOrder {
-  signature: ECSig;
 }
 
 export interface KyberTrade {
