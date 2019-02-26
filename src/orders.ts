@@ -21,16 +21,15 @@ import * as ethUtil from 'ethereumjs-util';
 import { BigNumber } from './bignumber';
 
 import { constants } from './constants';
-import { paddedBufferForBigNumber, paddedBufferForPrimitive } from './encoding';
+import { paddedBufferForPrimitive } from './encoding';
 import { generateKyberTradesBuffer } from './kyber';
-import { generateTakerWalletOrdersBuffer } from './takerWallet';
 import { generateZeroExOrdersBuffer } from './zeroEx';
 import {
   Bytes,
   Exchanges,
   ExchangeOrder,
 } from './types';
-import { isTakerWalletOrder, isZeroExOrder, isKyberTrade } from './typeGuards';
+import { isZeroExOrder, isKyberTrade } from './typeGuards';
 
 
 export function generateTimestamp(minutes: number): BigNumber {
@@ -70,9 +69,7 @@ export function generateSerializedOrders(orders: ExchangeOrder[]): Bytes {
     let exchangeOrders: any;
     if (isZeroExOrder(order)) {
       exchangeOrders = exchanges.ZERO_EX;
-    } else if (isTakerWalletOrder(order)) {
-      exchangeOrders = exchanges.TAKER_WALLET;
-     } else if (isKyberTrade(order)) {
+    } else if (isKyberTrade(order)) {
        exchangeOrders = exchanges.KYBER;
      }
 
@@ -87,8 +84,6 @@ export function generateSerializedOrders(orders: ExchangeOrder[]): Bytes {
       orderBuffer.push(generateZeroExOrdersBuffer(exchangeOrders));
     } else if (key === 'KYBER') {
       orderBuffer.push(generateKyberTradesBuffer(exchangeOrders));
-    } else if (key === 'TAKER_WALLET') {
-      orderBuffer.push(generateTakerWalletOrdersBuffer(exchangeOrders));
     }
   });
   return ethUtil.bufferToHex(Buffer.concat(orderBuffer));
@@ -99,20 +94,17 @@ export function generateSerializedOrders(orders: ExchangeOrder[]): Bytes {
  *
  * @param  exchangeId            Enum corresponding to exchange id, see constants.EXCHANGES
  * @param  orderCount            Number of exchange orders
- * @param  makerTokenAmount      Amount of tokens the maker is willing to pay
  * @param  totalOrderBodyLength  Length of order data buffer
  * @return                       Array containing all inputs as buffers
  */
 export function generateExchangeOrderHeader(
   exchangeId: string,
   orderCount: number,
-  makerTokenAmount: BigNumber,
   totalOrderBodyLength: number,
 ): Buffer[] {
   return [
     paddedBufferForPrimitive(exchangeId),
     paddedBufferForPrimitive(orderCount),
-    paddedBufferForBigNumber(makerTokenAmount),
     paddedBufferForPrimitive(totalOrderBodyLength),
   ];
 }

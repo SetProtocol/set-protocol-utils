@@ -18,13 +18,6 @@ export function isZeroExOrder(object: ExchangeOrder): boolean {
   );
 }
 
-export function isTakerWalletOrder(object: ExchangeOrder): boolean {
-  return (
-    'takerTokenAddress' in object &&
-    'takerTokenAmount' in object
-  );
-}
-
 export function isKyberTrade(object: ExchangeOrder): boolean {
   return (
     'destinationToken' in object &&

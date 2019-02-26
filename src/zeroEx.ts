@@ -38,12 +38,9 @@ import {
 export function generateZeroExOrdersBuffer(
   orders: ZeroExSignedFillOrder[],
 ): Buffer {
-  let totalMakerTokenAmount: BigNumber = constants.ZERO;
   const zeroExOrdersAsBuffers: Buffer[] = [];
 
   _.map(orders, order => {
-    totalMakerTokenAmount = totalMakerTokenAmount.add(order.fillAmount);
-
     const zeroExOrderHex = generateZeroExExchangeWrapperOrder(order, order.signature, order.fillAmount);
     zeroExOrdersAsBuffers.push(ethUtil.toBuffer(zeroExOrderHex));
   });
@@ -52,7 +49,6 @@ export function generateZeroExOrdersBuffer(
   const zeroExOrderHeader: Buffer[] = generateExchangeOrderHeader(
     constants.EXCHANGES.ZERO_EX,
     orders.length,
-    totalMakerTokenAmount,
     zeroExOrderBodyBuffer.length,
   );
 
@@ -63,9 +59,16 @@ export function generateZeroExOrdersBuffer(
 }
 
 export function zeroExOrderToBuffer(order: Order): Buffer[] {
+  const { makerAssetData, takerAssetData } = order;
+
+  const makerTokenAddress: Address = extractAddressFromAssetData(makerAssetData);
+  const takerTokenAddress: Address = extractAddressFromAssetData(takerAssetData);
+
   return [
     paddedBufferForPrimitive(order.makerAddress),
     paddedBufferForPrimitive(order.takerAddress),
+    paddedBufferForPrimitive(makerTokenAddress),
+    paddedBufferForPrimitive(takerTokenAddress),
     paddedBufferForPrimitive(order.feeRecipientAddress),
     paddedBufferForPrimitive(order.senderAddress),
     paddedBufferForBigNumber(order.makerAssetAmount),
@@ -84,14 +87,10 @@ export function generateZeroExExchangeWrapperOrder(zeroExOrder: Order, signature
 }
 
 export function zeroExSignedFillOrderToBuffer(zeroExOrder: Order, signature: Bytes, fillAmount: BigNumber): Buffer[] {
-  const { makerAssetData } = zeroExOrder;
-
   const signatureLength: BigNumber = numBytesFromHex(signature);
-  const makerTokenAddress: Address = extractAddressFromAssetData(makerAssetData);
   const orderHeader: Buffer[] = [
     paddedBufferForBigNumber(signatureLength),
     paddedBufferForBigNumber(fillAmount),
-    paddedBufferForPrimitive(makerTokenAddress),
   ];
 
   const zeroExOrderBuffer = zeroExOrderToBuffer(zeroExOrder);

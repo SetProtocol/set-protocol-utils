@@ -55,7 +55,6 @@ import {
 } from './zeroEx';
 import {
   isZeroExOrder,
-  isTakerWalletOrder,
   isKyberTrade,
 } from './typeGuards';
 import {
@@ -76,11 +75,9 @@ export {
   ExchangeIssueParams,
   ExchangeRedemptionParams,
   ExchangeOrder,
-  Exchanges,
   KyberTrade,
   Log,
   SolidityTypes,
-  TakerWalletOrder,
   UInt,
   ZeroExSignedFillOrder,
 } from './types';
@@ -245,18 +242,6 @@ export class SetProtocolUtils {
    */
   public static isZeroExOrder(order: ExchangeOrder): boolean {
     return isZeroExOrder(order);
-  }
-
-  /**
-   * Determines if an order is a TakerWalletOrder
-   *
-   * Used by setProtocol.js OrderAssertions
-   *
-   * @param   order   A liquiduity fill source object
-   * @return  Boolean for whether or not fill order is a TakerWalletOrder
-   */
-  public static isTakerWalletOrder(order: ExchangeOrder): boolean {
-    return isTakerWalletOrder(order);
   }
 
   /**
@@ -483,10 +468,9 @@ export class SetProtocolTestUtils {
   public static generateExchangeOrderHeader(
     exchangeName: string,
     orderCount: number,
-    makerTokenAmount: BigNumber,
     totalOrderBodyLength: number,
   ): Buffer[] {
-    return generateExchangeOrderHeader(exchangeName, orderCount, makerTokenAmount, totalOrderBodyLength);
+    return generateExchangeOrderHeader(exchangeName, orderCount, totalOrderBodyLength);
   }
 
   /**
