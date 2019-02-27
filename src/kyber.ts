@@ -19,7 +19,6 @@
 import * as _ from 'lodash';
 import * as ethUtil from 'ethereumjs-util';
 
-import { BigNumber } from './bignumber';
 import { constants } from './constants';
 import { paddedBufferForPrimitive, paddedBufferForBigNumber } from './encoding';
 import { generateExchangeOrderHeader } from './orders';
@@ -37,12 +36,10 @@ import { Bytes, KyberTrade } from './types';
 export function generateKyberTradesBuffer(
   trades: KyberTrade[],
 ): Buffer {
-  let totalMakerTokenAmount: BigNumber = constants.ZERO;
   const kyberTradesAsBuffers: Buffer[] = [];
 
   // Turn all Kyber trades to buffer
   _.map(trades, trade => {
-    totalMakerTokenAmount = totalMakerTokenAmount.add(trade.sourceTokenQuantity);
     kyberTradesAsBuffers.push(kyberTradeToBuffer(trade));
   });
   const kyberTradesBuffer: Buffer = Buffer.concat(kyberTradesAsBuffers);
@@ -52,7 +49,6 @@ export function generateKyberTradesBuffer(
     generateExchangeOrderHeader(
       constants.EXCHANGES.KYBER,
       trades.length,
-      totalMakerTokenAmount,
       kyberTradesBuffer.length,
     )
   );
@@ -84,6 +80,7 @@ function kyberTradeToBuffer(
 ): Buffer {
   const kyberSwapBuffer: Buffer[] = [];
   kyberSwapBuffer.push(paddedBufferForPrimitive(trade.destinationToken));
+  kyberSwapBuffer.push(paddedBufferForPrimitive(trade.sourceToken));
   kyberSwapBuffer.push(paddedBufferForBigNumber(trade.sourceTokenQuantity));
   kyberSwapBuffer.push(paddedBufferForBigNumber(trade.minimumConversionRate));
   kyberSwapBuffer.push(paddedBufferForBigNumber(trade.maxDestinationQuantity));

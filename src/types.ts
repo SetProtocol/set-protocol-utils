@@ -3,7 +3,7 @@ import { BigNumber } from './bignumber';
 export type Address = string;
 export type Bytes = string;
 export type UInt = number | BigNumber;
-export type ExchangeOrder = ZeroExSignedFillOrder | TakerWalletOrder | KyberTrade;
+export type ExchangeOrder = ZeroExSignedFillOrder | KyberTrade;
 
 export interface Constants {
   [constantId: string]: any;
@@ -33,16 +33,17 @@ export interface ECSig {
 }
 
 export interface Exchanges {
-  [exchangeId: string]: TakerWalletOrder[];
+  [exchangeId: string]: ExchangeOrder[];
 }
 
 export interface ExchangeIssueParams {
   setAddress: Address;
-  paymentToken: Address;
-  paymentTokenAmount: BigNumber;
+  sentTokenExchanges: BigNumber[];
+  sentTokens: Address[];
+  sentTokenAmounts: BigNumber[];
   quantity: BigNumber;
-  requiredComponents: Address[];
-  requiredComponentAmounts: BigNumber[];
+  receiveTokens: Address[];
+  receiveTokenAmounts: BigNumber[];
 }
 
 export interface ExchangeRedemptionParams {
@@ -56,15 +57,12 @@ export interface ExchangeRedemptionParams {
 
 export interface KyberTrade {
   destinationToken: Address;
+  sourceToken: Address;
   sourceTokenQuantity: BigNumber;
   minimumConversionRate: BigNumber;
   maxDestinationQuantity: BigNumber;
 }
 
-export interface TakerWalletOrder {
-  takerTokenAddress: Address;
-  takerTokenAmount: BigNumber;
-}
 
 export interface ZeroExSignedFillOrder {
   senderAddress: Address;
