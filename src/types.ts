@@ -38,11 +38,12 @@ export interface Exchanges {
 
 export interface ExchangeIssueParams {
   setAddress: Address;
-  paymentToken: Address;
-  paymentTokenAmount: BigNumber;
+  sentTokenExchanges: BigNumber[];
+  sentTokens: Address[];
+  sentTokenAmounts: BigNumber[];
   quantity: BigNumber;
-  requiredComponents: Address[];
-  requiredComponentAmounts: BigNumber[];
+  receiveTokens: Address[];
+  receiveTokenAmounts: BigNumber[];
 }
 
 export interface ExchangeRedemptionParams {

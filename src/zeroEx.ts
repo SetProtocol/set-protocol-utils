@@ -67,8 +67,6 @@ export function zeroExOrderToBuffer(order: Order): Buffer[] {
   return [
     paddedBufferForPrimitive(order.makerAddress),
     paddedBufferForPrimitive(order.takerAddress),
-    paddedBufferForPrimitive(makerTokenAddress),
-    paddedBufferForPrimitive(takerTokenAddress),
     paddedBufferForPrimitive(order.feeRecipientAddress),
     paddedBufferForPrimitive(order.senderAddress),
     paddedBufferForBigNumber(order.makerAssetAmount),
@@ -77,6 +75,8 @@ export function zeroExOrderToBuffer(order: Order): Buffer[] {
     paddedBufferForBigNumber(order.takerFee),
     paddedBufferForBigNumber(order.expirationTimeSeconds),
     paddedBufferForBigNumber(order.salt),
+    paddedBufferForPrimitive(makerTokenAddress),
+    paddedBufferForPrimitive(takerTokenAddress),
   ];
 }
 
