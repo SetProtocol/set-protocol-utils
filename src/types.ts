@@ -36,7 +36,7 @@ export interface Exchanges {
   [exchangeId: string]: ExchangeOrder[];
 }
 
-export interface ExchangeInteractData {
+export interface ExchangeIssuanceParams {
   setAddress: Address;
   sentTokenExchangeIds: BigNumber[];
   sentTokens: Address[];
