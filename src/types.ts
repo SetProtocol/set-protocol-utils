@@ -38,9 +38,9 @@ export interface Exchanges {
 
 export interface ExchangeIssuanceParams {
   setAddress: Address;
-  sentTokenExchangeIds: BigNumber[];
-  sentTokens: Address[];
-  sentTokenAmounts: BigNumber[];
+  sendTokenExchangeIds: BigNumber[];
+  sendTokens: Address[];
+  sendTokenAmounts: BigNumber[];
   quantity: BigNumber;
   receiveTokens: Address[];
   receiveTokenAmounts: BigNumber[];
