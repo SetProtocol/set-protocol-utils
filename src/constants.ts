@@ -6,7 +6,6 @@ export const constants: Constants = {
   EXCHANGES: {
     ZERO_EX: 1,
     KYBER: 2,
-    TAKER_WALLET: 3,
   },
   KYBER_NETWORK_PROXY_ADDRESS: '0x371b13d97f4bf77d724e78c16b7dc74099f40e84',
   KYBER_RESERVE_SOURCE_TOKEN_ADDRESS: '0x7e3f4e1deb8d3a05d9d2da87d9521268d0ec3239',

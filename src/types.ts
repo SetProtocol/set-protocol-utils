@@ -36,23 +36,14 @@ export interface Exchanges {
   [exchangeId: string]: ExchangeOrder[];
 }
 
-export interface ExchangeIssueParams {
+export interface ExchangeInteractData {
   setAddress: Address;
-  sentTokenExchanges: BigNumber[];
+  sentTokenExchangeIds: BigNumber[];
   sentTokens: Address[];
   sentTokenAmounts: BigNumber[];
   quantity: BigNumber;
   receiveTokens: Address[];
   receiveTokenAmounts: BigNumber[];
-}
-
-export interface ExchangeRedemptionParams {
-  setAddress: Address;
-  redemptionToken: Address;
-  redemptionTokenAmount: BigNumber;
-  quantity: BigNumber;
-  requiredComponents: Address[];
-  requiredComponentAmounts: BigNumber[];
 }
 
 export interface KyberTrade {
@@ -62,7 +53,6 @@ export interface KyberTrade {
   minimumConversionRate: BigNumber;
   maxDestinationQuantity: BigNumber;
 }
-
 
 export interface ZeroExSignedFillOrder {
   senderAddress: Address;
