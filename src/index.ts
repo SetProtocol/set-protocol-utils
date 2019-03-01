@@ -72,7 +72,7 @@ export {
   Bytes,
   Constants,
   ECSig,
-  ExchangeInteractData,
+  ExchangeIssuanceParams,
   ExchangeOrder,
   KyberTrade,
   Log,
