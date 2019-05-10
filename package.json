@@ -55,8 +55,8 @@
     "tiny-promisify": "^1.0.0",
     "tslint-eslint-rules": "^5.3.1",
     "types-bn": "^0.0.1",
-    "web3": "1.0.0-beta.36",
-    "web3-utils": "1.0.0-beta.36"
+    "web3": "1.0.0-beta.54",
+    "web3-utils": "1.0.0-beta.54"
   },
   "husky": {
     "hooks": {
