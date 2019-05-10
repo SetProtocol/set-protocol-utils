@@ -6,7 +6,7 @@ import { BN } from './bn';
 
 import { Bytes } from './types';
 
-const web3 = new Web3();
+const web3 = new Web3('ws://localhost:8546');
 
 
 export function concatBytes(inputs: Bytes[]): Bytes {
@@ -55,7 +55,7 @@ export function paddedBufferForPrimitive(input: any): Buffer {
 }
 
 export function paddedBufferForBigNumber(number: BigNumber): Buffer {
-  return paddedBufferForPrimitive(web3.utils.toHex(number));
+  return paddedBufferForPrimitive(web3.utils.toHex(number.toString()));
 }
 
 export function paddedBufferForBN(number: BN): Buffer {

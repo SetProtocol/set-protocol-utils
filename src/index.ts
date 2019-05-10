@@ -583,7 +583,7 @@ export class SetProtocolTestUtils {
    * @param web3   Web3 instance to use
    */
   public constructor(web3?: Web3) {
-    this.web3 = web3 || new Web3();
+    this.web3 = web3 || new Web3('ws://localhost:8546');
   }
 
   /**
