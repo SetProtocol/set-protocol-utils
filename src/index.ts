@@ -4,6 +4,7 @@ import { Order } from '@0xproject/types';
 import {
   Address,
   Bytes,
+  Constants,
   ECSig,
   ExchangeOrder,
   KyberTrade,
@@ -67,6 +68,7 @@ import {
 export { BigNumber };
 export { BN };
 export { Web3Utils };
+export { BaseContract } from './baseContract';
 export {
   Address,
   Bytes,
@@ -93,7 +95,7 @@ export class SetProtocolUtils {
    * see EXCHANGES and REBALANCING_STATE for examples. Constants that only apply to
    * development environments are defined as part of SetProtocolTestUtils
    */
-  public static CONSTANTS = constants;
+  public static CONSTANTS: Constants = constants;
 
   /**
    * Enumeration of accepted exchange wrapper ids used as part of Exchange headers
