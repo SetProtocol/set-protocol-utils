@@ -71,3 +71,9 @@ export interface ZeroExSignedFillOrder {
   signature: string;
   fillAmount: BigNumber;
 }
+
+export interface TimeSeriesFeedState {
+  nextEarliestUpdate: BigNumber;
+  updateInterval: BigNumber;
+  previousLoggedPrices: BigNumber[];
+}
