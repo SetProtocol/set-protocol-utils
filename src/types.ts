@@ -75,5 +75,5 @@ export interface ZeroExSignedFillOrder {
 export interface TimeSeriesFeedState {
   nextEarliestUpdate: BigNumber;
   updateInterval: BigNumber;
-  previousLoggedPrices: BigNumber[];
+  timeSeriesDataArray: BigNumber[];
 }
