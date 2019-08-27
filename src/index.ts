@@ -79,6 +79,7 @@ export {
   KyberTrade,
   Log,
   SolidityTypes,
+  LinkedList,
   TimeSeriesFeedState,
   UInt,
   ZeroExSignedFillOrder,

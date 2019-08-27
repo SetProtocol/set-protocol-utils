@@ -72,8 +72,14 @@ export interface ZeroExSignedFillOrder {
   fillAmount: BigNumber;
 }
 
+export interface LinkedList {
+  dataSizeLimit: BigNumber;
+  lastUpdatedIndex: BigNumber;
+  dataArray: BigNumber[];
+}
+
 export interface TimeSeriesFeedState {
   nextEarliestUpdate: BigNumber;
   updateInterval: BigNumber;
-  timeSeriesDataArray: BigNumber[];
+  timeSeriesData: LinkedList;
 }
