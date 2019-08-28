@@ -395,21 +395,6 @@ export class SetProtocolTestUtils {
   /* ============ SetProtocolTestUtils Constants  ============ */
 
   /**
-   * Address of deployed KyberNetworkProxy contract on test rpc, loaded from snapshot
-   */
-  public static KYBER_NETWORK_PROXY_ADDRESS = constants.KYBER_NETWORK_PROXY_ADDRESS;
-
-  /**
-   * Address of deployed token to use in Kyber swap on test rpc, loaded from snapshot on account[3]
-   */
-  public static KYBER_RESERVE_SOURCE_TOKEN_ADDRESS = constants.KYBER_RESERVE_SOURCE_TOKEN_ADDRESS;
-
-  /**
-   * Address of deployed token to receive in Kyber swap on test rpc, loaded from snapshot
-   */
-  public static KYBER_RESERVE_DESTINATION_TOKEN_ADDRESS = constants.KYBER_RESERVE_DESTINATION_TOKEN_ADDRESS;
-
-  /**
    * Address of deployed 0x exchange address contract on test rpc, loaded from snapshot
    */
   public static ZERO_EX_EXCHANGE_ADDRESS = constants.ZERO_EX_SNAPSHOT_EXCHANGE_ADDRESS;
