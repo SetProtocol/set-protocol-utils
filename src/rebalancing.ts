@@ -42,3 +42,30 @@ export function generateRebalancingSetTokenCallData(
     paddedBufferForBigNumber(rebalanceInterval),
   ]);
 }
+
+/**
+ * Function for clarifying the additional call data parameters that need to be sent to Core when creating
+ * a new rebalancing set token
+ *
+ * @param  managerAddress      Address of the manager to manage the rebalancing
+ * @param  proposalPeriod      Time the participants of the Set can withdraw from a rebalance
+ *                               once a new Set has been proposed
+ * @param  rebalanceInterval   Time between when the manager can initiate another rebalance
+ * @return                     String representing call data to send to Core contracts
+ */
+export function generateRebalancingSetTokenV2CallData(
+  managerAddress: Address,
+  liquidatorAddress: Address,
+  proposalPeriod: BigNumber,
+  rebalanceInterval: BigNumber,
+  failRebalancePeriod: BigNumber,
+
+): string {
+  return bufferArrayToHex([
+    paddedBufferForPrimitive(managerAddress),
+    paddedBufferForPrimitive(liquidatorAddress),
+    paddedBufferForBigNumber(proposalPeriod),
+    paddedBufferForBigNumber(rebalanceInterval),
+    paddedBufferForBigNumber(failRebalancePeriod),
+  ]);
+}
