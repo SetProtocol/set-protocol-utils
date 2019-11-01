@@ -153,6 +153,7 @@ export class SetProtocolUtils {
    * @param  proposalPeriod      Time the participants of the Set can withdraw from a rebalance
    *                               once a new Set has been proposed
    * @param  rebalanceInterval   Time between when the manager can initiate another rebalance
+   * @param  lastRebalanceTimestamp   Customized time in seconds of the last rebalance
    * @return                     String representing call data to send to Core contracts
    */
   public static generateRebalancingSetTokenV2CallData(
@@ -161,6 +162,7 @@ export class SetProtocolUtils {
     proposalPeriod: BigNumber,
     rebalanceInterval: BigNumber,
     failRebalancePeriod: BigNumber,
+    lastRebalanceTimestamp: BigNumber,
   ): string {
     return generateRebalancingSetTokenV2CallData(
       managerAddress,
@@ -168,6 +170,7 @@ export class SetProtocolUtils {
       proposalPeriod,
       rebalanceInterval,
       failRebalancePeriod,
+      lastRebalanceTimestamp,
     );
   }
 

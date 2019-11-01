@@ -1,6 +1,6 @@
 {
   "name": "set-protocol-utils",
-  "version": "1.0.0-beta.40",
+  "version": "1.0.0-beta.41",
   "description": "Common utilities for Set Protocol",
   "main": "dist/index.js",
   "typings": "dist/types/index.d.ts",
