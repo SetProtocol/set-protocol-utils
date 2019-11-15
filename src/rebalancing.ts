@@ -48,23 +48,35 @@ export function generateRebalancingSetTokenCallData(
  * a new rebalancing set token
  *
  * @param  managerAddress           Address of the manager to manage the rebalancing
+ * @param  liquidatorAddress        Address of liquidator that handles rebalancing
+ * @param  recipientAddress         Address of recipient of fees
  * @param  rebalanceInterval        Time between when the manager can initiate another rebalance
  * @param  lastRebalanceTimestamp   Customized time in seconds of the last rebalance
+ * @param  entryFee                 Mint fee in scaled value (10e18 value)
+ * @param  rebalanceFee             Rebalance fee in scaled value
+ * @param  exitFee                  Exit fee in scaled value
  * @return                     String representing call data to send to Core contracts
  */
 export function generateRebalancingSetTokenV2CallData(
   managerAddress: Address,
   liquidatorAddress: Address,
+  feeRecipient: Address,
   rebalanceInterval: BigNumber,
   failRebalancePeriod: BigNumber,
   lastRebalanceTimestamp: BigNumber,
-
+  entryFee: BigNumber,
+  rebalanceFee: BigNumber,
+  exitFee: BigNumber,
 ): string {
   return bufferArrayToHex([
     paddedBufferForPrimitive(managerAddress),
     paddedBufferForPrimitive(liquidatorAddress),
+    paddedBufferForPrimitive(feeRecipient),
     paddedBufferForBigNumber(rebalanceInterval),
     paddedBufferForBigNumber(failRebalancePeriod),
     paddedBufferForBigNumber(lastRebalanceTimestamp),
+    paddedBufferForBigNumber(entryFee),
+    paddedBufferForBigNumber(rebalanceFee),
+    paddedBufferForBigNumber(exitFee),
   ]);
 }
