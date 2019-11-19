@@ -156,7 +156,6 @@ export class SetProtocolUtils {
    * @param  lastRebalanceTimestamp   Customized time in seconds of the last rebalance
    * @param  entryFee                 Mint fee in scaled value (10e18 value)
    * @param  rebalanceFee             Rebalance fee in scaled value
-   * @param  exitFee                  Exit fee in scaled value
    * @return                     String representing call data to send to Core contracts
    */
   public static generateRebalancingSetTokenV2CallData(
@@ -168,7 +167,6 @@ export class SetProtocolUtils {
     lastRebalanceTimestamp: BigNumber,
     entryFee: BigNumber,
     rebalanceFee: BigNumber,
-    exitFee: BigNumber,
   ): string {
     return generateRebalancingSetTokenV2CallData(
       managerAddress,
@@ -179,7 +177,6 @@ export class SetProtocolUtils {
       lastRebalanceTimestamp,
       entryFee,
       rebalanceFee,
-      exitFee,
     );
   }
 
