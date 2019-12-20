@@ -38,6 +38,7 @@ import {
 import {
   generateRebalancingSetTokenCallData,
   generateRebalancingSetTokenV2CallData,
+  generateFixedFeeCalculatorCalldata,
 } from './rebalancing';
 import {
   convertSigToHex,
@@ -162,22 +163,34 @@ export class SetProtocolUtils {
     managerAddress: Address,
     liquidatorAddress: Address,
     feeRecipient: Address,
+    rebalanceFeeCalculator: Address,
     rebalanceInterval: BigNumber,
     failRebalancePeriod: BigNumber,
     lastRebalanceTimestamp: BigNumber,
     entryFee: BigNumber,
-    rebalanceFee: BigNumber,
+    rebalanceFeeCalculatorCalldata: Buffer,
   ): string {
     return generateRebalancingSetTokenV2CallData(
       managerAddress,
       liquidatorAddress,
       feeRecipient,
+      rebalanceFeeCalculator,
       rebalanceInterval,
       failRebalancePeriod,
       lastRebalanceTimestamp,
       entryFee,
-      rebalanceFee,
+      rebalanceFeeCalculatorCalldata,
     );
+  }
+
+  /**
+   * Function for generating Buffer / calldata required for the FixedRebalanceFeeCalculator.
+   *
+   * @param  rebalanceFee             Rebalance fee in scaled value
+   * @return                          Buffered data
+   */
+  public static generateFixedFeeCalculatorCalldata(rebalanceFee: BigNumber): Buffer {
+    return generateFixedFeeCalculatorCalldata(rebalanceFee);
   }
 
   /**

@@ -60,20 +60,34 @@ export function generateRebalancingSetTokenV2CallData(
   managerAddress: Address,
   liquidatorAddress: Address,
   feeRecipient: Address,
+  rebalanceFeeCalculator: Address,
   rebalanceInterval: BigNumber,
   failRebalancePeriod: BigNumber,
   lastRebalanceTimestamp: BigNumber,
   entryFee: BigNumber,
-  rebalanceFee: BigNumber,
+  rebalanceFeeCalculatorCalldata: Buffer,
 ): string {
   return bufferArrayToHex([
     paddedBufferForPrimitive(managerAddress),
     paddedBufferForPrimitive(liquidatorAddress),
     paddedBufferForPrimitive(feeRecipient),
+    paddedBufferForPrimitive(rebalanceFeeCalculator),
     paddedBufferForBigNumber(rebalanceInterval),
     paddedBufferForBigNumber(failRebalancePeriod),
     paddedBufferForBigNumber(lastRebalanceTimestamp),
     paddedBufferForBigNumber(entryFee),
-    paddedBufferForBigNumber(rebalanceFee),
+    rebalanceFeeCalculatorCalldata,
   ]);
 }
+
+/**
+ * Function for generating Buffer required for RebalancingSetTokenV2 creation. The main input
+ * is the rebalance fee.
+ *
+ * @param  rebalanceFee             Rebalance fee in scaled value
+ * @return                          Buffered data
+ */
+export function generateFixedFeeCalculatorCalldata(rebalanceFee: BigNumber): Buffer {
+  return paddedBufferForBigNumber(rebalanceFee);
+}
+
