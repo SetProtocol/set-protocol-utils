@@ -38,7 +38,11 @@ import {
 import {
   generateRebalancingSetTokenCallData,
   generateRebalancingSetTokenV2CallData,
+  generateRebalancingSetTokenV3CallData,
   generateFixedFeeCalculatorCalldata,
+  generateAdjustFeeCallData,
+  generatePerformanceFeeCallData,
+  generatePerformanceFeeCallDataBuffer
 } from './rebalancing';
 import {
   convertSigToHex,
@@ -184,6 +188,43 @@ export class SetProtocolUtils {
   }
 
   /**
+   * Function for clarifying the additional call data parameters that need to be sent to Core when creating
+   * a new rebalancing set token v3
+   *
+   * @param  managerAddress           Address of the manager to manage the rebalancing
+   * @param  liquidatorAddress        Address of liquidator that handles rebalancing
+   * @param  recipientAddress         Address of recipient of fees
+   * @param  rebalanceInterval        Time between when the manager can initiate another rebalance
+   * @param  lastRebalanceTimestamp   Customized time in seconds of the last rebalance
+   * @param  entryFee                 Mint fee in scaled value (10e18 value)
+   * @param  feeCalculatorCalldata    Fee calculator in array of buffers
+   * @return                          String representing call data to send to Core contracts
+   */
+  public static generateRebalancingSetTokenV3CallData(
+    managerAddress: Address,
+    liquidatorAddress: Address,
+    feeRecipient: Address,
+    rebalanceFeeCalculator: Address,
+    rebalanceInterval: BigNumber,
+    failRebalancePeriod: BigNumber,
+    lastRebalanceTimestamp: BigNumber,
+    entryFee: BigNumber,
+    feeCalculatorCalldata: Buffer[],
+  ): string {
+    return generateRebalancingSetTokenV3CallData(
+      managerAddress,
+      liquidatorAddress,
+      feeRecipient,
+      rebalanceFeeCalculator,
+      rebalanceInterval,
+      failRebalancePeriod,
+      lastRebalanceTimestamp,
+      entryFee,
+      feeCalculatorCalldata,
+    );
+  }
+
+  /**
    * Function for generating Buffer / calldata required for the FixedRebalanceFeeCalculator.
    *
    * @param  rebalanceFee             Rebalance fee in scaled value
@@ -191,6 +232,73 @@ export class SetProtocolUtils {
    */
   public static generateFixedFeeCalculatorCalldata(rebalanceFee: BigNumber): Buffer {
     return generateFixedFeeCalculatorCalldata(rebalanceFee);
+  }
+
+  /**
+   * Function for generating hex string that can be parsed by performance fee calculator to set fee params.
+   *
+   * @param  profitPeriod                   Time allowed between profitFee collection
+   * @param  highWatermarkResetPeriod       Time required to pass from last profitFee accrual before
+   *                                        highWatermark is reset
+   * @param  profitFeePercentage            Profit fee percentage
+   * @param  streamingFeePercentage         Streaming fee percentage
+   * @return                                String representing performance fee calc data
+   */
+  public static generatePerformanceFeeCallData(
+    profitPeriod: BigNumber,
+    highWatermarkResetPeriod: BigNumber,
+    profitFeePercentage: BigNumber,
+    streamingFeePercentage: BigNumber,
+  ): string {
+    return generatePerformanceFeeCallData(
+      profitPeriod,
+      highWatermarkResetPeriod,
+      profitFeePercentage,
+      streamingFeePercentage,
+    );
+  }
+
+  /**
+   * Function for generating performance fee calculator buffer array that can be appended to other call data to
+   * form inputs for RebalancingSetTokenV3.
+   *
+   * @param  profitPeriod                   Time allowed between profitFee collection
+   * @param  highWatermarkResetPeriod       Time required to pass from last profitFee accrual before highWatermark
+   *                                        is reset
+   * @param  profitFeePercentage            Profit fee percentage
+   * @param  streamingFeePercentage         Streaming fee percentage
+   * @return                                Array of performance fee calc buffers that can be appended to
+   *                                        other call data
+   */
+  public static generatePerformanceFeeCallDataBuffer(
+    profitPeriod: BigNumber,
+    highWatermarkResetPeriod: BigNumber,
+    profitFeePercentage: BigNumber,
+    streamingFeePercentage: BigNumber,
+  ): Buffer[] {
+    return generatePerformanceFeeCallDataBuffer(
+      profitPeriod,
+      highWatermarkResetPeriod,
+      profitFeePercentage,
+      streamingFeePercentage,
+    );
+  }
+
+  /**
+   * Function for generating hex string that can be parsed by performance fee calculator to adjust fee params.
+   *
+   * @param  feeType                  Enumeration of fee being changed
+   * @param  newFeePercentage         New fee percentage
+   * @return                          String representing adjust fee data
+   */
+  public static generateAdjustFeeCallData(
+    feeType: BigNumber,
+    newFeePercentage: BigNumber,
+  ): string {
+    return generateAdjustFeeCallData(
+      feeType,
+      newFeePercentage
+    );
   }
 
   /**
