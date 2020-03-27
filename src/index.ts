@@ -70,8 +70,12 @@ import {
 import {
   BN,
 } from './bn';
+import {
+  Blockchain,
+} from './blockchain';
 
 export { BigNumber };
+export { Blockchain };
 export { BN };
 export { Web3Utils };
 export { BaseContract } from './baseContract';
