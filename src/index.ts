@@ -42,7 +42,8 @@ import {
   generateFixedFeeCalculatorCalldata,
   generateAdjustFeeCallData,
   generatePerformanceFeeCallData,
-  generatePerformanceFeeCallDataBuffer
+  generatePerformanceFeeCallDataBuffer,
+  generateTWAPLiquidatorCalldata,
 } from './rebalancing';
 import {
   convertSigToHex,
@@ -260,6 +261,21 @@ export class SetProtocolUtils {
       profitFeePercentage,
       streamingFeePercentage,
     );
+  }
+
+  /**
+   * Function for generating hex string that can be parsed by the TWAP liquidator to initiate a TWAP
+   * rebalance
+   *
+   * @param  chunkSize                Currency value of rebalance volume in each chunk (18 decimal)
+   * @param  chunkAuctionPeriod       Time between chunk auctions
+   * @return                          String representing TWAP liquidator data
+   */
+  public static generateTWAPLiquidatorCalldata(
+    chunkSize: BigNumber,
+    chunkAuctionPeriod: BigNumber,
+  ): string {
+    return generateTWAPLiquidatorCalldata(chunkSize, chunkAuctionPeriod);
   }
 
   /**

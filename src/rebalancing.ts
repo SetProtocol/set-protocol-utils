@@ -193,3 +193,21 @@ export function generateAdjustFeeCallData(
   ]);
 }
 
+/**
+ * Function for generating hex string that can be parsed by the TWAP liquidator to initiate a TWAP
+ * rebalance
+ *
+ * @param  chunkSize                Currency value of rebalance volume in each chunk (18 decimal)
+ * @param  chunkAuctionPeriod       Time between chunk auctions
+ * @return                          String representing TWAP liquidator data
+ */
+export function generateTWAPLiquidatorCalldata(
+  chunkSize: BigNumber,
+  chunkAuctionPeriod: BigNumber,
+): string {
+  return bufferArrayToHex([
+    paddedBufferForBigNumber(chunkSize),
+    paddedBufferForBigNumber(chunkAuctionPeriod),
+  ]);
+}
+
